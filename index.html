@@ -30,10 +30,10 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
   --green:#16C784;--green-light:#e8faf1;--green-dark:#0fa96d;
-  --bg:transparent;--text:#ffffff;--text-muted:#f1f5f9;
-  --glass:rgba(255,255,255,.15);--glass-border:rgba(255,255,255,.3);
-  --shadow-glass:0 8px 32px rgba(0,0,0,.25);
-  --clay-light:rgba(255,255,255,.2);--clay-shadow:12px 12px 28px rgba(0,0,0,.08);
+  --bg:#f8f9fa;--text:#1a1a2e;--text-muted:#4b5563;
+  --glass:#ffffff;--glass-border:#e5e7eb;
+  --shadow-glass:0 4px 12px rgba(0,0,0,.03);
+  --clay-light:#ffffff;--clay-shadow:0 8px 24px rgba(0,0,0,.04);
   --radius:20px;--radius-sm:12px;
 }
 html{scroll-behavior:smooth;font-size:clamp(14px,1.1vw,16px)}
@@ -66,8 +66,8 @@ h1,h2,h3,h4,h5{font-family:'Outfit',sans-serif;font-weight:700;letter-spacing:-0
 /* ═══════════════════════════════════════ */
 /*  NAV                                    */
 /* ═══════════════════════════════════════ */
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:14px 0;transition:all .45s cubic-bezier(.22,1,.36,1);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);background:rgba(0,0,0,.15);border-bottom:1px solid rgba(255,255,255,.1)}
-nav.scrolled{padding:10px 0;background:rgba(0,0,0,.45);box-shadow:0 1px 20px rgba(0,0,0,.2);backdrop-filter:blur(32px)}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:14px 0;transition:all .45s cubic-bezier(.22,1,.36,1);background:#f8f9fa;border-bottom:1px solid var(--glass-border)}
+nav.scrolled{padding:10px 0;background:rgba(255,255,255,.98);box-shadow:0 1px 12px rgba(0,0,0,.05)}
 nav .container{display:flex;align-items:center;justify-content:space-between}
 .nav-logo{text-decoration:none;display:flex;align-items:center;overflow:hidden;height:34px}
 .logo-chars{display:flex;align-items:center;font-family:'Outfit',sans-serif;font-weight:900;font-size:1.35rem;color:var(--text);white-space:nowrap}
@@ -91,7 +91,7 @@ nav.scrolled .logo-v{color:var(--green);font-size:1.5rem}
 /*  HERO                                   */
 /* ═══════════════════════════════════════ */
 .hero{min-height:100vh;min-height:100dvh;display:flex;align-items:center;position:relative;padding:clamp(100px,12vh,140px) 0 clamp(40px,8vh,80px);overflow:hidden}
-.hero-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(22,199,132,.05) 1.2px,transparent 1.2px);background-size:clamp(28px,4vw,44px) clamp(28px,4vw,44px);will-change:transform}
+.hero-bg-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Silkscreen',monospace;font-size:clamp(80px,20vw,350px);color:#e2e8f0;z-index:1;white-space:nowrap;user-select:none;pointer-events:none;opacity:0.6;font-weight:700;line-height:1}
 .hero-row{display:flex;align-items:center;justify-content:space-between;gap:clamp(24px,5vw,70px);width:100%}
 .hero-content{position:relative;z-index:10;max-width:640px;flex:1 1 auto}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);color:var(--text);padding:8px 22px;border-radius:100px;font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
@@ -315,15 +315,13 @@ footer p{color:var(--text-muted);font-size:.82rem}
   .scroll-progress{transition:none}
 }
 </style>
-<!-- Vanta.js 3D Ocean dependencies -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+<!-- Silkscreen Pixel Font -->
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <a href="#hero" class="skip-to-content">Skip to content</a>
 <div class="scroll-progress" id="scrollProgress"></div>
 <div class="cursor-glow" id="cursorGlow"></div>
-<div id="vanta-bg" style="position:fixed;inset:0;z-index:-1;"></div>
 
 <nav id="nav"><div class="container">
 <a href="#" class="nav-logo"><div class="logo-chars"><span class="logo-v">V</span><span class="logo-char" data-i="1">a</span><span class="logo-char" data-i="2">r</span><span class="logo-char" data-i="3">u</span><span class="logo-char" data-i="4">n</span><span class="logo-dot">.</span></div></a>
@@ -333,6 +331,7 @@ footer p{color:var(--text-muted);font-size:.82rem}
 
 <!-- ═══ HERO ═══ -->
 <section class="hero" id="hero">
+<div class="hero-bg-text hero-entrance">SYSTEMS</div>
 <div class="container"><div class="hero-row">
 <div class="hero-content">
 <div class="hero-badge hero-entrance" style="transition-delay:.5s">Available for Projects</div>
@@ -670,14 +669,7 @@ if(window.matchMedia('(pointer:fine)').matches)document.addEventListener('mousem
 /* ═══ SMOOTH SCROLL NAV LINKS ═══ */
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t){t.scrollIntoView({behavior:'smooth',block:'start'});navLinks.classList.remove('open');mobileToggle.classList.remove('open');mobileToggle.setAttribute('aria-expanded','false')}})});
 
-/* ═══ VANTA 3D OCEAN INTERACTIVE BG ═══ */
-VANTA.WAVES({
-  el: "#vanta-bg",
-  mouseControls: true, touchControls: true, gyroControls: false,
-  minHeight: 200.00, minWidth: 200.00,
-  scale: 1.00, scaleMobile: 1.00,
-  color: 0x118c6b, shininess: 80.00, waveHeight: 18.00, waveSpeed: 0.80, zoom: 0.85
-});
+/* ═══ CLEAN UI INITIALIZED ═══ */
 </script>
 </body>
 </html>
