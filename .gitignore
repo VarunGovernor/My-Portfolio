@@ -13,3 +13,10 @@ desktop.ini
 # Temporary files
 *.tmp
 *.bak
+
+# Node / Vite
+node_modules/
+dist/
+dist-ssr/
+*.local
+.claude/
