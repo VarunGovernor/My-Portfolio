@@ -793,6 +793,96 @@ footer p{color:var(--text-muted);font-size:.82rem}
   .cursor-glow,.ambient{display:none}
   .scroll-progress{transition:none}
 }
+
+/* ═══════════════════════════════════════ */
+/*  CUSTOM CURSOR — dot + lagging ring     */
+/* ═══════════════════════════════════════ */
+.cur-dot{position:fixed;width:8px;height:8px;background:var(--green);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);will-change:left,top;transition:width .3s cubic-bezier(.22,1,.36,1),height .3s,background .3s}
+.cur-ring{position:fixed;width:34px;height:34px;border:1.5px solid rgba(22,199,132,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);will-change:left,top;transition:width .4s cubic-bezier(.22,1,.36,1),height .4s,border-color .4s,opacity .3s}
+.cur-dot.hov{width:14px;height:14px;background:var(--green-dark)}
+.cur-ring.hov{width:54px;height:54px;border-color:rgba(22,199,132,.25)}
+
+/* ═══════════════════════════════════════ */
+/*  RIPPLE EFFECT                          */
+/* ═══════════════════════════════════════ */
+.ripple-fx{position:absolute;border-radius:50%;background:rgba(255,255,255,.32);transform:scale(0);animation:ripplePop .55s linear forwards;pointer-events:none}
+@keyframes ripplePop{to{transform:scale(4);opacity:0}}
+
+/* ═══════════════════════════════════════ */
+/*  CARD SPOTLIGHT (mouse-follow glow)     */
+/* ═══════════════════════════════════════ */
+.skill-card::after,.project-card::after{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(350px circle at var(--sx,50%) var(--sy,50%),rgba(22,199,132,.08),transparent 60%);pointer-events:none;opacity:0;transition:opacity .4s;z-index:2}
+.skill-card:hover::after,.project-card:hover::after{opacity:1}
+
+/* ═══════════════════════════════════════ */
+/*  SVG PATH DRAW-IN                       */
+/* ═══════════════════════════════════════ */
+.svg-draw svg path,.svg-draw svg polyline,.svg-draw svg rect{stroke-dasharray:200;stroke-dashoffset:200;transition:stroke-dashoffset .9s cubic-bezier(.22,1,.36,1)}
+.svg-draw.drawn svg path,.svg-draw.drawn svg polyline,.svg-draw.drawn svg rect{stroke-dashoffset:0}
+.svg-draw.drawn svg path:nth-child(2),.svg-draw.drawn svg polyline:nth-child(2),.svg-draw.drawn svg rect:nth-child(2){transition-delay:.15s}
+.svg-draw.drawn svg path:nth-child(3),.svg-draw.drawn svg polyline:nth-child(3){transition-delay:.3s}
+
+/* ═══════════════════════════════════════ */
+/*  EXPERIENCE TIMELINE LINE DRAW          */
+/* ═══════════════════════════════════════ */
+.exp-timeline::before{transform-origin:top;transform:scaleY(0);transition:transform 1.6s cubic-bezier(.22,1,.36,1) .2s}
+.exp-timeline.tl-drawn::before{transform:scaleY(1)}
+
+/* ═══════════════════════════════════════ */
+/*  SECTION TITLE UNDERLINE DRAW           */
+/* ═══════════════════════════════════════ */
+.section-title{position:relative}
+.section-title::after{content:'';position:absolute;bottom:-4px;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--green),#34eaa0);border-radius:2px;transition:width .9s cubic-bezier(.22,1,.36,1) .35s}
+.section-title.visible::after{width:min(180px,45%)}
+
+/* ═══════════════════════════════════════ */
+/*  HERO STATS ROW                         */
+/* ═══════════════════════════════════════ */
+.hero-stats{display:flex;gap:clamp(20px,4vw,36px);margin-top:clamp(14px,2vw,24px);flex-wrap:wrap}
+.h-stat{display:flex;flex-direction:column;gap:2px}
+.h-stat-num{font-family:'Outfit',sans-serif;font-size:clamp(1.35rem,2vw,1.9rem);font-weight:800;color:var(--text);line-height:1;letter-spacing:-.02em}
+.h-stat-num .unit{color:var(--green)}
+.h-stat-label{font-size:clamp(.63rem,.78vw,.72rem);color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:.05em}
+
+/* ═══════════════════════════════════════ */
+/*  GRADIENT ANIMATE TEXT (philosophy)     */
+/* ═══════════════════════════════════════ */
+@keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.phil-gradient{background:linear-gradient(135deg,var(--green),#34eaa0,var(--green-dark),var(--green));background-size:300% 300%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradShift 4s ease infinite}
+
+/* ═══════════════════════════════════════ */
+/*  SKILL LIST STAGGER REVEAL              */
+/* ═══════════════════════════════════════ */
+.skill-list li{opacity:0;transform:translateX(-14px);transition:opacity .5s,transform .5s cubic-bezier(.22,1,.36,1),color .25s,padding-left .25s}
+.skill-card.visible .skill-list li{opacity:1;transform:translateX(0)}
+.skill-card.visible .skill-list li:nth-child(1){transition-delay:.15s}
+.skill-card.visible .skill-list li:nth-child(2){transition-delay:.25s}
+.skill-card.visible .skill-list li:nth-child(3){transition-delay:.35s}
+.skill-card.visible .skill-list li:nth-child(4){transition-delay:.45s}
+.skill-card.visible .skill-list li:nth-child(5){transition-delay:.55s}
+
+/* ═══════════════════════════════════════ */
+/*  PROJECT FEATURES STAGGER REVEAL        */
+/* ═══════════════════════════════════════ */
+.project-features li{opacity:0;transform:translateX(-10px);transition:opacity .45s,transform .45s cubic-bezier(.22,1,.36,1),color .25s,padding-left .25s}
+.project-card.visible .project-features li{opacity:1;transform:translateX(0)}
+.project-card.visible .project-features li:nth-child(1){transition-delay:.1s}
+.project-card.visible .project-features li:nth-child(2){transition-delay:.2s}
+.project-card.visible .project-features li:nth-child(3){transition-delay:.3s}
+.project-card.visible .project-features li:nth-child(4){transition-delay:.4s}
+.project-card.visible .project-features li:nth-child(5){transition-delay:.5s}
+
+/* ═══════════════════════════════════════ */
+/*  REDUCED MOTION — new additions         */
+/* ═══════════════════════════════════════ */
+@media(prefers-reduced-motion:reduce){
+  .cur-dot,.cur-ring{display:none!important}
+  .skill-list li,.project-features li{opacity:1!important;transform:none!important}
+  .svg-draw svg path,.svg-draw svg polyline,.svg-draw svg rect{stroke-dashoffset:0!important;transition:none!important}
+  .exp-timeline::before{transform:scaleY(1)!important}
+  .phil-gradient{animation:none!important;-webkit-text-fill-color:var(--green)!important}
+  .section-title::after{transition:none!important;width:min(180px,45%)!important}
+}
 </style>
 <!-- Silkscreen Pixel Font -->
 <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
@@ -834,8 +924,12 @@ footer p{color:var(--text-muted);font-size:.82rem}
 <p class="hero-entrance" style="transition-delay:.85s">Full Stack Developer specializing in backend systems, automation, and real-world applications that ship to production.</p>
 <div class="hero-ctas hero-entrance" style="transition-delay:1s">
 <a href="#case-studies" class="btn btn-primary">View Case Studies <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></a>
-
 <a href="#contact" class="btn btn-secondary">Contact Me</a>
+</div>
+<div class="hero-stats hero-entrance" style="transition-delay:1.15s">
+<div class="h-stat"><div class="h-stat-num"><span data-count="3">0</span><span class="unit">+</span></div><div class="h-stat-label">Production Apps</div></div>
+<div class="h-stat"><div class="h-stat-num"><span data-count="8">0</span><span class="unit">+</span></div><div class="h-stat-label">Technologies</div></div>
+<div class="h-stat"><div class="h-stat-num"><span data-count="2">0</span><span class="unit">+</span></div><div class="h-stat-label">Years Building</div></div>
 </div>
 </div>
 
@@ -1003,7 +1097,7 @@ footer p{color:var(--text-muted);font-size:.82rem}
 
 <section class="philosophy"><div class="container">
 <span class="section-tag reveal">Philosophy</span>
-<div class="philosophy-quote reveal d1">"I design <span class="accent">systems</span>, not just features."</div>
+<div class="philosophy-quote reveal d1">"I design <span class="accent phil-gradient">systems</span>, not just features."</div>
 <p class="reveal d2">Every line of code serves the architecture. Every feature reduces complexity. I think in workflows, data models, and outcomes — then I build.</p>
 </div></section>
 
@@ -1276,9 +1370,20 @@ function toggleCase(id){
 /* ═══ TILT CARDS ═══ */
 document.querySelectorAll('.tilt-card').forEach(c=>{c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`perspective(900px) rotateY(${x*5}deg) rotateX(${-y*5}deg) translateY(-4px)`});c.addEventListener('mouseleave',()=>c.style.transform='')});
 
-/* ═══ CURSOR GLOW ═══ */
-const glow=document.getElementById('cursorGlow');
-if(window.matchMedia('(pointer:fine)').matches)document.addEventListener('mousemove',e=>{glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px'});else glow.style.display='none';
+/* ═══ CURSOR — dot + lagging ring ═══ */
+const glow=document.getElementById('cursorGlow');glow.style.display='none';
+if(window.matchMedia('(pointer:fine)').matches){
+  const dot=document.createElement('div');dot.className='cur-dot';
+  const ring=document.createElement('div');ring.className='cur-ring';
+  document.body.appendChild(dot);document.body.appendChild(ring);
+  let cdx=0,cdy=0,crx=0,cry=0;
+  document.addEventListener('mousemove',e=>{cdx=e.clientX;cdy=e.clientY;dot.style.left=cdx+'px';dot.style.top=cdy+'px'});
+  (function aniCur(){crx=lerp(crx,cdx,.1);cry=lerp(cry,cdy,.1);ring.style.left=crx+'px';ring.style.top=cry+'px';requestAnimationFrame(aniCur)})();
+  document.querySelectorAll('a,button,[role=button]').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{dot.classList.add('hov');ring.classList.add('hov')});
+    el.addEventListener('mouseleave',()=>{dot.classList.remove('hov');ring.classList.remove('hov')});
+  });
+}
 
 /* ═══ SMOOTH SCROLL NAV LINKS ═══ */
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t){t.scrollIntoView({behavior:'smooth',block:'start'});navLinks.classList.remove('open');mobileToggle.classList.remove('open');mobileToggle.setAttribute('aria-expanded','false')}})});
@@ -1321,6 +1426,75 @@ function handleContactSubmit(e){
     closeContactModal();
   },3000);
 }
+
+/* ═══ RIPPLE ON BUTTONS ═══ */
+document.querySelectorAll('.btn,.modal-submit').forEach(btn=>{
+  btn.style.overflow='hidden';btn.style.position='relative';
+  btn.addEventListener('click',e=>{
+    const r=btn.getBoundingClientRect(),sz=Math.max(r.width,r.height)*2;
+    const rpl=document.createElement('span');rpl.className='ripple-fx';
+    rpl.style.cssText=`width:${sz}px;height:${sz}px;left:${e.clientX-r.left-sz/2}px;top:${e.clientY-r.top-sz/2}px;position:absolute`;
+    btn.appendChild(rpl);rpl.addEventListener('animationend',()=>rpl.remove());
+  });
+});
+
+/* ═══ MAGNETIC BUTTONS ═══ */
+document.querySelectorAll('.btn-primary,.nav-cta').forEach(btn=>{
+  btn.addEventListener('mousemove',e=>{
+    const r=btn.getBoundingClientRect();
+    const x=(e.clientX-r.left-r.width/2)*.22,y=(e.clientY-r.top-r.height/2)*.22;
+    btn.style.transform=`translate(${x}px,${y}px) translateY(-3px) scale(1.02)`;
+  });
+  btn.addEventListener('mouseleave',()=>btn.style.transform='');
+});
+
+/* ═══ CARD SPOTLIGHT ═══ */
+document.querySelectorAll('.skill-card,.project-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    card.style.setProperty('--sx',(e.clientX-r.left)+'px');
+    card.style.setProperty('--sy',(e.clientY-r.top)+'px');
+  });
+});
+
+/* ═══ SVG ICON DRAW-IN ═══ */
+const svgObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('drawn');svgObs.unobserve(e.target)}});
+},{threshold:.15});
+document.querySelectorAll('.trust-icon,.skill-icon,.project-icon').forEach(icon=>{
+  icon.classList.add('svg-draw');svgObs.observe(icon);
+});
+
+/* ═══ EXPERIENCE TIMELINE LINE DRAW ═══ */
+const tlEl=document.querySelector('.exp-timeline');
+if(tlEl){const tlO=new IntersectionObserver(([en])=>{if(en.isIntersecting){tlEl.classList.add('tl-drawn');tlO.disconnect()}},{threshold:.05});tlO.observe(tlEl);}
+
+/* ═══ NUMBER COUNTERS ═══ */
+function animCount(el,to,dur=1400){
+  const s=performance.now();
+  (function step(ts){const p=Math.min((ts-s)/dur,1),ease=1-Math.pow(1-p,3);el.textContent=Math.round(ease*to);if(p<1)requestAnimationFrame(step);else el.textContent=to;})(s);
+}
+const cntO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){animCount(e.target,parseInt(e.target.dataset.count));cntO.unobserve(e.target)}});
+},{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>cntO.observe(el));
+
+/* ═══ TEXT SCRAMBLE — hero accent on load ═══ */
+const SCHARS='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%&*';
+function scrambleTo(el,dur=1100){
+  const tgt=el.textContent;let f=0;const frames=Math.ceil(dur/16);
+  const iv=setInterval(()=>{
+    const p=f/frames;
+    el.textContent=tgt.split('').map((c,i)=>{
+      if(c===' ')return ' ';if(i/tgt.length<p*1.4)return c;
+      return SCHARS[Math.floor(Math.random()*SCHARS.length)];
+    }).join('');
+    if(f++>=frames){clearInterval(iv);el.textContent=tgt;}
+  },16);
+}
+window.addEventListener('load',()=>{
+  setTimeout(()=>{const acc=document.querySelector('.hero h1 .accent');if(acc)scrambleTo(acc);},1800);
+});
 
 /* ═══ CLEAN UI INITIALIZED ═══ */
 </script>
