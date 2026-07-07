@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ Varun — Systems Engineer & Product Developer
+# ⚡ Varun — Full Stack Developer & Systems Architect
 
 [![Live Portfolio](https://img.shields.io/badge/🌐_Live_Portfolio-View_Site-16C784?style=for-the-badge&logoColor=white)](https://varungovernor.github.io/My-Portfolio/)
 [![GitHub](https://img.shields.io/badge/GitHub-VarunGovernor-181717?style=for-the-badge&logo=github)](https://github.com/VarunGovernor)
@@ -10,8 +10,8 @@
 <br/>
 
 > **"I design *systems*, not just features."**
-> 
-> Full Stack Developer specializing in backend systems, automation, and real-world applications that ship to production.
+>
+> Full Stack Developer & Systems Architect building production-grade CRM, forensic intelligence, POS, mobile, and automation platforms for real-world operations.
 
 <br/>
 
@@ -43,9 +43,9 @@
 
 ## 🧑‍💻 About This Portfolio
 
-This is my personal developer portfolio — a **single-file, zero-dependency** web experience built entirely with raw HTML, CSS, and vanilla JavaScript. No React. No build tools. No npm install. Just a crafted `.html` file that opens and _wows_.
+This is my personal developer portfolio — a **single-file, zero-dependency** web experience built entirely with raw HTML, CSS, and vanilla JavaScript. No React. No build tools. No npm install.
 
-It showcases my key projects, skills, engineering philosophy, and contact information — designed to leave a strong first impression on clients and hiring teams alike.
+It showcases recent production work across CRM platforms, forensic intelligence systems, offline-first POS infrastructure, mobile apps, and automation workflows.
 
 ---
 
@@ -160,6 +160,51 @@ My-Portfolio/
 
 ## 🚀 Featured Projects
 
+### Quantum Digital Forensics Platform — `Next.js + NestJS + PostgreSQL`
+> Digital investigation platform for banking fraud intelligence, CDR analysis, NCRP preview workflows, case management, evidence upload, authentication, and role-based access.
+
+- Banking intelligence dashboards for transaction trails, account relationships, risk indicators, recovery status, and destination intelligence
+- CDR intelligence views for event mix, top contacts, IMEI/IMSI references, call patterns, location signals, and SMS analysis
+- Secure authentication, password reset flow, Docker packaging, and AWS Lightsail deployment support
+
+**Stack:** `Next.js` `NestJS` `PostgreSQL` `TypeORM` `Python` `Docker` `AWS Lightsail`
+
+---
+
+### CRM Staffing Platform — Production Upgrade — `React + Supabase`
+> Production staffing CRM for candidates, clients, jobs, submissions, interviews, placements, HR onboarding, reporting, and role-based operations.
+
+- Job requirements workflows with create, edit, details, status, search, filters, and dashboard metrics
+- Linked candidates, submissions, interviews, placements, clients/vendors, and job requirements into one workflow
+- RBAC, Supabase RLS, protected document handling, signed URL access, admin management, and email notifications
+
+**Stack:** `React` `Vite` `TailwindCSS` `Supabase` `PostgreSQL` `RLS` `Edge Functions` `Recharts`
+
+---
+
+### Offline-First POS Operating Layer — `FastAPI + SQLite + React`
+> Reusable POS foundation for business counters where billing must continue during network failures.
+
+- Local persistence, billing drafts, cashier sessions, receipt printing, recovery workflows, reports, settings, support tools, and audit logs
+- Sync outbox foundation for cloud synchronization and retry-safe workflows
+- Printer queue foundations with status, retry, print, and reprint flows
+- Linux/kiosk packaging scripts for appliance-style deployment
+
+**Stack:** `FastAPI` `SQLite` `React/Next.js` `TypeScript` `Printer Jobs` `Sync Engine` `Linux/Kiosk`
+
+---
+
+### Hairmaxxing Pro — `Flutter + iOS`
+> Salon and barber booking marketplace for at-home hairstyling, haircut discovery, artist profiles, and appointment workflows.
+
+- Mobile-first customer booking experience
+- Artist profile screens for service and portfolio presentation
+- Client-facing UI iteration and TestFlight build workflow documentation
+
+**Stack:** `Flutter` `Dart` `iOS` `Mobile UI/UX` `TestFlight`
+
+---
+
 ### 🗳️ My Voters Hub — `Flutter + Supabase`
 > Political campaign management platform for Telangana elections
 
@@ -173,15 +218,14 @@ My-Portfolio/
 
 ---
 
-### 🏢 CRM Staffing Portal — `React + Redux`
-> Enterprise CRM for staffing operations and pipeline management
+### HAM Tech Innovations Landing Page — `HTML + CSS + JavaScript`
+> Responsive marketing site for a technology brand.
 
-- "San Synapse-CRM" — multi-stage drag-and-drop pipeline management
-- Redux Toolkit state management with role-based access control
-- Framer Motion animated UI with lazy-loaded Vite production bundle
-- Client-ready demo environment with TailwindCSS design system
+- Service-focused landing page structure
+- Lightweight responsive implementation
+- Clear presentation for contact and brand credibility
 
-**Stack:** `React` `Vite` `Redux Toolkit` `TailwindCSS` `Framer Motion` `REST APIs`
+**Stack:** `HTML` `CSS` `JavaScript` `Responsive Design`
 
 ---
 
@@ -198,19 +242,19 @@ My-Portfolio/
 </tr>
 <tr>
 <td><strong>Backend & Data</strong></td>
-<td>Supabase, PostgreSQL, REST APIs, Socket.io, Row-Level Security</td>
+<td>PostgreSQL, Supabase, Supabase RLS, NestJS, FastAPI, REST APIs, TypeORM</td>
 </tr>
 <tr>
 <td><strong>Automation</strong></td>
-<td>Excel VBA, Data Pipelines, Process Optimization</td>
+<td>Excel VBA, Data Parsing, Evidence Workflows, Sync Engines, Printer Queues</td>
 </tr>
 <tr>
 <td><strong>Embedded</strong></td>
-<td>Bluetooth LE, Protocol Buffers, APK Reverse Engineering</td>
+<td>Bluetooth LE, Protocol Buffers, APK Reverse Engineering, Linux/Kiosk Systems</td>
 </tr>
 <tr>
 <td><strong>DevOps</strong></td>
-<td>CI/CD, App Store Deployment, Docker, Git</td>
+<td>CI/CD, App Store Deployment, TestFlight, Docker, AWS Lightsail, Git</td>
 </tr>
 </table>
 
