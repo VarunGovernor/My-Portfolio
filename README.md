@@ -160,6 +160,19 @@ My-Portfolio/
 
 ## 🚀 Featured Projects
 
+### 🤍 Liva, With Love (Secret - Still in Production): `Next.js 15 + TypeScript + Framer Motion`
+> Direct-to-consumer luxury apparel and clothing brand founded by Varun for someone special. Currently a work in progress preparing for public launch.
+
+- Founded by Varun as an intimate personal apparel label created with love for someone special
+- Interactive Custom Studio allowing customers to configure garment silhouettes (Boxy Tee, Drop-Shoulder, Crewneck), colorways, and bespoke graphic placements in real time
+- High-performance collections catalog with granular size matrix (XS-XXL), collection filtering, price sliders, and drop notifications
+- Fluid motion architecture with Lenis smooth scrolling (60/120/240Hz calibrated) and spring physics
+- Next.js 15 App Router, TypeScript, Tailwind CSS, and Supabase architecture
+
+**Stack:** `Next.js 15` `React 18` `TypeScript` `Tailwind CSS` `Framer Motion` `Lenis Scroll` `Supabase` `Drizzle ORM`
+
+---
+
 ### Quantum Digital Forensics Platform: `Next.js + NestJS + PostgreSQL`
 > Digital investigation platform for banking fraud intelligence, CDR analysis, NCRP preview workflows, case management, evidence upload, authentication, and role-based access.
 
