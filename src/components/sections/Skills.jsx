@@ -133,7 +133,7 @@ export default function Skills({ dark }) {
         </ScrollReveal>
         <ScrollReveal delay={0.14}>
           <p className={`mb-14 max-w-xl text-base leading-relaxed ${dark ? 'text-slate-400' : 'text-slate-600'}`}>
-            Not just languages and frameworks — but how I think about building
+            Not just languages and frameworks, but how I think about building
             secure, intelligent, production-ready systems.
           </p>
         </ScrollReveal>

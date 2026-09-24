@@ -86,7 +86,7 @@ export default function Experience({ dark }) {
           </ScrollReveal>
           <ScrollReveal delay={0.14}>
             <p className={`mb-14 text-base leading-relaxed ${dark ? 'text-slate-400' : 'text-slate-600'}`}>
-              Building systems that replace manual work with intelligent automation —
+              Building systems that replace manual work with intelligent automation:
               across mobile, web, and embedded hardware.
             </p>
           </ScrollReveal>

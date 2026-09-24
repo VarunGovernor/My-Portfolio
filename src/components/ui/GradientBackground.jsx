@@ -1,17 +1,17 @@
 export default function GradientBackground() {
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
-      {/* Primary purple blob — top left */}
+      {/* Primary purple blob - top left */}
       <div
         className="blob blob-1"
         style={{ top: '-10%', left: '-8%' }}
       />
-      {/* Pink blob — top right */}
+      {/* Pink blob - top right */}
       <div
         className="blob blob-2"
         style={{ top: '5%', right: '-5%' }}
       />
-      {/* Cyan blob — bottom center */}
+      {/* Cyan blob - bottom center */}
       <div
         className="blob blob-3"
         style={{ bottom: '10%', left: '40%', transform: 'translateX(-50%)' }}

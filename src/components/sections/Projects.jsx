@@ -127,7 +127,7 @@ export default function Projects({ dark }) {
         </ScrollReveal>
         <ScrollReveal delay={0.14}>
           <p className={`mb-14 max-w-xl text-base leading-relaxed ${dark ? 'text-slate-400' : 'text-slate-600'}`}>
-            Production systems designed to solve real problems — built end-to-end,
+            Production systems designed to solve real problems: built end-to-end,
             shipped to users, and validated with results.
           </p>
         </ScrollReveal>

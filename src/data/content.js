@@ -28,14 +28,14 @@ export const experience = [
   {
     role: 'Full Stack Developer & Systems Builder',
     company: 'Independent / Freelance',
-    period: '2023 — Present',
-    desc: 'Shipping production applications across Flutter, React, and web — from political campaign tools to enterprise CRMs. End-to-end ownership from database schema to App Store deployment.',
+    period: '2023 - Present',
+    desc: 'Shipping production applications across Flutter, React, and web: from political campaign tools to enterprise CRMs. End-to-end ownership from database schema to App Store deployment.',
     tags: ['Flutter', 'React', 'Supabase', 'PostgreSQL'],
   },
   {
     role: 'Automation & Workflow Specialist',
     company: 'Process Engineering',
-    period: '2022 — 2023',
+    period: '2022 - 2023',
     desc: 'Excel VBA automation that eliminated manual workflows. Data pipelines turning hours of repetitive work into one-click operations across multiple enterprise clients.',
     tags: ['VBA', 'Excel', 'Data Pipelines', 'Process Optimization'],
   },
@@ -43,7 +43,7 @@ export const experience = [
     role: 'Hardware Integration Engineer',
     company: 'Embedded Systems',
     period: '2022',
-    desc: 'Reverse-engineered Motorola watch firmware — extracted BLE Protocol Buffer specifications from APK decompilation to build a custom Flutter iOS companion app.',
+    desc: 'Reverse-engineered Motorola watch firmware: extracted BLE Protocol Buffer specifications from APK decompilation to build a custom Flutter iOS companion app.',
     tags: ['BLE', 'Protocol Buffers', 'Flutter', 'iOS', 'APK Reverse Engineering'],
   },
 ]
@@ -58,9 +58,9 @@ export const projects = [
     status: 'shipped',
     tags: ['Flutter', 'Supabase', 'PostgreSQL', 'Twilio'],
     accentColor: '#7C3AED',
-    summary: 'Cross-platform campaign management app with real-time voter tracking, Smart Folder filtering, Telugu-first UI, and Twilio SMS outreach — shipped to both app stores.',
+    summary: 'Cross-platform campaign management app with real-time voter tracking, Smart Folder filtering, Telugu-first UI, and Twilio SMS outreach, shipped to both app stores.',
     problem: 'Campaign teams across wards had no centralized tool. Spreadsheets and WhatsApp groups led to duplicated voter outreach, zero data visibility, and impossible-to-track progress in real time.',
-    solution: 'A Flutter cross-platform app with Smart Folder voter filtering, Telugu-first UI, Twilio SMS invite system, and offline-first Supabase sync — enabling field agents to work without connectivity and sync when online.',
+    solution: 'A Flutter cross-platform app with Smart Folder voter filtering, Telugu-first UI, Twilio SMS invite system, and offline-first Supabase sync, enabling field agents to work without connectivity and sync when online.',
     techStack: ['Flutter', 'Dart', 'Supabase', 'PostgreSQL', 'Twilio SMS', 'Row-Level Security', 'iOS', 'Android'],
     architecture: [
       { layer: 'Mobile Client', detail: 'Flutter (iOS + Android) with offline-first Supabase SDK' },
@@ -72,7 +72,7 @@ export const projects = [
     challenges: [
       'Designing an offline-first sync architecture for rural field agents with intermittent connectivity',
       'Building the Smart Folder data model to handle dynamic voter segmentation at scale',
-      'Telugu-first accessibility — keyboard input, rendering, and RTL-adjacent layout considerations',
+      'Telugu-first accessibility: keyboard input, rendering, and RTL-adjacent layout considerations',
       'Row-Level Security policies that strictly isolate ward-level data across campaign teams',
     ],
     outcome: [
@@ -90,7 +90,7 @@ export const projects = [
     status: 'shipped',
     tags: ['React', 'Redux', 'TailwindCSS', 'Framer Motion'],
     accentColor: '#06B6D4',
-    summary: '"San Synapse-CRM" — React CRM with multi-stage drag-and-drop pipeline views, real-time candidate tracking, Redux Toolkit state management, and Framer Motion UI.',
+    summary: '"San Synapse-CRM": React CRM with multi-stage drag-and-drop pipeline views, real-time candidate tracking, Redux Toolkit state management, and Framer Motion UI.',
     problem: 'No unified view of candidates, clients, and open roles. Lost opportunities from poor pipeline visibility and slow placement cycles caused by switching between disconnected tools.',
     solution: 'A full-featured staffing CRM with drag-and-drop pipeline stages, advanced filtering, role-based access control, real-time engagement tracking, and an animated sidebar for context switching.',
     techStack: ['React 18', 'Vite', 'Redux Toolkit', 'TailwindCSS', 'Framer Motion', 'REST APIs', 'Recharts'],
@@ -122,8 +122,8 @@ export const projects = [
     status: 'shipped',
     tags: ['HTML5', 'CSS3', 'JavaScript', 'Three.js', 'GSAP'],
     accentColor: '#EC4899',
-    summary: 'Production-grade marketing site with 3D Three.js hero, glassmorphism design system, service showcases, and an integrated lead-intake form. Zero frameworks — pure performance.',
-    problem: 'The agency needed a premium, fast-loading landing page communicating AI-first development services, building trust with startup clients, and driving lead conversions — without framework overhead.',
+    summary: 'Production-grade marketing site with 3D Three.js hero, glassmorphism design system, service showcases, and an integrated lead-intake form. Zero frameworks, pure performance.',
+    problem: 'The agency needed a premium, fast-loading landing page communicating AI-first development services, building trust with startup clients, and driving lead conversions without framework overhead.',
     solution: 'A zero-dependency marketing site with Three.js 3D canvas hero, glassmorphism UI system, animated service cards, client testimonial carousel, and a Netlify Forms-powered lead intake flow.',
     techStack: ['HTML5', 'CSS3', 'Vanilla JavaScript', 'Three.js', 'GSAP', 'SEO Structured Data', 'Netlify Forms'],
     architecture: [
@@ -140,7 +140,7 @@ export const projects = [
       'Achieving 95+ Lighthouse score while running a WebGL canvas and GSAP animations',
     ],
     outcome: [
-      'Live at hamtechinnovations.com — client actively using for lead generation',
+      'Live at hamtechinnovations.com: client actively using for lead generation',
       'Sub-2s load time, 95+ Lighthouse performance score',
       'Fully responsive across all device sizes and browsers',
       'Integrated lead capture form with automated email routing',
@@ -214,8 +214,8 @@ export const projects = [
     status: 'ongoing',
     tags: ['React', 'AI', 'PostgreSQL', 'Supabase'],
     accentColor: '#EF4444',
-    summary: 'AI-assisted billing, real-time pharmacy inventory, patient record integration, and automated analytics — replacing fragmented hospital software with one intelligent system.',
-    problem: 'Hospitals use 5–8 disconnected software systems for billing, inventory, and patient records — leading to errors, delays, and no cross-department intelligence.',
+    summary: 'AI-assisted billing, real-time pharmacy inventory, patient record integration, and automated analytics, replacing fragmented hospital software with one intelligent system.',
+    problem: 'Hospitals use 5-8 disconnected software systems for billing, inventory, and patient records, leading to errors, delays, and no cross-department intelligence.',
     solution: 'A unified hospital POS with AI-assisted billing, insurance claim processing, pharmacy inventory, patient record integration, and role-based multi-department access.',
     techStack: ['React', 'Supabase', 'PostgreSQL', 'Python AI', 'FastAPI', 'PDF Generation'],
     architecture: [

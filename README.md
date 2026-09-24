@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ Varun — Full Stack Developer & Systems Architect
+# ⚡ Varun - Full Stack Developer & Systems Architect
 
 [![Live Portfolio](https://img.shields.io/badge/🌐_Live_Portfolio-View_Site-16C784?style=for-the-badge&logoColor=white)](https://varungovernor.github.io/My-Portfolio/)
 [![GitHub](https://img.shields.io/badge/GitHub-VarunGovernor-181717?style=for-the-badge&logo=github)](https://github.com/VarunGovernor)
@@ -43,7 +43,7 @@
 
 ## 🧑‍💻 About This Portfolio
 
-This is my personal developer portfolio — a **single-file, zero-dependency** web experience built entirely with raw HTML, CSS, and vanilla JavaScript. No React. No build tools. No npm install.
+This is my personal developer portfolio: a **single-file, zero-dependency** web experience built entirely with raw HTML, CSS, and vanilla JavaScript. No React. No build tools. No npm install.
 
 It showcases recent production work across CRM platforms, forensic intelligence systems, offline-first POS infrastructure, mobile apps, and automation workflows.
 
@@ -56,10 +56,10 @@ This portfolio is engineered to feel **premium and alive**. Every visual decisio
 | Feature | Details |
 |---|---|
 | 🎨 **Glassmorphism UI** | Frosted-glass cards using `backdrop-filter: blur()` throughout |
-| 🌊 **Smooth Animations** | All transitions use `cubic-bezier(.22,1,.36,1)` — Apple's spring curve |
+| 🌊 **Smooth Animations** | All transitions use `cubic-bezier(.22,1,.36,1)`: Apple's spring curve |
 | 🖱️ **Cursor Glow** | Radial gradient follows the mouse cursor for a premium feel |
 | 🧲 **Parallax Scene** | Hero section has multi-layer CSS parallax driven by mouse position |
-| 💻 **3D Laptop (Pure CSS)** | An animated laptop with scrolling code — zero images, pure CSS |
+| 💻 **3D Laptop (Pure CSS)** | An animated laptop with scrolling code: zero images, pure CSS |
 | ☕ **CSS Coffee Cup** | Steam animation and floating cup built entirely with CSS `::before/::after` |
 | 🏷️ **Orbital Tech Tags** | JS-positioned tags (`JS`, `SQL`, `Flutter`, etc.) float with `sin/cos` math |
 | 📜 **Scroll Progress Bar** | Fixed top progress bar tracks reading depth |
@@ -71,7 +71,7 @@ This portfolio is engineered to feel **premium and alive**. Every visual decisio
 
 ## 🏗️ Architecture & How It's Built
 
-This is a **single-file architecture** — all CSS, HTML, and JavaScript live in one `index.html`. Here's how each system works:
+This is a **single-file architecture**: all CSS, HTML, and JavaScript live in one `index.html`. Here's how each system works:
 
 ### Design System
 
@@ -93,9 +93,9 @@ All visual tokens are defined as CSS custom properties in `:root`:
 ```
 
 All fonts are loaded from Google Fonts:
-- **Outfit** — headings (900 weight for hero)
-- **Plus Jakarta Sans** — body text
-- **JetBrains Mono** — code snippets and tech tags
+- **Outfit** - headings (900 weight for hero)
+- **Plus Jakarta Sans** - body text
+- **JetBrains Mono** - code snippets and tech tags
 
 ### Animation Engine
 
@@ -104,7 +104,7 @@ The main animation loop runs on `requestAnimationFrame` with a **LERP (Linear In
 ```js
 const lerp = (a, b, t) => a + (b - a) * t;
 
-// Smooth cursor follow — 5% interpolation per frame
+// Smooth cursor follow - 5% interpolation per frame
 sx = lerp(sx, mx, 0.05);
 sy = lerp(sy, my, 0.05);
 ```
@@ -117,7 +117,7 @@ All animated elements use `will-change: transform` for GPU acceleration. Each fr
 
 ### 3D Scene (CSS Only)
 
-The hero's right-side visual is built with pure CSS — **no SVGs, no images, no canvas**:
+The hero's right-side visual is built with pure CSS: **no SVGs, no images, no canvas**:
 
 ```
 .scene
@@ -132,13 +132,13 @@ The hero's right-side visual is built with pure CSS — **no SVGs, no images, no
     └── .coffee-wrap             ← CSS coffee cup
 ```
 
-Each `data-depth` value determines how far the layer moves relative to cursor — creating genuine depth.
+Each `data-depth` value determines how far the layer moves relative to cursor, creating genuine depth.
 
 ### Scroll & Interaction System
 
 | Mechanism | Implementation |
 |---|---|
-| **Scroll reveal** | `IntersectionObserver` — elements gain `.visible` class at 8% threshold |
+| **Scroll reveal** | `IntersectionObserver`: elements gain `.visible` class at 8% threshold |
 | **Scroll progress** | `scrollY / (scrollHeight - innerHeight) * 100` → bar width |
 | **Nav collapse** | Logo animates with `max-width: 0` on each character + CSS transitions |
 | **Case study expand** | `scrollHeight` injection for smooth accordion height animation |
@@ -154,13 +154,13 @@ My-Portfolio/
 └── README.md           ← This file
 ```
 
-> The portfolio is intentionally self-contained in one file — no build step, no node_modules, no config. Load it in a browser and it works.
+> The portfolio is intentionally self-contained in one file: no build step, no node_modules, no config. Load it in a browser and it works.
 
 ---
 
 ## 🚀 Featured Projects
 
-### Quantum Digital Forensics Platform — `Next.js + NestJS + PostgreSQL`
+### Quantum Digital Forensics Platform: `Next.js + NestJS + PostgreSQL`
 > Digital investigation platform for banking fraud intelligence, CDR analysis, NCRP preview workflows, case management, evidence upload, authentication, and role-based access.
 
 - Banking intelligence dashboards for transaction trails, account relationships, risk indicators, recovery status, and destination intelligence
@@ -171,7 +171,7 @@ My-Portfolio/
 
 ---
 
-### CRM Staffing Platform — Production Upgrade — `React + Supabase`
+### CRM Staffing Platform: Production Upgrade - `React + Supabase`
 > Production staffing CRM for candidates, clients, jobs, submissions, interviews, placements, HR onboarding, reporting, and role-based operations.
 
 - Job requirements workflows with create, edit, details, status, search, filters, and dashboard metrics
@@ -182,7 +182,7 @@ My-Portfolio/
 
 ---
 
-### Offline-First POS Operating Layer — `FastAPI + SQLite + React`
+### Offline-First POS Operating Layer: `FastAPI + SQLite + React`
 > Reusable POS foundation for business counters where billing must continue during network failures.
 
 - Local persistence, billing drafts, cashier sessions, receipt printing, recovery workflows, reports, settings, support tools, and audit logs
@@ -194,7 +194,7 @@ My-Portfolio/
 
 ---
 
-### Hairmaxxing Pro — `Flutter + iOS`
+### Hairmaxxing Pro: `Flutter + iOS`
 > Salon and barber booking marketplace for at-home hairstyling, haircut discovery, artist profiles, and appointment workflows.
 
 - Mobile-first customer booking experience
@@ -205,7 +205,7 @@ My-Portfolio/
 
 ---
 
-### 🗳️ My Voters Hub — `Flutter + Supabase`
+### 🗳️ My Voters Hub: `Flutter + Supabase`
 > Political campaign management platform for Telangana elections
 
 - Cross-platform Flutter app (iOS & Android) with a Telugu-first UI
@@ -218,7 +218,7 @@ My-Portfolio/
 
 ---
 
-### HAM Tech Innovations Landing Page — `HTML + CSS + JavaScript`
+### HAM Tech Innovations Landing Page: `HTML + CSS + JavaScript`
 > Responsive marketing site for a technology brand.
 
 - Service-focused landing page structure
