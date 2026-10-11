@@ -332,6 +332,14 @@ section{padding:clamp(60px,10vw,100px) 0;position:relative;z-index:1}
 .case-block ul li{padding-left:20px;position:relative;margin-bottom:8px}
 .case-block ul li::before{content:'';position:absolute;left:0;top:9px;width:6px;height:6px;background:var(--green);border-radius:50%}
 .case-block.full-width{grid-column:1/-1}
+.case-showcase-note{margin-bottom:16px}
+.screen-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.screen-card{overflow:hidden;border:1px solid rgba(61,139,108,.12);border-radius:16px;background:rgba(255,255,255,.55);transition:transform .35s,box-shadow .35s}
+.screen-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.08)}
+.screen-card img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;background:#edf1f6;border-bottom:1px solid rgba(61,139,108,.1)}
+.screen-card figcaption{padding:14px 16px}
+.screen-card h5{font-size:.9rem;margin-bottom:5px}
+.screen-card p{color:var(--text-muted);font-size:.8rem;line-height:1.6}
 .tech-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .tech-pill{padding:5px 14px;background:rgba(255,255,255,.4);backdrop-filter:blur(8px);border-radius:100px;font-size:.78rem;font-weight:500;color:var(--text);border:1px solid rgba(255,255,255,.5);transition:all .3s;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
 .tech-pill:hover{border-color:var(--green);color:var(--green);transform:translateY(-2px);box-shadow:0 4px 12px rgba(61,139,108,.1)}
@@ -778,6 +786,7 @@ footer p{color:var(--text-muted);font-size:.82rem}
 
 @media(max-width:1024px){.nav-links{display:none;position:absolute;top:56px;left:0;right:0;flex-direction:column;background:rgba(255,255,255,.92);backdrop-filter:blur(24px) saturate(1.6);-webkit-backdrop-filter:blur(24px) saturate(1.6);padding:24px;gap:16px;box-shadow:0 12px 32px rgba(0,0,0,.08);border-radius:0 0 20px 20px;border:1px solid rgba(255,255,255,.4)}.nav-links.open{display:flex}.mobile-toggle{display:flex}.hero-row{flex-direction:column}.scene{flex:0 0 auto;width:100%;max-width:420px;height:400px;margin:0 auto}.cursor-glow{display:none}.laptop-float{right:-10px;top:-55px}}
 @media(max-width:768px){.trust-grid{grid-template-columns:repeat(2,1fr)}.social-link span{display:none}.scene{display:none}.laptop-float{display:none}.hero-ctas{flex-direction:column}.hero-ctas .btn{justify-content:center;width:100%}.projects-grid{grid-template-columns:1fr}}
+@media(max-width:1024px){.screen-gallery{grid-template-columns:1fr}}
 @media(max-width:480px){.trust-grid{grid-template-columns:1fr}.case-header{flex-wrap:wrap}.back-to-top{bottom:20px;right:20px;width:42px;height:42px}}
 @media(min-width:1440px){.container{max-width:1320px}}
 @media(min-width:1920px){.container{max-width:1500px}html{font-size:18px}}
@@ -1817,14 +1826,6 @@ section > .container{position:relative;z-index:1}
 
 <section id="case-studies"><div class="container">
 <span class="section-tag reveal">Featured Work</span><h2 class="section-title reveal d1">Case Studies</h2><p class="section-desc reveal d2">Production-grade systems built for operations, investigation, retail, staffing, and mobile workflows.</p>
-<div class="case-study reveal d3 tilt-card" id="cs1"><div class="case-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleCase('cs1')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCase('cs1')}"><div class="case-header-left"><h3>Quantum Digital Forensics Platform</h3><p>Digital Forensics / Investigation Intelligence / Full-Stack Platform</p></div><span class="case-tag tag-react">Forensics</span><div class="case-toggle"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div></div>
-<div class="case-body" id="cs1-body"><div class="case-body-inner">
-<div class="case-block"><h4>Overview</h4><p>Digital investigation platform for banking fraud intelligence, CDR analysis, NCRP preview workflows, case management, evidence upload, authentication, and role-based access.</p></div>
-<div class="case-block"><h4>Banking Intelligence</h4><ul><li>Built modules for banking transaction analysis and fraud investigation workflows.</li><li>Designed dashboards for transaction trails, account relationships, risk indicators, recovery status, and destination intelligence.</li></ul></div>
-<div class="case-block"><h4>CDR Intelligence</h4><ul><li>Designed investigation views for event mix, top contacts, IMEI/IMSI references, call patterns, location signals, and SMS analysis.</li><li>Linked case records, evidence upload, and preview workflows for investigation teams.</li></ul></div>
-<div class="case-block"><h4>Production Readiness</h4><ul><li>Added secure authentication and password reset flows.</li><li>Supported Docker and AWS Lightsail deployment paths.</li></ul></div>
-<div class="case-block full-width"><h4>Tech Stack</h4><div class="tech-pills"><span class="tech-pill">Next.js</span><span class="tech-pill">NestJS</span><span class="tech-pill">PostgreSQL</span><span class="tech-pill">TypeORM</span><span class="tech-pill">Python</span><span class="tech-pill">Docker</span><span class="tech-pill">AWS Lightsail</span><span class="tech-pill">REST APIs</span><span class="tech-pill">Data Visualization</span></div></div>
-</div></div></div>
 <div class="case-study reveal tilt-card" id="cs2"><div class="case-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleCase('cs2')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCase('cs2')}"><div class="case-header-left"><h3>CRM Staffing Platform: Production Upgrade</h3><p>Staffing CRM / Enterprise Operations / Supabase</p></div><span class="case-tag tag-react">CRM</span><div class="case-toggle"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div></div>
 <div class="case-body" id="cs2-body"><div class="case-body-inner">
 <div class="case-block"><h4>Overview</h4><p>Production-grade staffing CRM for candidates, clients, jobs, submissions, interviews, placements, HR onboarding, reporting, and role-based team operations.</p></div>
@@ -1958,57 +1959,68 @@ section > .container{position:relative;z-index:1}
     I founded <strong>Liva, With Love</strong> as an intimate direct-to-consumer apparel and clothing brand created for someone I love. Currently a work in progress preparing for public launch, the platform combines bespoke heavyweight textiles with a real-time custom print studio, tactile spring physics, and fluid Lenis motion calibrated across 60Hz, 120Hz, and 240Hz screens.
   </p>
 
-  <div class="design-grid" style="margin-top:0">
+  <h4 style="font-family:'Outfit',sans-serif;font-size:1.08rem;font-weight:700;margin:32px 0 0;color:var(--text)">Liva Storefront Screens</h4>
+  <div class="design-grid" style="margin-top:18px">
     <article class="design-card reveal d1">
-      <div class="design-thumb">
-        <img src="./images/liva-1.png" alt="Liva Storefront Hero UI" onerror="this.style.display='none';this.parentElement.querySelector('.design-thumb-placeholder').style.display='flex'">
-        <div class="design-thumb-placeholder" style="display:none">Liva Storefront Hero</div>
-        <span class="design-thumb-label">Storefront UI</span>
-      </div>
-      <div class="design-info">
-        <h3>Storefront Hero & Identity</h3>
-        <p>"Heavyweight craft. Zero compromise." Minimalist hero with custom interactive L!va branding, fluid marquee banner, and tactile call-to-actions.</p>
-        <span class="design-link" style="color:var(--green-dark)">Secret &bull; Still in Production</span>
-      </div>
+      <div class="design-thumb"><img src="./images/liva-showcase/01_homepage_hero.png" alt="Liva homepage hero and storefront" loading="lazy" decoding="async"><span class="design-thumb-label">Homepage</span></div>
+      <div class="design-info"><h3>Homepage Hero</h3><p>The storefront opening screen, introducing Liva’s visual identity and featured apparel.</p></div>
     </article>
-
     <article class="design-card reveal d2">
-      <div class="design-thumb">
-        <img src="./images/liva-2.png" alt="Liva Collections Catalog" onerror="this.style.display='none';this.parentElement.querySelector('.design-thumb-placeholder').style.display='flex'">
-        <div class="design-thumb-placeholder" style="display:none">Liva Collections</div>
-        <span class="design-thumb-label">Drop Catalog</span>
-      </div>
-      <div class="design-info">
-        <h3>Collections & Size Matrix</h3>
-        <p>Curated drop catalog with real-time collection filters (Paglu, UnHinged, Memes), granular XS to XXL size selection, price sliders, and quick add-to-bag.</p>
-        <span class="design-link" style="color:var(--green-dark)">Work in Progress</span>
-      </div>
+      <div class="design-thumb"><img src="./images/liva-showcase/02_new_drops_section.png" alt="Liva new drops section" loading="lazy" decoding="async"><span class="design-thumb-label">New Drops</span></div>
+      <div class="design-info"><h3>New Drops</h3><p>A product-led section for highlighting the latest collection releases.</p></div>
     </article>
-
     <article class="design-card reveal d3">
-      <div class="design-thumb">
-        <img src="./images/liva-3.png" alt="Liva Custom Studio" onerror="this.style.display='none';this.parentElement.querySelector('.design-thumb-placeholder').style.display='flex'">
-        <div class="design-thumb-placeholder" style="display:none">Liva Custom Studio</div>
-        <span class="design-thumb-label">Interactive Studio</span>
-      </div>
-      <div class="design-info">
-        <h3>Bespoke Custom Print Studio</h3>
-        <p>Real-time interactive garment builder allowing customers to configure silhouettes (Boxy Tee, Drop-Shoulder, Crewneck), colorways, and custom graphic placements.</p>
-        <span class="design-link" style="color:var(--green-dark)">Garment Builder UI</span>
-      </div>
+      <div class="design-thumb"><img src="./images/liva-showcase/03_featured_collections.png" alt="Liva featured collections" loading="lazy" decoding="async"><span class="design-thumb-label">Collections</span></div>
+      <div class="design-info"><h3>Featured Collections</h3><p>Collection cards help visitors browse the brand’s apparel range.</p></div>
+    </article>
+    <article class="design-card reveal d1">
+      <div class="design-thumb"><img src="./images/liva-showcase/04_product_detail_f1_monaco.png" alt="Liva F1 Monaco product detail page" loading="lazy" decoding="async"><span class="design-thumb-label">Product Detail</span></div>
+      <div class="design-info"><h3>F1 Monaco Product Page</h3><p>A detailed product view for the F1 Monaco design, with purchase information and product imagery.</p></div>
+    </article>
+    <article class="design-card reveal d2">
+      <div class="design-thumb"><img src="./images/liva-showcase/05_custom_studio_workspace.png" alt="Liva custom design studio workspace" loading="lazy" decoding="async"><span class="design-thumb-label">Custom Studio</span></div>
+      <div class="design-info"><h3>Custom Studio Workspace</h3><p>The workspace for personalizing a garment and previewing a custom design.</p></div>
+    </article>
+    <article class="design-card reveal d3">
+      <div class="design-thumb"><img src="./images/liva-showcase/06_collections_catalog.png" alt="Liva collections catalog" loading="lazy" decoding="async"><span class="design-thumb-label">Catalog</span></div>
+      <div class="design-info"><h3>Collections Catalog</h3><p>A broader catalog view for scanning the available Liva collections and products.</p></div>
+    </article>
+    <article class="design-card reveal d1">
+      <div class="design-thumb"><img src="./images/liva-showcase/07_cart_drawer_preview.png" alt="Liva shopping cart drawer" loading="lazy" decoding="async"><span class="design-thumb-label">Shopping Cart</span></div>
+      <div class="design-info"><h3>Cart Drawer</h3><p>A quick cart preview that keeps selected items and checkout action close at hand.</p></div>
+    </article>
+    <article class="design-card reveal d2">
+      <div class="design-thumb" style="aspect-ratio:4/5"><img src="./images/liva-showcase/08_mobile_showcase.png" alt="Liva mobile storefront showcase" loading="lazy" decoding="async" style="object-fit:contain;background:#f2f5f3"><span class="design-thumb-label">Mobile</span></div>
+      <div class="design-info"><h3>Mobile Storefront</h3><p>A portrait view of the Liva shopping experience on a phone-sized screen.</p></div>
     </article>
   </div>
+
+  <h4 style="font-family:'Outfit',sans-serif;font-size:clamp(1.2rem,2vw,1.55rem);font-weight:750;margin:36px 0 10px;color:var(--text)">Quantum Digital Forensics - Cybersecurity Platform</h4>
+  <p style="color:var(--text-muted);font-size:.96rem;line-height:1.75;max-width:900px;margin:0 0 18px">A case-based digital forensics platform for banking fraud and communication investigations. It brings CDR analysis, transaction trails, account relationships, risk signals, evidence workflows, and role-based case access into one workspace. Expand the project below for the investigation views, capabilities, and technology stack.</p>
+  <div class="case-study reveal d3 tilt-card" id="cs1"><div class="case-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleCase('cs1')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCase('cs1')}"><div class="case-header-left"><h3>Quantum Digital Forensics - Cybersecurity Platform</h3><p>Digital Forensics / Investigation Intelligence / Full-Stack Platform</p></div><span class="case-tag tag-react">Forensics</span><div class="case-toggle"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+<div class="case-body" id="cs1-body"><div class="case-body-inner">
+<div class="case-block"><h4>Overview</h4><p>Digital investigation platform for banking fraud intelligence, CDR analysis, NCRP preview workflows, case management, evidence upload, authentication, and role-based access.</p></div>
+<div class="case-block"><h4>Banking Intelligence</h4><ul><li>Built modules for banking transaction analysis and fraud investigation workflows.</li><li>Designed dashboards for transaction trails, account relationships, risk indicators, recovery status, and destination intelligence.</li></ul></div>
+<div class="case-block"><h4>CDR Intelligence</h4><ul><li>Designed investigation views for event mix, top contacts, IMEI/IMSI references, call patterns, location signals, and SMS analysis.</li><li>Linked case records, evidence upload, and preview workflows for investigation teams.</li></ul></div>
+<div class="case-block"><h4>Production Readiness</h4><ul><li>Added secure authentication and password reset flows.</li><li>Supported Docker and AWS Lightsail deployment paths.</li></ul></div>
+<div class="case-block full-width case-showcase"><h4>Investigation Views</h4><p class="case-showcase-note">These screens bring call records, communication links, transaction trails, and account relationships into one investigation workflow. Direct contact and device identifiers are obscured in the record views; the hierarchy graphic uses simplified account labels.</p><div class="screen-gallery">
+<figure class="screen-card reveal d1"><img src="images/quantum-digital/01-cdr-link-analysis.png" width="1165" height="609" loading="lazy" decoding="async" alt="Communication graph connecting a source, a suspected pivot, and downstream contacts"><figcaption><h5>Communication link analysis</h5><p>Follow a source through a suspected pivot to downstream contacts and inspect the connected movement.</p></figcaption></figure>
+<figure class="screen-card reveal d2"><img src="images/quantum-digital/02-cdr-summary.png" width="937" height="760" loading="lazy" decoding="async" alt="Call-detail record analytics dashboard with summary cards and activity charts; personal identifiers are obscured"><figcaption><h5>Call-detail record overview</h5><p>Summarize call and message activity by direction, time, communication type, and location signals.</p></figcaption></figure>
+<figure class="screen-card reveal d3"><img src="images/quantum-digital/03-record-search.png" width="1325" height="653" loading="lazy" decoding="async" alt="Searchable communication records table with filters and redacted record values"><figcaption><h5>Searchable communication records</h5><p>Filter a large record set by date, direction, call type, duration, and device or network fields.</p></figcaption></figure>
+<figure class="screen-card reveal d4"><img src="images/quantum-digital/04-account-hierarchy.png" width="1177" height="768" loading="lazy" decoding="async" alt="Account hierarchy graph showing connected account and recipient nodes"><figcaption><h5>Account hierarchy</h5><p>Group related accounts and recipients so analysts can follow connections across the wider network.</p></figcaption></figure>
+<figure class="screen-card reveal d1"><img src="images/quantum-digital/05-transaction-layers.png" width="1600" height="765" loading="lazy" decoding="async" alt="Transaction layering dashboard with a money-flow graph and investigation sequence"><figcaption><h5>Transaction layering</h5><p>Trace how funds move through successive layers and identify consolidation or cash-out points.</p></figcaption></figure>
+<figure class="screen-card reveal d2"><img src="images/quantum-digital/06-risk-and-movement.png" width="1600" height="769" loading="lazy" decoding="async" alt="Transaction analytics charts for layer values, risk, payment channels, bank actions, locations, and timing"><figcaption><h5>Risk and movement patterns</h5><p>Compare transaction layers, risk categories, payment channels, bank actions, locations, and daily movement.</p></figcaption></figure>
+<figure class="screen-card reveal d3"><img src="images/quantum-digital/07-investigation-overview.png" width="1600" height="765" loading="lazy" decoding="async" alt="Forensic case workspace showing communication analytics and investigation navigation; personal identifiers are obscured"><figcaption><h5>Investigation workspace</h5><p>Bring case navigation together with communication analytics and entry points for caller, location, network, and report analysis.</p></figcaption></figure>
+<figure class="screen-card reveal d4"><img src="images/quantum-digital/08-bank-recipient-analysis.png" width="1600" height="767" loading="lazy" decoding="async" alt="Banking intelligence dashboard with bank rankings, risk exposure, and recipient analysis; account details are obscured"><figcaption><h5>Bank and recipient analysis</h5><p>Rank destination banks and review transaction values and risk exposure to guide the next investigative step.</p></figcaption></figure>
+</div></div>
+<div class="case-block full-width"><h4>Tech Stack</h4><div class="tech-pills"><span class="tech-pill">Next.js</span><span class="tech-pill">NestJS</span><span class="tech-pill">PostgreSQL</span><span class="tech-pill">TypeORM</span><span class="tech-pill">Python</span><span class="tech-pill">Docker</span><span class="tech-pill">AWS Lightsail</span><span class="tech-pill">REST APIs</span><span class="tech-pill">Data Visualization</span></div></div>
+</div></div></div>
 </div>
 
 <h3 style="font-family:'Outfit',sans-serif;font-size:1.3rem;font-weight:700;margin-top:20px;margin-bottom:18px;color:var(--text)" class="reveal">Agency & Client Platforms</h3>
 <div class="design-grid">
 
 <article class="design-card reveal d1">
-<div class="design-thumb">
-<img src="./images/hamtech-1.png" alt="Ham Tech Innovations landing" onerror="this.style.display='none';this.parentElement.querySelector('.design-thumb-placeholder').style.display='flex'">
-<div class="design-thumb-placeholder" style="display:none">Ham Tech Innovations</div>
-<span class="design-thumb-label">Landing Page</span>
-</div>
 <div class="design-info">
 <h3>Ham Tech Innovations</h3>
 <p>AI-first development agency landing page with 3D hero, glassmorphism UI, and sub-2s load times.</p>
@@ -2017,11 +2029,6 @@ section > .container{position:relative;z-index:1}
 </article>
 
 <article class="design-card reveal d2">
-<div class="design-thumb">
-<img src="./images/hamtech-2.png" alt="Ham Tech services" onerror="this.style.display='none';this.parentElement.querySelector('.design-thumb-placeholder').style.display='flex'">
-<div class="design-thumb-placeholder" style="display:none">Services & Stats</div>
-<span class="design-thumb-label">Services UI</span>
-</div>
 <div class="design-info">
 <h3>Agency Services Page</h3>
 <p>Stats-driven services showcase with animated counters and product-obsessed positioning for startups.</p>
@@ -2030,11 +2037,6 @@ section > .container{position:relative;z-index:1}
 </article>
 
 <article class="design-card reveal d3">
-<div class="design-thumb">
-<img src="./images/hamtech-3.png" alt="Case studies grid" onerror="this.style.display='none';this.parentElement.querySelector('.design-thumb-placeholder').style.display='flex'">
-<div class="design-thumb-placeholder" style="display:none">Case Studies Grid</div>
-<span class="design-thumb-label">Projects Grid</span>
-</div>
 <div class="design-info">
 <h3>Case Studies Grid</h3>
 <p>Clean grid layout showcasing product launches, CRMs, and AI automation with metric-first cards.</p>
@@ -2640,6 +2642,7 @@ function toggleCase(id) {
     if (header) header.setAttribute('aria-expanded', 'true');
   }
 }
+toggleCase('cs1');
 
 /* ═══ TILT CARDS (fine pointer only) ═══ */
 if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
