@@ -1387,3 +1387,23 @@ h1>span:nth-child(3){animation-delay:.44s}
  .work-card:before,.signature-name:after{transition:none!important}
  .signature-name:after{width:100%}
 }
+
+
+/* Text motion uses the existing reveal observer; no second scheduler. */
+.motion-word{
+ display:inline-block;white-space:pre-wrap;
+ transform:translate3d(0,0,0) rotate(0deg);opacity:1;
+}
+.motion-ready .reveal:not(.in-view) .motion-word{
+ transform:translate3d(0,23px,0) rotate(1.5deg);opacity:.15;
+}
+.motion-ready .reveal.in-view .motion-word{
+ transform:translate3d(0,0,0) rotate(0);opacity:1;
+ transition:transform .92s var(--ease),opacity .85s var(--ease);
+ transition-delay:calc(var(--word-index,0) * 75ms);
+}
+@media(prefers-reduced-motion:reduce){
+ .motion-word,.motion-ready .reveal:not(.in-view) .motion-word{
+  transform:none!important;opacity:1!important;transition:none!important;
+ }
+}
