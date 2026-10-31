@@ -2,7 +2,7 @@ name: Independent portfolio versions
 
 on:
   push:
-    branches: [feat/v2-motion-experience-20261031]
+    branches: [feat/v2-motion-experience-20261031, feat/v2-parallax-live-showcase-20261031]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -29,6 +29,13 @@ jobs:
           test -f dist/v4/index.html
           test -f dist/v2/assets/kinetic.css
           test -f dist/v2/assets/kinetic.js
+          test -f dist/v2/gallery/quantum/01-cdr-link-analysis.png
+          test -f dist/v2/gallery/quantum/07-investigation-overview.png
+          test -f dist/v2/gallery/liva/01_homepage_hero.png
+          test -f dist/v2/gallery/liva/05_custom_studio_workspace.png
+          grep -q 'data-ambient-icon="build"' dist/v2/index.html
+          grep -q 'data-ambient-icon="explore"' dist/v2/index.html
+          grep -q 'data-ambient-icon="collaborate"' dist/v2/index.html
           test -f dist/v2/assets/dm-sans-400.ttf
           grep -q 'light-field' dist/v2/index.html
           grep -q 'repeating-linear-gradient' dist/v2/assets/kinetic.css
@@ -101,6 +108,7 @@ jobs:
           path: |
             dist/v2/index.html
             dist/v2/assets/**
+            dist/v2/gallery/**
             dist/v3/index.html
             dist/v4/index.html
             previews/*.png
