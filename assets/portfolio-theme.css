@@ -133,7 +133,7 @@ section[data-portfolio-depth] > .container { position:relative; z-index:1; }
   will-change:transform;
 }
 .portfolio-haze--a { left:-17%; top:0; background:radial-gradient(circle,var(--haze-one),transparent 70%); }
-.portfolio-haze--b { right:-20%; bottom:-2%; background:radial-gradient(circle,var(--haze-two),transparent 72%); transform:translate3d(0,calc(var(--depth-travel,0px) * -1),0); }
+.portfolio-haze--b { right:-20%; bottom:-2%; background:radial-gradient(circle,var(--haze-two),transparent 72%); transform:translate3d(0,var(--depth-travel-b,0px),0); }
 .portfolio-edge {
   position:absolute;bottom:-1px;left:clamp(16px,4vw,54px);
   right:clamp(16px,4vw,54px); height:1px;
@@ -238,3 +238,9 @@ html[data-portfolio-theme="midnight"] .palette-option[aria-pressed="true"] {back
   body,.palette-trigger,.portfolio-haze,.portfolio-edge,.portrait-letter {transition:none!important;animation:none!important;transform:none!important;}
   .portfolio-stripe-overlay {opacity:.12;}
 }
+
+/* Protect contrast in dark navigation and the dense legacy content panels. */
+html[data-portfolio-theme="midnight"] :is(.nav-links a,.nav-logo,.logo,.nav-cta,.faq-item summary,.compare-col h3) { color:var(--text); }
+html[data-portfolio-theme="midnight"] :is(.modal-overlay,.contact-modal) { color:var(--text); }
+html[data-portfolio-theme="midnight"] :is(.design-info,.design-info p,.project-card p,.skill-card p,.service-card p) { color:var(--text-muted); }
+html[data-portfolio-theme="midnight"] .palette-option[aria-pressed="true"] { color:#fff; }
