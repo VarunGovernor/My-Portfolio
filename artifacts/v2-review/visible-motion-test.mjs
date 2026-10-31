@@ -91,9 +91,23 @@ try {
   await check("Selected Fields reacts to cursor depth", async () => firstTilt !== secondTilt);
 
   const beforeScroll = await prop(".hero", "--copy-y");
+  const beforeRender = await page.evaluate(() => ({
+    text: getComputedStyle(document.querySelector(".hero .hero-copy")).transform,
+    canvas: getComputedStyle(document.querySelector(".hero .light-field")).transform,
+    panel: getComputedStyle(document.querySelector(".hero .fields")).transform
+  }));
   await page.evaluate(() => window.scrollTo({ top: 410, behavior: "instant" }));
   await wait(350);
   const afterScroll = await prop(".hero", "--copy-y");
+  const afterRender = await page.evaluate(() => ({
+    text: getComputedStyle(document.querySelector(".hero .hero-copy")).transform,
+    canvas: getComputedStyle(document.querySelector(".hero .light-field")).transform,
+    panel: getComputedStyle(document.querySelector(".hero .fields")).transform
+  }));
+  await check("Real CSS transforms produce independent on-screen scroll depth", async () =>
+    beforeRender.text !== afterRender.text &&
+    beforeRender.canvas !== afterRender.canvas &&
+    beforeRender.panel !== afterRender.panel);
   await check("Hero copy has independent scroll parallax", async () => beforeScroll !== afterScroll);
   await check("Hero depth is not identical to typography movement", async () => {
     const deep = await prop(".hero", "--depth-a-y");
@@ -109,9 +123,13 @@ try {
   await check("About signature reveal starts on entry", async () =>
     page.$eval(".signature-name .sig-letter", e => getComputedStyle(e).animationName.includes("letter-enter")));
   const aboutBefore = await prop(".about-section", "--about-intro-y");
+  const aboutRenderedBefore = await page.$eval(".about-intro", e => getComputedStyle(e).transform);
   await page.evaluate(() => scrollBy({ top: 150, behavior: "instant" }));
   await wait(320);
   const aboutAfter = await prop(".about-section", "--about-intro-y");
+  const aboutRenderedAfter = await page.$eval(".about-intro", e => getComputedStyle(e).transform);
+  await check("About parallax changes the rendered transform", async () =>
+    aboutRenderedBefore !== aboutRenderedAfter);
   await check("About has scroll-linked depth, not static positioning", async () =>
     aboutBefore !== aboutAfter);
   await check("About text columns move at different rates", async () => {
