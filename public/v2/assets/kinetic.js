@@ -72,6 +72,10 @@
     span.style.setProperty("--wave", `${-((i % 3) + 1) * 3}px`);
     signature.append(span);
   });
+  const caret = document.createElement("span");
+  caret.className = "sig-caret";
+  caret.setAttribute("aria-hidden", "true");
+  signature.append(caret);
   // Optional typographic interaction. Text is stable unless someone hovers it.
   const heading = document.getElementById("hero-title");
   if (heading) {
@@ -124,6 +128,88 @@
     walk(heading);
   }
   document.querySelectorAll(".section-heading h2,.about-intro h2,.contact-title,.work-card h3").forEach(prepareWords);
+
+  // Original, real project screenshots bundled under public/v2/gallery.
+  const galleryData = {
+    quantum: {
+      title: "Quantum Digital Forensics",
+      description: "Communication and banking intelligence views from the original portfolio.",
+      href: "../index.html#cs1",
+      frames: [
+        ["./gallery/quantum/01-cdr-link-analysis.png", "Call relationship graph"],
+        ["./gallery/quantum/02-cdr-summary.png", "Communication analytics summary"],
+        ["./gallery/quantum/07-investigation-overview.png", "Investigation workspace"],
+        ["./gallery/quantum/08-bank-recipient-analysis.png", "Bank and recipient analysis"]
+      ]
+    },
+    liva: {
+      title: "Liva, With Love",
+      description: "Real storefront, product and studio screens from the original portfolio.",
+      href: "../index.html#designs",
+      frames: [
+        ["./gallery/liva/01_homepage_hero.png", "Storefront homepage"],
+        ["./gallery/liva/04_product_detail_f1_monaco.png", "F1 Monaco product detail"],
+        ["./gallery/liva/05_custom_studio_workspace.png", "Custom design studio"],
+        ["./gallery/liva/08_mobile_showcase.png", "Mobile storefront showcase"]
+      ]
+    }
+  };
+  const dialog = document.getElementById("project-gallery");
+  const photo = dialog?.querySelector(".gallery-image");
+  const dots = dialog?.querySelector(".gallery-dots");
+  let galleryActive = null, galleryIndex = 0, galleryTrigger = null;
+  function drawGallery() {
+    const items = galleryActive.frames;
+    galleryIndex = (galleryIndex + items.length) % items.length;
+    const [src, caption] = items[galleryIndex];
+    photo.classList.remove("is-switching");
+    void photo.offsetWidth;
+    photo.src = src;
+    photo.alt = `${galleryActive.title}: ${caption}`;
+    photo.classList.add("is-switching");
+    dialog.querySelector(".gallery-caption").textContent = caption;
+    dialog.querySelector(".gallery-count").textContent = `${galleryIndex + 1} / ${items.length}`;
+    dots.querySelectorAll("button").forEach((b, i) =>
+      b.setAttribute("aria-pressed", String(i === galleryIndex)));
+  }
+  function openGallery(key, trigger) {
+    if (!dialog || !galleryData[key]) return;
+    galleryActive = galleryData[key];
+    galleryIndex = 0;
+    galleryTrigger = trigger;
+    dialog.querySelector("#gallery-title").textContent = galleryActive.title;
+    dialog.querySelector("#gallery-description").textContent = galleryActive.description;
+    dialog.querySelector(".gallery-case-link").href = galleryActive.href;
+    dots.replaceChildren();
+    galleryActive.frames.forEach(([src, label], i) => {
+      const button = document.createElement("button");
+      button.className = "gallery-dot";
+      button.type = "button";
+      button.setAttribute("aria-label", `Show screenshot ${i + 1}: ${label}`);
+      const thumb = document.createElement("img");
+      thumb.src = src;
+      thumb.alt = "";
+      thumb.loading = "lazy";
+      button.append(thumb);
+      button.addEventListener("click", () => { galleryIndex = i; drawGallery(); });
+      dots.append(button);
+    });
+    drawGallery();
+    dialog.showModal();
+  }
+  document.querySelectorAll("[data-gallery]").forEach(button => {
+    button.addEventListener("click", () => openGallery(button.dataset.gallery, button));
+  });
+  dialog?.querySelector(".gallery-prev")?.addEventListener("click", () => { galleryIndex--; drawGallery(); });
+  dialog?.querySelector(".gallery-next")?.addEventListener("click", () => { galleryIndex++; drawGallery(); });
+  dialog?.querySelector(".gallery-close")?.addEventListener("click", () => dialog.close());
+  dialog?.addEventListener("click", event => { if (event.target === dialog) dialog.close(); });
+  dialog?.addEventListener("close", () => { galleryTrigger?.focus({ preventScroll: true }); });
+  document.addEventListener("keydown", event => {
+    if (!dialog?.open) return;
+    if (event.key === "ArrowLeft") { event.preventDefault(); galleryIndex--; drawGallery(); }
+    if (event.key === "ArrowRight") { event.preventDefault(); galleryIndex++; drawGallery(); }
+  });
 
   const reveal = new IntersectionObserver(
     (entries) =>
@@ -332,15 +418,44 @@
             ? `${Math.max(-43, Math.min(43, -rect.top * 0.04))}px`
             : "0px",
         );
-        const phase = Math.max(-1, Math.min(1, (rect.top + rect.height / 2 - innerHeight / 2) / Math.max(rect.height, innerHeight)));
-        section.style.setProperty("--scene-y", moving ? `${(-phase * 29).toFixed(2)}px` : "0px");
-        if (section === hero) hero.style.setProperty("--copy-y", moving ? `${(-phase * 8).toFixed(2)}px` : "0px");
-        if (section.matches(".work-section")) {
-          cards.forEach(card => {
+        // Distinct per-layer scroll depths. Translate only; keep layout stable.
+        const phase = Math.max(-1, Math.min(1,
+          (rect.top + rect.height / 2 - innerHeight / 2) / Math.max(rect.height, innerHeight)
+        ));
+        const offset = size => moving ? `${(-phase * size).toFixed(2)}px` : "0px";
+        section.style.setProperty("--scene-y", offset(102));
+        if (section === hero) {
+          hero.style.setProperty("--copy-y", offset(54));
+          hero.style.setProperty("--feature-y", offset(28));
+          hero.style.setProperty("--ribs-scroll-y", offset(76));
+          hero.style.setProperty("--field-scroll-y", offset(90));
+          hero.style.setProperty("--depth-a-y", offset(116));
+          hero.style.setProperty("--depth-b-y", offset(-140));
+        } else if (section.matches(".work-section")) {
+          section.style.setProperty("--work-heading-y", offset(31));
+          cards.forEach((card, index) => {
             const box = card.getBoundingClientRect();
-            const cardPhase = Math.max(-1, Math.min(1, (box.top + box.height / 2 - innerHeight / 2) / Math.max(box.height, innerHeight)));
-            card.style.setProperty("--card-depth", moving ? `${(-cardPhase * 9).toFixed(2)}px` : "0px");
+            const p = Math.max(-1, Math.min(1,
+              (box.top + box.height / 2 - innerHeight / 2) / Math.max(box.height, innerHeight)
+            ));
+            card.style.setProperty("--card-depth", moving ? `${(-p * (18 + index * 3)).toFixed(2)}px` : "0px");
+            card.style.setProperty("--preview-y", moving ? `${(-p * 42).toFixed(2)}px` : "0px");
           });
+        } else if (section.matches(".about-section")) {
+          section.style.setProperty("--about-bg-y", offset(115));
+          section.style.setProperty("--about-intro-y", offset(30));
+          section.style.setProperty("--about-copy-y", offset(-27));
+          section.style.setProperty("--about-points-y", offset(17));
+          section.style.setProperty("--signature-y", offset(22));
+        } else if (section.matches(".skills-section")) {
+          section.style.setProperty("--skills-bg-y", offset(124));
+          section.style.setProperty("--skills-title-y", offset(36));
+          section.querySelectorAll(".cap-card").forEach((card, i) => {
+            card.style.setProperty("--cap-y", offset(17 + i * 13));
+          });
+        } else if (section.matches(".contact-section")) {
+          section.style.setProperty("--contact-bg-y", offset(110));
+          section.style.setProperty("--contact-title-y", offset(38));
         }
       });
       scrollDirty = false;
@@ -365,13 +480,20 @@
         section.style.setProperty("--ribbon-sweep", `${-115 + ((seconds * 14) % 245)}%`);
       });
       if (visible.has(hero)) {
-        fields.style.setProperty("--field-x", `${-x * 17}px`);
-        fields.style.setProperty(
-          "--field-y",
-          `${-y * 10 + Math.sin(seconds * 0.72) * 7}px`,
-        );
+        fields.style.setProperty("--field-x", `${(-x * 17).toFixed(2)}px`);
+        fields.style.setProperty("--field-y",
+          `${(-y * 10 + Math.sin(seconds * .72) * 7).toFixed(2)}px`);
         fields.style.setProperty("--field-rotate-x", `${(y * 2.2).toFixed(2)}deg`);
         fields.style.setProperty("--field-rotate-y", `${(-x * 2.8).toFixed(2)}deg`);
+        hero.style.setProperty("--depth-a-x", `${(x * 38).toFixed(2)}px`);
+        hero.style.setProperty("--depth-b-x", `${(-x * 64).toFixed(2)}px`);
+        hero.style.setProperty("--depth-a-pointer-y", `${(y * 25).toFixed(2)}px`);
+        hero.style.setProperty("--depth-b-pointer-y", `${(-y * 46).toFixed(2)}px`);
+        hero.style.setProperty("--copy-x", `${(x * 9).toFixed(2)}px`);
+        hero.style.setProperty("--light-x", `${(-x * 22).toFixed(2)}px`);
+      }
+      if (visible.has(document.querySelector(".work-section"))) {
+        document.querySelector(".work-section").style.setProperty("--light-x", `${(x * 12).toFixed(2)}px`);
       }
       if (activeCard) {
         const currentX =
