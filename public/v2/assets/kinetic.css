@@ -207,3 +207,21 @@ body { text-rendering:optimizeLegibility; }
  .signature-name .sig-letter{animation:none!important;transition:none!important;transform:none!important}
  .motion-ready .kinetic-word,.motion-ready .reveal:not(.in-view) .kinetic-word{opacity:1!important;transform:none!important;transition:none!important}
 }
+
+/* Procedural 2D light field: original moving atmosphere, not a screenshot background. */
+.v2-flow-canvas{
+  position:absolute;inset:-6%;z-index:1;width:112%;height:112%;
+  pointer-events:none;opacity:.8;
+  filter:blur(27px) saturate(1.16);
+  transform:translate3d(calc(var(--mx) * -.3),calc(var(--my) * -.2),0) scale(1.05);
+  will-change:transform;
+}
+.about-signature:hover .sig-letter{
+  transform:translateY(var(--wave-y,-2px)) rotate(-.7deg);
+}
+@media(max-width:600px){
+ .v2-flow-canvas{filter:blur(30px);opacity:.68}
+}
+@media(prefers-reduced-motion:reduce){
+ .v2-flow-canvas{display:none}
+}
