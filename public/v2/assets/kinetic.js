@@ -15,6 +15,48 @@
   const sections=Array.from(document.querySelectorAll('.section'));
   const reveals=Array.from(document.querySelectorAll('.reveal'));
   let visibleHero=true, visibleSections=new Set();
+
+  // The atmosphere is a low-resolution original procedural light field,
+  // redrawn at most 24fps. The crisp 18px vertical ribs remain a CSS layer above it.
+  const canvas=document.getElementById('v2-flow-canvas');
+  const ctx=canvas?.getContext('2d',{alpha:true,desynchronized:true})||null;
+  let lastCanvas=0;
+  if(ctx){canvas.width=360;canvas.height=220}
+  function lightSpot(x,y,rx,ry,r,g,b,a){
+    if(!ctx)return;
+    ctx.save();ctx.translate(x,y);ctx.scale(rx,ry);
+    const gr=ctx.createRadialGradient(0,0,0,0,0,1);
+    gr.addColorStop(0,'rgba('+r+','+g+','+b+','+a+')');
+    gr.addColorStop(.42,'rgba('+r+','+g+','+b+','+(a*.64)+')');
+    gr.addColorStop(1,'rgba('+r+','+g+','+b+',0)');
+    ctx.fillStyle=gr;ctx.beginPath();ctx.arc(0,0,1,0,Math.PI*2);ctx.fill();ctx.restore();
+  }
+  function drawFlow(time){
+    if(!ctx || time-lastCanvas<42)return;
+    lastCanvas=time;ctx.clearRect(0,0,360,220);
+    const t=time*.00027;
+    const drift=Math.sin(t)*22;
+    // Distinct navy / sky-blue / hot-pink masses, sliding behind the ribbing.
+    lightSpot(206+drift+px*8,70+Math.cos(t*.8)*14,78,100,3,11,65,.62);
+    lightSpot(120+Math.sin(t*.72)*27,119+Math.cos(t*.62)*13,102,94,252,255,255,.18);
+    lightSpot(190+Math.cos(t*.55)*22,161+Math.sin(t*.61)*17,110,74,216,57,149,.59);
+    lightSpot(280+Math.sin(t*.82)*16,147+Math.cos(t*.45)*19,94,89,28,178,231,.32);
+    lightSpot(280+Math.cos(t*.7)*12,55+Math.sin(t*.65)*10,84,84,2,105,185,.22);
+    ctx.save();
+    ctx.globalAlpha=.15;
+    ctx.lineCap='round';
+    const ribbon=ctx.createLinearGradient(50,65,300,192);
+    ribbon.addColorStop(0,'rgba(252,255,255,0)');
+    ribbon.addColorStop(.43,'rgba(216,57,149,.75)');
+    ribbon.addColorStop(.76,'rgba(252,255,255,.25)');
+    ribbon.addColorStop(1,'rgba(216,57,149,0)');
+    ctx.strokeStyle=ribbon;ctx.lineWidth=20;
+    ctx.beginPath();
+    ctx.moveTo(-20,126+Math.sin(t)*15);
+    ctx.bezierCurveTo(107,65+Math.sin(t*.8)*24,166,203+Math.cos(t*.7)*17,355,146+Math.cos(t)*14);
+    ctx.stroke();ctx.restore();
+  }
+
   let px=0,py=0,tx=0,ty=0;
   let running=false,last=0;
   let hidden=document.hidden;
@@ -153,6 +195,7 @@
     if(visibleHero && hero){
       const r=hero.getBoundingClientRect();
       const progress=Math.max(-1,Math.min(1,-r.top/Math.max(1,r.height)));
+      drawFlow(time);
       hero.style.setProperty('--mx',(px*26).toFixed(2)+'px');
       hero.style.setProperty('--my',(py*17+progress*13).toFixed(2)+'px');
       hero.style.setProperty('--sx',(px*-11).toFixed(2)+'px');
