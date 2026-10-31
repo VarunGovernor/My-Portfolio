@@ -1,6 +1,8 @@
 name: Independent portfolio versions
 
 on:
+  push:
+    branches: [feat/v2-motion-experience-20261031]
   pull_request:
     branches: [main]
   workflow_dispatch:
