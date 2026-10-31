@@ -1,0 +1,41 @@
+name: Independent portfolio versions
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Verify independent version outputs and design anchors
+        run: |
+          test -f dist/index.html
+          test -f dist/v2/index.html
+          test -f dist/v3/index.html
+          test -f dist/v4/index.html
+          grep -q 'background-size:13px 100%' dist/v2/index.html
+          grep -q 'feDisplacementMap' dist/v2/index.html
+          grep -q 'starfield' dist/v3/index.html
+          grep -q 'equalizer-scene' dist/v3/index.html
+          grep -q '#FC734D' dist/v3/index.html
+          grep -q '#105BFF' dist/v4/index.html
+          grep -q '#ff48a5' dist/v4/index.html
+          for v in v2 v3 v4; do
+            if grep -q 'images/profile.jpeg' "dist/$v/index.html"; then
+              echo "Profile image unexpectedly referenced in $v"
+              exit 1
+            fi
+          done
+          cmp index.html dist/index.html >/dev/null || echo "Vite may have transformed original index.html; source is unchanged."
