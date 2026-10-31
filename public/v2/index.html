@@ -448,7 +448,8 @@ main > footer{background:#052e56;color:#FCFFFF;margin:0;width:100%;max-width:non
  .v2-floating-schedule{transform:none!important}
 }
 
-</style></head>
+</style>
+<link rel="stylesheet" href="./assets/kinetic.css"></head>
 <body>
 <a href="#top" class="skip">Skip to content</a>
 <nav class="navigation" data-open="false" aria-label="Primary navigation"><div class="shell nav-inner">
@@ -512,7 +513,8 @@ main > footer{background:#052e56;color:#FCFFFF;margin:0;width:100%;max-width:non
   </div>
   <span class="edge-mark" aria-hidden="true"></span>
 </section>
-<section class="section work-section" id="work"><div class="shell section-content">
+<section class="section work-section" id="work">
+<div class="work-atmosphere" aria-hidden="true"><div class="work-rib-field"></div><div class="work-pink-orb"></div></div><div class="shell section-content">
  <div class="section-heading reveal"><div><div class="eyebrow">SELECTED WORK — REAL SYSTEMS</div><h2>Selected<br>work.</h2></div><p>Not just pretty dashboards. Systems built for actual operations, where the messy real-world requirements start.</p></div>
  <div class="work-grid"><article class="work-card reveal">
 <div class="work-top"><span class="work-number">01 / 05</span><span class="work-category">ENTERPRISE SOFTWARE</span></div>
@@ -564,6 +566,10 @@ main > footer{background:#052e56;color:#FCFFFF;margin:0;width:100%;max-width:non
       <div><b>Exploring</b><span>Local models, agent workflows, system design and better ways to solve problems.</span></div>
       <div><b>Open to</b><span>Engineering roles, interesting freelance work and people who enjoy building things properly.</span></div>
     </div>
+    <div class="about-signature" aria-label="Name fallback">
+      <strong class="signature-name">Varun.</strong>
+      <span class="sig-note">The human behind the experiments.<br>Occasionally debugging at 2 AM.</span>
+    </div>
   </div>
 </div><span class="edge-mark" aria-hidden="true"></span></section>
 <section class="section contact-section" id="contact"><div class="shell section-content">
@@ -572,160 +578,4 @@ main > footer{background:#052e56;color:#FCFFFF;margin:0;width:100%;max-width:non
  <a href="mailto:varunmanikanta15@gmail.com">Email ↗</a><a href="https://github.com/VarunGovernor" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/in/varun-m-a62418172/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
  </div></div></div><span class="edge-mark" aria-hidden="true"></span></section>
 <footer class="shell"><span>© 2026 Varun Manikanta. Built with intent.</span><span>VERSION 2 / INDEPENDENT DESIGN STUDY</span><a href="#top">BACK TO TOP ↑</a></footer></main>
-<script>
-(()=>{
-'use strict';
-const nav=document.querySelector('.navigation');
-const menu=document.querySelector('.menu-toggle');
-if(menu&&nav){
-  menu.addEventListener('click',()=>{
-    const open=nav.dataset.open!=='true';
-    nav.dataset.open=String(open);
-    menu.setAttribute('aria-expanded',String(open));
-  });
-  nav.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{
-    nav.dataset.open='false'; menu.setAttribute('aria-expanded','false');
-  }));
-}
-const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const reveals=document.querySelectorAll('.reveal');
-if('IntersectionObserver' in window&&!reduce){
- const ro=new IntersectionObserver(entries=>{
-  for(const e of entries)if(e.isIntersecting){e.target.classList.add('in-view');ro.unobserve(e.target);}
- },{threshold:.08,rootMargin:'0px 0px 80px 0px'});
- reveals.forEach(el=>ro.observe(el));
-}else reveals.forEach(el=>el.classList.add('in-view'));
-if(reduce)return;
-const layers=[...document.querySelectorAll('[data-parallax]')];
-const sections=[...document.querySelectorAll('.section')];
-let scheduled=false;
-function onTick(){
- scheduled=false;
- const h=window.innerHeight;
- for(const section of sections){
-   const r=section.getBoundingClientRect();
-   if(r.bottom<0||r.top>h)continue;
-   const center=(r.top+r.height/2-h/2)/Math.max(h,r.height);
-   section.style.setProperty('--edge-shift',Math.max(-36,Math.min(36,center*36)).toFixed(1)+'px');
- }
- for(const el of layers){
-   const section=el.closest('.section')||el.parentElement;
-   const r=section.getBoundingClientRect();
-   if(r.bottom<0||r.top>h)continue;
-   const f=parseFloat(el.dataset.parallax||'.12');
-   const drift=Math.max(-55,Math.min(55,(h/2-r.top-r.height/2)*f));
-   el.style.setProperty('--parallax',drift.toFixed(1)+'px');
- }
-}
-function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(onTick)}}
-addEventListener('scroll',schedule,{passive:true});
-addEventListener('resize',schedule,{passive:true});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)schedule()});
-schedule();
-})();
-
-
-
-/* V2 standalone motion controller: mouse depth, scroll depth, and hero text reveal. */
-(()=>{
- 'use strict';
- const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
- const hero=document.querySelector('.v2-hero');
- const stripe=document.querySelector('.v2-ribs');
- const schedule=document.querySelector('.v2-floating-schedule');
- const cards=[...document.querySelectorAll('.work-card')];
- if(!hero||reduced.matches)return;
- let targetX=0,targetY=0,smoothX=0,smoothY=0;
- let raf=0,active=true,heroVisible=true;
- const heroWatcher=('IntersectionObserver' in window)
- ? new IntersectionObserver(e=>{heroVisible=e[0].isIntersecting;tickRequest();},{rootMargin:'25% 0px 25% 0px'})
- : null;
- heroWatcher?.observe(hero);
- hero.addEventListener('pointermove',e=>{
-   if(e.pointerType==='touch')return;
-   const rect=hero.getBoundingClientRect();
-   targetX=((e.clientX-rect.left)/Math.max(rect.width,1)-0.5)*2;
-   targetY=((e.clientY-rect.top)/Math.max(rect.height,1)-0.5)*2;
-   tickRequest();
- },{passive:true});
- hero.addEventListener('pointerleave',()=>{targetX=0;targetY=0;tickRequest()},{passive:true});
- const observed=new Set();
- const sectionWatcher=('IntersectionObserver' in window) ? new IntersectionObserver(es=>{
-   for(const e of es){if(e.isIntersecting)observed.add(e.target);else observed.delete(e.target);}
-   tickRequest();
- },{rootMargin:'18% 0px 18% 0px'}) : null;
- const sections=[...document.querySelectorAll('.work-section,.skills-section,.about-section,.contact-section')];
- sections.forEach(s=>{sectionWatcher?.observe(s);if(!sectionWatcher)observed.add(s)});
- function tickRequest(){if(!raf&&active)raf=requestAnimationFrame(frame)}
- function frame(){
-   raf=0;if(!active||reduced.matches)return;
-   smoothX+=(targetX-smoothX)*.072;
-   smoothY+=(targetY-smoothY)*.072;
-   if(heroVisible){
-     const rect=hero.getBoundingClientRect();
-     const t=Math.max(-1,Math.min(1,-rect.top/Math.max(1,rect.height)));
-     hero.style.setProperty('--hero-x',(smoothX*16).toFixed(2)+'px');
-     hero.style.setProperty('--hero-y',(smoothY*12+t*15).toFixed(2)+'px');
-     stripe?.style.setProperty('--stripe-shift',(smoothX*4).toFixed(2)+'px');
-     schedule?.style.setProperty('--field-y',(smoothY*9+t*13).toFixed(2)+'px');
-   }
-   const vh=window.innerHeight;
-   observed.forEach(section=>{
-     const r=section.getBoundingClientRect();
-     const progress=(r.top+r.height*.5-vh*.5)/Math.max(vh,r.height);
-     section.style.setProperty('--edge-shift',(Math.max(-33,Math.min(33,progress*45))).toFixed(1)+'px');
-     section.style.setProperty('--section-shift',(Math.max(-32,Math.min(32,progress*32))).toFixed(1)+'px');
-     if(section.classList.contains('work-section')){
-       cards.forEach((card,i)=>{
-         const cr=card.getBoundingClientRect();
-         if(cr.bottom<0||cr.top>vh)return;
-         const mid=(cr.top+cr.height*.5-vh*.5)/Math.max(vh,cr.height);
-         card.style.setProperty('--card-shift',(Math.max(-10,Math.min(10,-mid*(9+(i%3)*2)))).toFixed(1)+'px');
-       });
-     }
-   });
-   const heroActive=heroVisible&&(Math.abs(targetX-smoothX)>.003||Math.abs(targetY-smoothY)>.003);
-   if(heroActive)tickRequest();
- }
- window.addEventListener('scroll',tickRequest,{passive:true});
- window.addEventListener('resize',tickRequest,{passive:true});
- document.addEventListener('visibilitychange',()=>{active=!document.hidden;if(active)tickRequest()});
- tickRequest();
-
- /* Live-site-inspired scramble is interactive, not automatic.
-    Heading stays readable on first paint and in browser screenshots. */
- const lines=[...hero.querySelectorAll('.hero-title-line')];
- const glyphs='ABCDEFGHJKLMNPQRSTUVWXYZ0123456789';
- const original=lines.map(el=>el.textContent);
- function scramble(el,target,duration,delay){
-   const start=performance.now()+delay;
-   function draw(now){
-     if(reduced.matches){el.textContent=target;return}
-     if(now<start){requestAnimationFrame(draw);return}
-     const progress=Math.min(1,(now-start)/duration);
-     const preserved=Math.floor(target.length*Math.pow(progress,.72));
-     let visual='';
-     for(let i=0;i<target.length;i++){
-       const ch=target[i];
-       visual+=i<preserved||ch===' '||ch==='.'||ch==='&'||ch==='-'?ch:glyphs[(i*17+Math.floor(now/45))%glyphs.length];
-     }
-     el.textContent=visual;
-     if(progress<1)requestAnimationFrame(draw);else el.textContent=target;
-   }
-   requestAnimationFrame(draw);
- }
- // Re-run a short scramble on desktop hover, but never hide the actual headline on load.
- if(lines.length===3){
-   lines.forEach((el,i)=>{
-     let busy=false;
-     el.addEventListener('pointerenter',event=>{
-       if(event.pointerType==='touch'||busy||reduced.matches)return;
-       busy=true;
-       scramble(el,original[i],370,0);
-       window.setTimeout(()=>{el.textContent=original[i];busy=false},410);
-     });
-   });
- }
-})();
-
-</script></body></html>
+<script defer src="./assets/kinetic.js"></script></body></html>
