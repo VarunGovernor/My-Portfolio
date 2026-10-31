@@ -38,7 +38,7 @@ try {
   check("V2 kinetic controller initializes",
     await page.evaluate(() => document.documentElement.classList.contains("motion-ready")));
   check("Project links open V2-styled text case studies",
-    (await page.$('a[href*="v2/work/index.html#"]')).length === 5);
+    (await page.$$('a[href*="v2/work/index.html#"]')).length === 5);
   check("No em dashes in public title or visible text",
     await page.evaluate(() => !/[—–]/.test(document.title + document.body.innerText)));
 
@@ -85,7 +85,7 @@ try {
   check("Standalone V2 route still serves the approved portfolio",
     await page.$eval("#hero-title", e => e.textContent.includes("Full-stack")));
   check("Standalone V2 links open its own project details",
-    (await page.$('a[href*="./work/index.html#"]')).length === 5);
+    (await page.$$('a[href*="./work/index.html#"]')).length === 5);
 
   await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
   await page.goto(root, { waitUntil: "networkidle0" });
