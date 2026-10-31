@@ -24,6 +24,13 @@ jobs:
       - name: Verify independent version outputs and design anchors
         run: |
           test -f dist/index.html
+          test -f dist/legacy/index.html
+          test -f dist/images/liva-showcase/01_homepage_hero.png
+          test -f dist/images/quantum-digital/01-cdr-link-analysis.png
+          grep -q 'v2/assets/kinetic.css' dist/index.html
+          grep -q 'v2/assets/kinetic.js' dist/index.html
+          grep -q 'legacy/index.html#cs1' dist/index.html
+          grep -q 'id="case-studies"' dist/legacy/index.html
           test -f dist/v2/index.html
           test -f dist/v3/index.html
           test -f dist/v4/index.html
