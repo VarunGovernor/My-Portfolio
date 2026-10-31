@@ -1,0 +1,31 @@
+name: Portfolio build check
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Assert built theme assets
+        run: |
+          test -f dist/index.html
+          grep -q 'paletteTrigger' dist/index.html
+          find dist/assets -name '*.css' | grep -q .
+          find dist/assets -name '*.js' | grep -q .
+          if grep -q 'images/profile.jpeg' dist/index.html; then
+            echo "Old profile image was unexpectedly included"
+            exit 1
+          fi
