@@ -109,7 +109,7 @@ try {
 
   await page.goto(root + "v2/work/index.html#liva", { waitUntil: "networkidle0" });
   check("V2 project details load with consistent theme",
-    (await page.$("#liva")) !== null && (await page.$('img')).length === 0);
+    (await page.$("#liva")) !== null && (await page.$$('img')).length === 0);
   check("V2 details page contains no legacy gallery or screenshot buttons",
     await page.evaluate(() => !document.body.innerText.includes("Liva Storefront Screens")));
   const v2Errors = errors.slice();
