@@ -1,0 +1,240 @@
+/* Portfolio theme lab — visual overrides for the active static portfolio.
+   The old inline stylesheet still provides layout; palette values live here. */
+html[data-portfolio-theme="sky"] {
+  --green: #0593c6; --green-light: #e8f8fe; --green-dark: #056a8d;
+  --green-bright: #d83995; --accent-rgb: 5, 147, 198;
+  --bg: #f4fbff; --text: #102333; --text-muted: #476475;
+  --glass: rgba(252,255,255,.65); --glass-border: rgba(5,147,198,.20);
+  --glass-solid: #fcffff; --liquid-bg: rgba(252,255,255,.67);
+  --liquid-border: rgba(5,147,198,.20);
+  --liquid-shine: linear-gradient(120deg,rgba(255,255,255,.7),rgba(5,147,198,.06) 56%,rgba(216,57,149,.06));
+  --stripe-color: rgba(5,147,198,.26);
+  --haze-one: rgba(5,147,198,.30); --haze-two: rgba(216,57,149,.24);
+  --card-shadow: rgba(5,77,111,.08); --page-surface: rgba(252,255,255,.7);
+  color-scheme: light;
+}
+html[data-portfolio-theme="midnight"] {
+  --green: #0297de; --green-light: #132b39; --green-dark: #6dd4ff;
+  --green-bright: #fc734d; --accent-rgb: 2, 151, 222;
+  --bg: #02070a; --text: #f4f8fc; --text-muted: #a2bbc8;
+  --glass: rgba(9,24,33,.76); --glass-border: rgba(95,195,240,.22);
+  --glass-solid: #102431; --liquid-bg: rgba(9,24,33,.80);
+  --liquid-border: rgba(95,195,240,.22);
+  --liquid-shine: linear-gradient(125deg,rgba(2,151,222,.08),rgba(255,255,255,.015),rgba(252,115,77,.09));
+  --stripe-color: rgba(2,151,222,.28);
+  --haze-one: rgba(2,151,222,.24); --haze-two: rgba(252,115,77,.18);
+  --card-shadow: rgba(0,0,0,.33); --page-surface: rgba(9,24,33,.72);
+  color-scheme: dark;
+}
+html[data-portfolio-theme="galactic"] {
+  /* The printed hex labels in reference 3 differ from its visible swatches:
+     these values intentionally match the violet / pink swatch appearance. */
+  --green: #5541f5; --green-light: #eeebff; --green-dark: #4432d6;
+  --green-bright: #f765ce; --accent-rgb: 85, 65, 245;
+  --bg: #f0f0f0; --text: #17162b; --text-muted: #57566d;
+  --glass: rgba(255,255,255,.70); --glass-border: rgba(85,65,245,.18);
+  --glass-solid: #fff; --liquid-bg: rgba(255,255,255,.72);
+  --liquid-border: rgba(85,65,245,.18);
+  --liquid-shine: linear-gradient(120deg,rgba(255,255,255,.9),rgba(85,65,245,.06),rgba(247,101,206,.07));
+  --stripe-color: rgba(85,65,245,.18);
+  --haze-one: rgba(85,65,245,.23); --haze-two: rgba(247,101,206,.23);
+  --card-shadow: rgba(38,21,90,.08); --page-surface: rgba(255,255,255,.74);
+  color-scheme: light;
+}
+
+/* Deliberately centralize all three palettes instead of introducing more green literals. */
+body {
+  background: var(--bg) !important;
+  color: var(--text);
+  transition: background-color .55s ease, color .55s ease;
+}
+::selection { background: var(--green-bright); color: #fff; }
+:focus-visible { outline: 2px solid var(--green-bright); outline-offset: 4px; }
+.scroll-progress { background: linear-gradient(90deg,var(--green),var(--green-bright)); }
+.hero-bg-text { color: var(--green); opacity: .075; }
+.hero { isolation: isolate; }
+.hero::before {
+  content:""; position:absolute; pointer-events:none; inset:-10% -10% auto;
+  height:min(92vh,900px); z-index:0;
+  background:
+    radial-gradient(ellipse at 70% 40%,var(--haze-one),transparent 44%),
+    radial-gradient(ellipse at 43% 63%,var(--haze-two),transparent 42%);
+  filter: blur(32px); opacity: .82;
+}
+.hero h1 .accent { color: var(--green); }
+.hero h1 .accent::after { background:var(--haze-two); }
+.hero-badge { border-color:var(--liquid-border); }
+.btn-primary,.nav-cta { background:var(--green); color:#fff; }
+.btn-primary:hover,.nav-cta:hover { box-shadow:0 14px 45px var(--haze-one); }
+.hero-ctas .btn-secondary, .about-photo, .skill-card, .project-card,
+.service-card,.process-step,.design-card,.faq-item,.compare-col,.social-link {
+  border-color:var(--liquid-border);
+}
+.skill-card,.project-card,.service-card,.process-step,.faq-item,.compare-col,.design-card {
+  box-shadow:0 16px 55px var(--card-shadow);
+}
+:is(.skill-card,.project-card,.service-card,.process-step,.faq-item,.compare-col,.design-card):hover {
+  border-color:var(--green);
+}
+.about-photo {
+  min-height: 355px; border-radius:28px; aspect-ratio:4/5;
+  background:linear-gradient(148deg,var(--green-light),var(--page-surface) 51%,var(--haze-two));
+  overflow:hidden; isolation:isolate;
+}
+.about-photo::before {
+  content:""; position:absolute; z-index:-1; inset:0;
+  background:repeating-linear-gradient(90deg,transparent 0 5px,var(--stripe-color) 5px 6px,transparent 6px 11px);
+  opacity:.42;
+}
+.about-photo-placeholder {
+  display:flex !important; flex-direction:column; width:100%;height:100%;
+  align-items:center;justify-content:center; gap:12px;
+  color:var(--text); text-align:center; padding:24px;
+}
+.portrait-letter {
+  display:block; font-family:'Outfit',sans-serif; font-weight:800;
+  font-size:clamp(7rem,15vw,13rem); letter-spacing:-.11em;
+  line-height:.9; padding-right:.1em; color:var(--green);
+  text-shadow:12px 15px 0 var(--haze-two);
+}
+.portrait-name {
+  font-family:'Outfit',sans-serif; font-size:clamp(1.45rem,3vw,2.1rem);
+  font-weight:800; letter-spacing:.32em; padding-left:.32em;
+}
+.portrait-caption {
+  font-family:'JetBrains Mono',monospace;font-size:.64rem;
+  letter-spacing:.12em; font-weight:500; color:var(--text-muted);
+}
+.about-photo::after { background:linear-gradient(135deg,transparent 55%,var(--haze-two)); }
+
+/* The image-1 fine, vertical stripes extend across the page with low contrast. */
+.portfolio-stripe-overlay {
+  position:fixed; inset:0; z-index:10; pointer-events:none;
+  background:repeating-linear-gradient(
+    90deg,transparent 0 6px,var(--stripe-color) 6px 7px,transparent 7px 13px
+  );
+  opacity:.15; mask-image:linear-gradient(to bottom,transparent 0%,#000 12%,#000 90%,transparent 100%);
+}
+html[data-portfolio-theme="sky"] .portfolio-stripe-overlay { opacity:.31; }
+html[data-portfolio-theme="midnight"] .portfolio-stripe-overlay { opacity:.28; }
+html[data-portfolio-theme="galactic"] .portfolio-stripe-overlay { opacity:.25; }
+
+/* Decorative layers do not modify section content or existing 3-D hero animation. */
+section[data-portfolio-depth] { position:relative; isolation:isolate; }
+section[data-portfolio-depth] > .container { position:relative; z-index:1; }
+.portfolio-atmosphere {
+  position:absolute; inset:0; pointer-events:none;
+  overflow:hidden; z-index:0; contain:paint;
+}
+.portfolio-haze {
+  position:absolute; width:min(48vw,540px); height:min(48vw,540px);
+  border-radius:50%; filter:blur(63px); opacity:.42;
+  transform:translate3d(0,var(--depth-travel,0px),0);
+  will-change:transform;
+}
+.portfolio-haze--a { left:-17%; top:0; background:radial-gradient(circle,var(--haze-one),transparent 70%); }
+.portfolio-haze--b { right:-20%; bottom:-2%; background:radial-gradient(circle,var(--haze-two),transparent 72%); transform:translate3d(0,calc(var(--depth-travel,0px) * -1),0); }
+.portfolio-edge {
+  position:absolute;bottom:-1px;left:clamp(16px,4vw,54px);
+  right:clamp(16px,4vw,54px); height:1px;
+  background:linear-gradient(90deg,transparent,var(--green),var(--green-bright),transparent);
+  opacity:.47; z-index:2;pointer-events:none;
+}
+.portfolio-edge::after {
+  content:""; position:absolute; width:20%; max-width:200px; height:3px;top:-1px;left:40%;
+  background:var(--green);border-radius:999px;filter:blur(7px);opacity:.6;
+  transform:translate3d(var(--edge-travel,0px),0,0);
+}
+.portfolio-edge::before {
+  content:""; position:absolute; width:38px;height:38px; border-radius:50%;
+  top:-19px;right:9%;
+  border:1px solid var(--liquid-border);opacity:.55;
+  transform:translate3d(0,var(--depth-travel,0px),0);
+}
+
+/* Make the second concept genuinely dark throughout the lengthy legacy page. */
+html[data-portfolio-theme="midnight"] :is(
+ .skill-card,.project-card,.service-card,.process-step,.faq-item,.compare-col,.design-card,
+ .tech-marquee,.philosophy,.about-photo,.modal-content,.os-card
+) {
+  background:var(--liquid-bg) !important;
+  color:var(--text);
+  border-color:var(--liquid-border);
+}
+html[data-portfolio-theme="midnight"] :is(
+ #skills,.philosophy,.cube-band,.open-source-section
+) { background:rgba(5,16,24,.64) !important; }
+html[data-portfolio-theme="midnight"] :is(
+ .compare-col.compare-me,.compare-col.compare-them
+) { background:linear-gradient(145deg,rgba(2,151,222,.11),rgba(9,24,33,.85)) !important; }
+html[data-portfolio-theme="midnight"] :is(
+ .faq-item summary,.design-card h3,.service-card h3,.process-step h3,
+ .skill-card h3,.project-card h3,.about-text h2,.section-title
+) { color:var(--text); }
+html[data-portfolio-theme="midnight"] :is(.nav-links,.nav,.nav-inner) {
+  border-color:var(--liquid-border);
+}
+html[data-portfolio-theme="midnight"] .hero-bg-text { opacity:.11; }
+html[data-portfolio-theme="midnight"] .design-thumb { background:rgba(255,255,255,.05); }
+html[data-portfolio-theme="midnight"] .portfolio-haze { opacity:.55; }
+html[data-portfolio-theme="midnight"] input,
+html[data-portfolio-theme="midnight"] textarea,
+html[data-portfolio-theme="midnight"] select {
+  background:#102431; color:var(--text); border-color:var(--liquid-border);
+}
+html[data-portfolio-theme="midnight"] input::placeholder,
+html[data-portfolio-theme="midnight"] textarea::placeholder { color:#a2bbc8; }
+
+/* Floating palette switcher: compact button on the page, three actual options on click. */
+.palette-lab { position:fixed;right:clamp(12px,3vw,36px);bottom:clamp(12px,3vw,26px);z-index:1200;font-family:'Plus Jakarta Sans',sans-serif; }
+.palette-trigger {
+  appearance:none;display:flex;align-items:center;gap:10px;cursor:pointer;
+  padding:11px 14px;border:1px solid var(--liquid-border);border-radius:999px;
+  color:var(--text);background:var(--glass-solid);
+  box-shadow:0 15px 45px rgba(0,0,0,.15);font-size:.8rem;font-weight:700;
+  backdrop-filter:blur(22px);
+}
+.palette-trigger:hover { transform:translateY(-2px); }
+.palette-trigger-icon { width:15px;height:15px;border-radius:50%;display:inline-block;
+ background:conic-gradient(var(--green) 0 47%,var(--green-bright) 47% 79%,var(--bg) 79%);border:1px solid var(--liquid-border); }
+.palette-trigger-count {font-size:.65rem;letter-spacing:.08em;color:var(--text-muted); }
+.palette-panel {
+  position:absolute;right:0;bottom:calc(100% + 12px);width:min(340px,calc(100vw - 24px));
+  padding:16px;background:var(--glass-solid);color:var(--text);
+  border:1px solid var(--liquid-border);border-radius:22px;
+  box-shadow:0 22px 70px rgba(0,0,0,.23);backdrop-filter:blur(30px);
+}
+.palette-panel[hidden] { display:none !important; }
+.palette-panel-title {font-size:.8rem;font-weight:800;margin:0 0 4px; }
+.palette-panel-sub {font-size:.68rem;color:var(--text-muted);margin:0 0 14px; }
+.palette-options {display:grid;gap:8px;}
+.palette-option {
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  width:100%;padding:10px 12px; border-radius:13px;cursor:pointer;
+  background:transparent;color:inherit;text-align:left;
+  border:1px solid var(--liquid-border);
+}
+.palette-option:hover,.palette-option[aria-pressed="true"] {
+  border-color:var(--green);background:var(--green-light);
+}
+html[data-portfolio-theme="midnight"] .palette-option:hover,
+html[data-portfolio-theme="midnight"] .palette-option[aria-pressed="true"] {background:#143245;}
+.palette-option-label {font-size:.76rem;font-weight:750; }
+.palette-option-desc {display:block;margin-top:3px;color:var(--text-muted);font-size:.64rem;font-weight:500; }
+.palette-swatches {display:flex;gap:3px;flex-shrink:0;}
+.palette-swatches i {width:16px;height:28px;border-radius:4px;border:1px solid rgba(127,127,127,.22);}
+.palette-check {color:var(--green);font-size:.8rem;font-weight:800;min-width:10px;}
+.palette-legend {font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text-muted);margin-top:11px;line-height:1.5;}
+
+/* Preserve phone legibility and explicit accessibility motion preferences. */
+@media(max-width:740px) {
+  .palette-lab {right:12px;bottom:12px;}
+  .palette-trigger {font-size:.72rem;padding:10px 12px;}
+  .portfolio-haze {width:60vw;height:60vw;filter:blur(42px);}
+  .portfolio-edge::before {display:none;}
+  .about-photo {max-width:360px;margin-inline:auto;min-height:310px;}
+}
+@media(prefers-reduced-motion:reduce) {
+  body,.palette-trigger,.portfolio-haze,.portfolio-edge,.portrait-letter {transition:none!important;animation:none!important;transform:none!important;}
+  .portfolio-stripe-overlay {opacity:.12;}
+}
