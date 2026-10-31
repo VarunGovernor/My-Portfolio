@@ -39,3 +39,35 @@ jobs:
             fi
           done
           cmp index.html dist/index.html >/dev/null || echo "Vite may have transformed original index.html; source is unchanged."
+
+      - name: Capture desktop and mobile design previews
+        continue-on-error: true
+        run: |
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME" ]; then echo "Chrome unavailable on runner"; exit 1; fi
+          mkdir -p previews
+          npm run preview -- --host 127.0.0.1 --port 4173 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl -fsS http://127.0.0.1:4173/My-Portfolio/v2/ > /dev/null; then break; fi
+            sleep 1
+          done
+          for v in v2 v3 v4; do
+            "$CHROME" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars \
+              --window-size=1440,1000 --force-device-scale-factor=1 --virtual-time-budget=2500 \
+              --screenshot="previews/${v}-desktop.png" "http://127.0.0.1:4173/My-Portfolio/${v}/"
+            "$CHROME" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars \
+              --window-size=390,850 --force-device-scale-factor=1 --virtual-time-budget=2500 \
+              --screenshot="previews/${v}-mobile.png" "http://127.0.0.1:4173/My-Portfolio/${v}/"
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-portfolio-preview-bundle
+          path: |
+            dist/v2/index.html
+            dist/v3/index.html
+            dist/v4/index.html
+            previews/*.png
+          if-no-files-found: warn
