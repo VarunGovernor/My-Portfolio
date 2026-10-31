@@ -16,7 +16,7 @@ root HTML, so changing only them has no visible effect on the deployed site.
   deleted the unused image from this branch.
 - Added the thin vertical stripe texture from reference one.
 - Added section-depth atmospheric glows and bottom-edge markers to all
-  14 non-cube? (actually 14 of the 15 sections carry IDs) existing named
+  14 named
   sections, with one IntersectionObserver and one scroll-throttled rAF.
 - Preserved the current hero animation, content, routing, and project screenshots.
 - Kept a non-deploying branch; the live site only changes on merge to main.
