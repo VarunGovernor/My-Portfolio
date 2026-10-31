@@ -1419,12 +1419,12 @@ h1>span:nth-child(3){animation-delay:.44s}
 .depth-a{
   background:radial-gradient(ellipse 22% 37% at 21% 55%,#9fe9ff35,transparent 75%),
              radial-gradient(ellipse 24% 35% at 75% 22%,#c5eaff4f,transparent 74%);
-  transform:translate3d(var(--depth-a-x,0px),var(--depth-a-y,0px),0);
+  transform:translate3d(var(--depth-a-x,0px),calc(var(--depth-a-y,0px) + var(--depth-a-pointer-y,0px)),0);
 }
 .depth-b{
   background:radial-gradient(ellipse 24% 43% at 56% 47%,#e831a846,transparent 72%),
              radial-gradient(ellipse 20% 32% at 86% 77%,#85caff40,transparent 74%);
-  transform:translate3d(var(--depth-b-x,0px),var(--depth-b-y,0px),0);
+  transform:translate3d(var(--depth-b-x,0px),calc(var(--depth-b-y,0px) + var(--depth-b-pointer-y,0px)),0);
 }
 .hero .hero-copy{transform:translate3d(var(--copy-x,0px),var(--copy-y,0px),0)}
 .hero .feature-bar{transform:translate3d(0,var(--feature-y,0px),0);will-change:transform}
