@@ -67,6 +67,7 @@ jobs:
           name: independent-portfolio-preview-bundle
           path: |
             dist/v2/index.html
+            dist/v2/assets/**
             dist/v3/index.html
             dist/v4/index.html
             previews/*.png
