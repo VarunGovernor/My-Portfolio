@@ -34,7 +34,8 @@ jobs:
           test -f legacy/images/quantum-digital/01-cdr-link-analysis.png
           grep -q 'v2/assets/kinetic.css' index.html
           grep -q 'v2/assets/kinetic.js' index.html
-          grep -q 'legacy/index.html#cs1' index.html
+          grep -q 'v2/work/index.html#quantum' index.html
+          test -f v2/work/index.html
           cmp index.html dist/index.html
           test -f dist/index.html
           test -f dist/legacy/index.html
@@ -42,7 +43,8 @@ jobs:
           test -f dist/v2/assets/kinetic.js
           grep -q 'v2/assets/kinetic.css' dist/index.html
           grep -q 'v2/assets/kinetic.js' dist/index.html
-          grep -q 'legacy/index.html#cs1' dist/index.html
+          grep -q 'v2/work/index.html#quantum' dist/index.html
+          test -f dist/v2/work/index.html
           grep -q 'id="case-studies"' dist/legacy/index.html
       - uses: actions/upload-pages-artifact@v3
         with:

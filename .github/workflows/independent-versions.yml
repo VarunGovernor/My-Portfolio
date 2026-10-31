@@ -29,7 +29,9 @@ jobs:
           test -f dist/images/quantum-digital/01-cdr-link-analysis.png
           grep -q 'v2/assets/kinetic.css' dist/index.html
           grep -q 'v2/assets/kinetic.js' dist/index.html
-          grep -q 'legacy/index.html#cs1' dist/index.html
+          grep -q 'v2/work/index.html#quantum' dist/index.html
+          test -f dist/v2/work/index.html
+          grep -q 'id="liva"' dist/v2/work/index.html
           grep -q 'id="case-studies"' dist/legacy/index.html
           test -f dist/v2/index.html
           test -f dist/v3/index.html
@@ -112,6 +114,7 @@ jobs:
             dist/index.html
             dist/legacy/index.html
             dist/v2/index.html
+            dist/v2/work/index.html
             dist/v2/assets/**
             dist/v3/index.html
             dist/v4/index.html

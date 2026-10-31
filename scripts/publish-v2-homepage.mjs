@@ -36,7 +36,8 @@ await writeFile(v2Path, legacyLinks);
 const live = legacyLinks
   .replaceAll('./assets/kinetic.css', './v2/assets/kinetic.css')
   .replaceAll('./assets/kinetic.js', './v2/assets/kinetic.js')
-  .replaceAll('../legacy/index.html#', './legacy/index.html#');
+  .replaceAll('../legacy/index.html#', './legacy/index.html#')
+  .replaceAll('href="./work/index.html', 'href="./v2/work/index.html');
 await writeFile(resolve(dist, "index.html"), live);
 
 for (const [label, html] of [["homepage", live], ["V2", legacyLinks], ["legacy V1", legacy]]) {

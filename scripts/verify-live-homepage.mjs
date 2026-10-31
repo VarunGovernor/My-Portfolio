@@ -37,8 +37,8 @@ try {
     await page.$eval('script[src]', e => e.getAttribute("src") === "./v2/assets/kinetic.js"));
   check("V2 kinetic controller initializes",
     await page.evaluate(() => document.documentElement.classList.contains("motion-ready")));
-  check("Project case studies point to preserved V1",
-    (await page.$$('a[href*="legacy/index.html#cs"]')).length >= 4);
+  check("Project links open V2-styled text case studies",
+    (await page.$('a[href*="v2/work/index.html#"]')).length === 5);
   check("No em dashes in public title or visible text",
     await page.evaluate(() => !/[—–]/.test(document.title + document.body.innerText)));
 
@@ -84,8 +84,8 @@ try {
   await page.goto(root + "v2/index.html", { waitUntil: "networkidle0" });
   check("Standalone V2 route still serves the approved portfolio",
     await page.$eval("#hero-title", e => e.textContent.includes("Full-stack")));
-  check("V2 case-study links resolve to legacy page",
-    (await page.$$('a[href*="../legacy/index.html#cs"]')).length >= 4);
+  check("Standalone V2 links open its own project details",
+    (await page.$('a[href*="./work/index.html#"]')).length === 5);
 
   await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
   await page.goto(root, { waitUntil: "networkidle0" });
@@ -107,6 +107,11 @@ try {
     !overlaps(mobile.glass, mobile.heading));
   await page.screenshot({ path: "previews/live-root-mobile.png" });
 
+  await page.goto(root + "v2/work/index.html#liva", { waitUntil: "networkidle0" });
+  check("V2 project details load with consistent theme",
+    (await page.$("#liva")) !== null && (await page.$('img')).length === 0);
+  check("V2 details page contains no legacy gallery or screenshot buttons",
+    await page.evaluate(() => !document.body.innerText.includes("Liva Storefront Screens")));
   const v2Errors = errors.slice();
   await page.goto(root + "legacy/index.html#cs1", { waitUntil: "networkidle0" });
   check("Legacy project case studies survive the upgrade",

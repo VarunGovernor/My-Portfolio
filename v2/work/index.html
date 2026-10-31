@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#3858a1"><meta name="description" content="Selected engineering projects by Varun Manikanta: systems, automation, mobile, investigation software, and commerce.">
+<title>Selected Work | Varun</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ctext y='32' font-size='32'%3EV.%3C/text%3E%3C/svg%3E">
+<style>
+@font-face{font-family:DMS;src:url('../assets/dm-sans-400.ttf')}@font-face{font-family:DMS;src:url('../assets/dm-sans-700.ttf');font-weight:700}
+@font-face{font-family:Plex;src:url('../assets/plex-mono-500.ttf')}
+:root{color-scheme:dark;--white:#fcffff;--cyan:#0593c6;--pink:#d83995;--ink:#13245b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;font-family:DMS,Arial,sans-serif;color:var(--white);background:#263f87;line-height:1.55}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse 54% 62% at 13% 20%,#59b4fd92,transparent 70%),radial-gradient(ellipse 55% 65% at 77% 36%,#eb54ad94,transparent 73%),linear-gradient(112deg,#29468e,#395cb0 51%,#34245d)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:repeating-linear-gradient(90deg,transparent 0 3px,#def4ff19 4px,#1b448119 6px,transparent 8px);opacity:.62}
+a{color:inherit}button,a{-webkit-tap-highlight-color:transparent}a:focus-visible{outline:3px solid var(--white);outline-offset:5px}
+.shell{width:min(1200px,calc(100% - 48px));margin-inline:auto}
+header{position:sticky;top:0;z-index:20;border-bottom:1px solid #ffffff24;background:#2f4685d9;backdrop-filter:blur(18px)}
+.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{font-size:24px;font-weight:700;letter-spacing:-1.1px;text-decoration:none}.brand span{color:#ff7cc2}
+.nav-right{display:flex;align-items:center;gap:28px;font-size:13px;font-weight:700}.nav-right a{text-decoration:none}.nav-right .outline{border:1px solid #ffffff60;padding:10px 16px}
+.hero{padding:clamp(74px,10vw,142px) 0 72px;max-width:100%}
+.eyebrow,.panel-top,.detail-label,.jump-num,.footer-id{font-family:Plex,monospace;letter-spacing:.09em;font-size:11px;font-weight:500}
+.eyebrow{color:#e6deff}h1{font-weight:400;font-size:clamp(60px,10vw,138px);letter-spacing:-.073em;line-height:.87;margin:25px 0 29px}
+h1 em{font-style:normal;color:#ffd9f0}.intro{max-width:660px;font-size:clamp(16px,2vw,21px);color:#f6f8ffcf;line-height:1.55}
+.overview{padding:0 0 52px;display:grid;grid-template-columns:280px 1fr;gap:32px}.overview-title{font-weight:700;max-width:250px;font-size:20px;line-height:1.2}
+.jump-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.jump-list a{display:flex;gap:12px;align-items:center;min-height:56px;padding:12px 16px;background:#ffffff16;border:1px solid #ffffff3d;border-radius:12px;text-decoration:none;transition:background .25s,border .25s,transform .25s;font-size:14px}
+.jump-list a:hover{background:#eaf7ff29;border-color:#ffaddb;transform:translateY(-3px)}
+.jump-num{color:#d9e3ff}.jump-arrow{margin-left:auto;color:#ffb4de}
+.panels{display:grid;gap:20px;padding:0 0 110px}
+.project-panel{scroll-margin-top:110px;position:relative;overflow:hidden;border-radius:19px;background:linear-gradient(112deg,#273e84eb,#446db4dc);border:1px solid #ffffff59;box-shadow:inset 0 1px #ffffff33,0 20px 75px #17194935;min-height:340px;transition:border-color .25s,box-shadow .25s}
+.project-panel::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 65% 100% at 88% 10%,#eb61b947,transparent 65%),radial-gradient(ellipse 70% 130% at 0% 100%,#1393d547,transparent 65%);opacity:.8}
+.project-panel:target{border-color:#ff79cc;box-shadow:0 0 0 2px #f43fba6c,0 24px 90px #1c1b6750}
+.panel-top{position:relative;display:flex;justify-content:space-between;gap:15px;text-transform:uppercase;padding:23px 30px 0;color:#e7f3ff}
+.panel-layout{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(35px,6vw,100px);padding:28px 30px 36px}
+h2{font-size:clamp(33px,4vw,59px);font-weight:400;letter-spacing:-.055em;line-height:1.03;margin:0 0 25px}.project-lede{font-size:20px;font-weight:700;max-width:470px;margin:0 0 15px}
+.project-overview{font-size:15px;max-width:490px;line-height:1.75;color:#edf1ffdb}
+.detail-label{padding-bottom:13px;color:#ffcfed;border-bottom:1px solid #ffffff4b}
+.detail-row{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid #ffffff26}
+.detail-row h3{font-size:14px;margin:0;font-weight:700}.detail-row p{margin:0;color:#edf2ffe0;font-size:13px;line-height:1.65}
+.stack-label{margin-top:27px}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chips span{font:11px Plex,monospace;border:1px solid #ffffff5b;border-radius:24px;background:#a6cbf41c;padding:7px 11px}
+.next-link{display:inline-flex;gap:10px;margin-top:22px;text-underline-offset:5px;font-weight:700;font-size:13px}
+footer{border-top:1px solid #ffffff40;padding:26px 0 38px;display:flex;align-items:center;justify-content:space-between;gap:20px;font-size:13px}
+.footer-id{color:#d8e6ff}
+@media(max-width:880px){.overview{grid-template-columns:1fr}.panel-layout{grid-template-columns:1fr;gap:25px}.jump-list{grid-template-columns:1fr 1fr}.detail-row{grid-template-columns:145px 1fr}}
+@media(max-width:560px){.shell{width:min(100% - 30px,1200px)}.nav{min-height:65px}.nav-right{gap:14px;font-size:12px}.nav-right .outline{padding:8px 10px}.hero{padding:75px 0 45px}h1{font-size:clamp(56px,14vw,86px)}.overview{padding-bottom:37px}.jump-list{grid-template-columns:1fr}.panel-top{padding:20px 18px 0}.panel-layout{padding:25px 18px 30px}h2{font-size:39px}.detail-row{grid-template-columns:1fr;gap:6px}.project-panel{scroll-margin-top:80px}footer{flex-direction:column;align-items:flex-start}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+</style></head>
+<body>
+<header><nav class="shell nav" aria-label="Primary"><a href="../../index.html#top" class="brand">Varun<span>.</span></a><div class="nav-right"><a href="../../index.html#work">Portfolio</a><a href="../../index.html#contact" class="outline">Let's connect ↗</a></div></nav></header>
+<main id="main"><section class="shell hero"><div class="eyebrow">VARUN / PROJECT ARCHIVE / 2026</div><h1>Selected<br><em>work.</em></h1><p class="intro">A closer look at the engineering behind five real systems. Built around workflows, reliability and usable experiences. No image galleries, just what each system does and how it works.</p></section>
+<section class="shell overview" aria-label="Projects"><div class="overview-title">Explore by project.<br>Five selected builds.</div><nav class="jump-list" aria-label="Jump to a project"><a href="#crm" aria-label="Jump to CRM Staffing Platform"><span class="jump-num">01</span><span>CRM Staffing Platform</span><span class="jump-arrow" aria-hidden="true">↗</span></a>
+<a href="#pos" aria-label="Jump to Offline-First POS"><span class="jump-num">02</span><span>Offline-First POS</span><span class="jump-arrow" aria-hidden="true">↗</span></a>
+<a href="#voters" aria-label="Jump to My Voters Hub"><span class="jump-num">03</span><span>My Voters Hub</span><span class="jump-arrow" aria-hidden="true">↗</span></a>
+<a href="#quantum" aria-label="Jump to Quantum Digital Forensics"><span class="jump-num">04</span><span>Quantum Digital Forensics</span><span class="jump-arrow" aria-hidden="true">↗</span></a>
+<a href="#liva" aria-label="Jump to Liva, With Love"><span class="jump-num">05</span><span>Liva, With Love</span><span class="jump-arrow" aria-hidden="true">↗</span></a></nav></section>
+<section class="shell panels" aria-label="Project details"><article id="crm" class="project-panel" aria-labelledby="crm-title">
+<div class="panel-top"><span>01 / 05</span><span>Enterprise software</span></div>
+<div class="panel-layout"><div class="panel-lead">
+<h2 id="crm-title">CRM Staffing Platform</h2>
+<p class="project-lede">An operational backbone for staffing teams.</p>
+<p class="project-overview">A production-grade staffing CRM designed to connect candidates, clients, jobs, submissions, interviews, placements and reporting in one organized workflow.</p>
+<a class="next-link" href="#pos">Next project <span aria-hidden="true">↗</span></a>
+</div><div class="panel-detail"><div class="detail-label">SYSTEM HIGHLIGHTS</div>
+<div class="detail-row"><h3>Operational flow</h3><p>Job requirements, candidate profiles, submissions, interviews and placements remain connected rather than scattered across tools.</p></div>
+<div class="detail-row"><h3>Access and documents</h3><p>Role-based access, Supabase Row-Level Security, protected document handling and signed-URL workflows.</p></div>
+<div class="detail-row"><h3>Production support</h3><p>Administrative user management, notifications and dashboard reporting for day-to-day team operations.</p></div>
+<div class="detail-label stack-label">TOOLS &amp; TECHNOLOGIES</div><div class="chips"><span>React</span><span>Vite</span><span>Supabase</span><span>PostgreSQL</span><span>RLS</span><span>Edge Functions</span></div>
+</div></div>
+</article>
+<article id="pos" class="project-panel" aria-labelledby="pos-title">
+<div class="panel-top"><span>02 / 05</span><span>Offline systems</span></div>
+<div class="panel-layout"><div class="panel-lead">
+<h2 id="pos-title">Offline-First POS</h2>
+<p class="project-lede">Billing that keeps working when the network doesn't.</p>
+<p class="project-overview">A reusable point-of-sale foundation for businesses that cannot afford to stop at the checkout counter during an internet outage.</p>
+<a class="next-link" href="#voters">Next project <span aria-hidden="true">↗</span></a>
+</div><div class="panel-detail"><div class="detail-label">SYSTEM HIGHLIGHTS</div>
+<div class="detail-row"><h3>Local-first operations</h3><p>SQLite-backed persistence, billing drafts, cashier sessions, receipts, recovery workflows and audit logs.</p></div>
+<div class="detail-row"><h3>Sync and printing</h3><p>An outbox for retry-safe synchronization and a printer queue with status, retry, print and reprint workflows.</p></div>
+<div class="detail-row"><h3>Deployment</h3><p>Linux and kiosk packaging foundations for appliance-style installations in multiple POS verticals.</p></div>
+<div class="detail-label stack-label">TOOLS &amp; TECHNOLOGIES</div><div class="chips"><span>FastAPI</span><span>SQLite</span><span>React / Next.js</span><span>TypeScript</span><span>Sync engine</span><span>Linux / Kiosk</span></div>
+</div></div>
+</article>
+<article id="voters" class="project-panel" aria-labelledby="voters-title">
+<div class="panel-top"><span>03 / 05</span><span>Mobile application</span></div>
+<div class="panel-layout"><div class="panel-lead">
+<h2 id="voters-title">My Voters Hub</h2>
+<p class="project-lede">Practical field tools for organized campaign operations.</p>
+<p class="project-overview">A cross-platform application focused on making voter records, outreach and local field coordination more usable for teams working on the ground.</p>
+<a class="next-link" href="#quantum">Next project <span aria-hidden="true">↗</span></a>
+</div><div class="panel-detail"><div class="detail-label">SYSTEM HIGHLIGHTS</div>
+<div class="detail-row"><h3>Field experience</h3><p>Structured voter records, Smart Folder filtering and accessible workflows designed around field use.</p></div>
+<div class="detail-row"><h3>Communication</h3><p>Twilio SMS invitations and outreach, connected to Supabase-backed workflows.</p></div>
+<div class="detail-row"><h3>Localization and delivery</h3><p>Telugu-first interface, PostgreSQL Row-Level Security and mobile release workflows.</p></div>
+<div class="detail-label stack-label">TOOLS &amp; TECHNOLOGIES</div><div class="chips"><span>Flutter</span><span>Dart</span><span>Supabase</span><span>PostgreSQL</span><span>Twilio</span><span>iOS / Android</span></div>
+</div></div>
+</article>
+<article id="quantum" class="project-panel" aria-labelledby="quantum-title">
+<div class="panel-top"><span>04 / 05</span><span>Investigation software</span></div>
+<div class="panel-layout"><div class="panel-lead">
+<h2 id="quantum-title">Quantum Digital Forensics</h2>
+<p class="project-lede">Turning dense records into navigable investigative context.</p>
+<p class="project-overview">A digital investigation platform spanning communication records, banking intelligence, evidence workflows and case management.</p>
+<a class="next-link" href="#liva">Next project <span aria-hidden="true">↗</span></a>
+</div><div class="panel-detail"><div class="detail-label">SYSTEM HIGHLIGHTS</div>
+<div class="detail-row"><h3>Communication intelligence</h3><p>CDR analysis covering call patterns, contacts, IMEI/IMSI references, SMS activity and location signals.</p></div>
+<div class="detail-row"><h3>Banking intelligence</h3><p>Transaction trails, account relationships, recipient analysis, risk indicators and movement across layers.</p></div>
+<div class="detail-row"><h3>Investigation workflow</h3><p>Case navigation, evidence handling, authentication, role-based access and deployment preparation.</p></div>
+<div class="detail-label stack-label">TOOLS &amp; TECHNOLOGIES</div><div class="chips"><span>Next.js</span><span>NestJS</span><span>PostgreSQL</span><span>TypeORM</span><span>Python</span><span>Docker</span></div>
+</div></div>
+</article>
+<article id="liva" class="project-panel" aria-labelledby="liva-title">
+<div class="panel-top"><span>05 / 05</span><span>Commerce · In progress</span></div>
+<div class="panel-layout"><div class="panel-lead">
+<h2 id="liva-title">Liva, With Love</h2>
+<p class="project-lede">A tactile, custom-first apparel storefront.</p>
+<p class="project-overview">An independent direct-to-consumer apparel project in development, combining a considered storefront with an interactive garment customization experience.</p>
+<a class="next-link" href="#crm">Back to first project <span aria-hidden="true">↗</span></a>
+</div><div class="panel-detail"><div class="detail-label">SYSTEM HIGHLIGHTS</div>
+<div class="detail-row"><h3>Storefront experience</h3><p>Product discovery, collection browsing, detailed product views and a streamlined shopping flow.</p></div>
+<div class="detail-row"><h3>Custom print studio</h3><p>A dedicated workspace for personalizing garments and previewing custom designs.</p></div>
+<div class="detail-row"><h3>Interaction design</h3><p>Spring-based tactile motion and smooth scrolling tuned for a variety of display refresh rates.</p></div>
+<div class="detail-label stack-label">TOOLS &amp; TECHNOLOGIES</div><div class="chips"><span>Next.js</span><span>TypeScript</span><span>Motion</span><span>Custom studio</span><span>Responsive UI</span><span>In development</span></div>
+</div></div>
+</article></section></main>
+<footer class="shell"><a href="../../index.html#work">← Back to selected work</a><span class="footer-id">VARUN / BUILDING WITH INTENT / 2026</span></footer>
+</body></html>
