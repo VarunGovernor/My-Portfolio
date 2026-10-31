@@ -50,7 +50,15 @@ try {
   await check("Section word reveals are wired", async () =>
     (await page.$$eval(".motion-word", nodes => nodes.length)) >= 15);
   await check("Name fallback contains animated letters", async () =>
-    (await page.$$eval(".signature-name .sig-letter", nodes => nodes.length)) === 6);
+    (await page.$eval(".signature-name .sig-letter", nodes => nodes.length)) === 6);
+  await check("Three meaningful continuous capability animations exist", async () =>
+    page.evaluate(() => ["code-flow", "radar-sweep", "phone-handset"].every(name => {
+      const item = document.querySelector("." + name);
+      return item && getComputedStyle(item).animationIterationCount.includes("infinite");
+    })));
+  await check("Name has a persistent animated caret", async () =>
+    page.$eval(".signature-name .sig-caret", e =>
+      getComputedStyle(e).animationName.includes("signature-caret")));
 
   const canvasHash = async () => page.$eval(".hero canvas.light-field", canvas => {
     const { width, height } = canvas;
@@ -87,11 +95,42 @@ try {
   await wait(350);
   const afterScroll = await prop(".hero", "--copy-y");
   await check("Hero copy has independent scroll parallax", async () => beforeScroll !== afterScroll);
+  await check("Hero depth is not identical to typography movement", async () => {
+    const deep = await prop(".hero", "--depth-a-y");
+    return deep !== afterScroll && parseFloat(deep) !== 0;
+  });
+  await check("Floating panel has independent scroll depth", async () => {
+    const floating = await prop(".hero", "--field-scroll-y");
+    return Number.isFinite(parseFloat(floating)) && Math.abs(parseFloat(floating)) > 3;
+  });
 
   await page.$eval(".about-intro", e => e.scrollIntoView({ block: "center", behavior: "instant" }));
   await page.waitForFunction(() => document.querySelector(".about-intro")?.classList.contains("in-view"), { timeout: 9000 });
   await check("About signature reveal starts on entry", async () =>
     page.$eval(".signature-name .sig-letter", e => getComputedStyle(e).animationName.includes("letter-enter")));
+  const aboutBefore = await prop(".about-section", "--about-intro-y");
+  await page.evaluate(() => scrollBy({ top: 150, behavior: "instant" }));
+  await wait(320);
+  const aboutAfter = await prop(".about-section", "--about-intro-y");
+  await check("About has scroll-linked depth, not static positioning", async () =>
+    aboutBefore !== aboutAfter);
+  await check("About text columns move at different rates", async () => {
+    const intro = parseFloat(await prop(".about-section", "--about-intro-y"));
+    const copy = parseFloat(await prop(".about-section", "--about-copy-y"));
+    return Number.isFinite(intro) && Number.isFinite(copy) && Math.sign(intro) !== Math.sign(copy);
+  });
+  await check("Build code runs continuously", async () => {
+    const getDash = () => page.$eval(".code-flow", e => getComputedStyle(e).strokeDashoffset);
+    const a = await getDash();
+    await wait(250);
+    return a !== await getDash();
+  });
+  await check("Explore radar rotates continuously", async () => {
+    const getRotation = () => page.$eval(".radar-sweep", e => getComputedStyle(e).transform);
+    const a = await getRotation();
+    await wait(290);
+    return a !== await getRotation();
+  });
   await page.screenshot({ path: "previews/v2-motion-about.png", fullPage: false });
 
   await page.$eval(".work-card:first-child", e => e.scrollIntoView({ block: "center", behavior: "instant" }));
@@ -102,6 +141,33 @@ try {
     e => Number.parseFloat(getComputedStyle(e, "::before").opacity) > 0.5
   ));
   await page.screenshot({ path: "previews/v2-motion-work.png", fullPage: false });
+  // Real screenshot galleries must load locally and work with keyboard controls.
+  await page.$eval('[data-gallery="quantum"]', button => button.click());
+  await page.waitForSelector("#project-gallery[open]");
+  await page.waitForFunction(() => {
+    const image = document.querySelector(".gallery-image");
+    return image?.complete && image.naturalWidth > 100;
+  }, { timeout: 10000 });
+  await check("Quantum Digital gallery serves actual project images", async () =>
+    page.$eval(".gallery-image", img => img.naturalWidth > 100 && img.src.includes("quantum")));
+  await check("Gallery exposes four screenshot thumbnails", async () =>
+    (await page.$(".gallery-dot")).length === 4);
+  const firstSrc = await page.$eval(".gallery-image", img => img.src);
+  await page.keyboard.press("ArrowRight");
+  await check("Gallery keyboard navigation changes the real image", async () =>
+    (await page.$eval(".gallery-image", img => img.src)) !== firstSrc);
+  await page.screenshot({ path: "previews/v2-quantum-gallery.png", fullPage: false });
+  await page.keyboard.press("Escape");
+  await check("Gallery closes with Escape", async () =>
+    !(await page.$eval("#project-gallery", e => e.open)));
+
+  await page.$eval('[data-gallery="liva"]', button => button.click());
+  await page.waitForSelector("#project-gallery[open]");
+  await page.waitForFunction(() => document.querySelector(".gallery-image")?.naturalWidth > 100);
+  await check("Liva gallery serves authentic storefront screenshots", async () =>
+    page.$eval(".gallery-image", img => img.naturalWidth > 100 && img.src.includes("liva")));
+  await page.screenshot({ path: "previews/v2-liva-gallery.png", fullPage: false });
+  await page.click(".gallery-close");
 
   for (const width of [390, 768, 1024, 1440]) {
     await page.setViewport({ width, height: 900, deviceScaleFactor: 1 });
