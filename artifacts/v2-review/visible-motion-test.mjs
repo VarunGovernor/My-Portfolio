@@ -50,7 +50,7 @@ try {
   await check("Section word reveals are wired", async () =>
     (await page.$$eval(".motion-word", nodes => nodes.length)) >= 15);
   await check("Name fallback contains animated letters", async () =>
-    (await page.$eval(".signature-name .sig-letter", nodes => nodes.length)) === 6);
+    (await page.$$eval(".signature-name .sig-letter", nodes => nodes.length)) === 6);
   await check("Three meaningful continuous capability animations exist", async () =>
     page.evaluate(() => ["code-flow", "radar-sweep", "phone-handset"].every(name => {
       const item = document.querySelector("." + name);
