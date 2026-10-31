@@ -112,7 +112,7 @@ try {
   check("Legacy project case studies survive the upgrade",
     (await page.$("#cs1")) !== null);
   const imageStatus = await page.evaluate(async () =>
-    (await fetch("../images/quantum-digital/01-cdr-link-analysis.png")).status
+    (await fetch("./images/quantum-digital/01-cdr-link-analysis.png")).status
   );
   check("Original case-study image assets are published", imageStatus === 200);
 
