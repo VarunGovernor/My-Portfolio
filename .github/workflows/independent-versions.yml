@@ -61,6 +61,25 @@ jobs:
               --window-size=390,850 --force-device-scale-factor=1 --virtual-time-budget=2500 \
               --screenshot="previews/${v}-mobile.png" "http://127.0.0.1:4173/My-Portfolio/${v}/"
           done
+          # Compare a later frame against the usual hero screenshot to verify ongoing motion.
+          "$CHROME" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars \
+            --window-size=1440,1000 --force-device-scale-factor=1 --virtual-time-budget=7100 \
+            --screenshot="previews/v2-motion-later.png" "http://127.0.0.1:4173/My-Portfolio/v2/"
+          "$CHROME" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --virtual-time-budget=3000 --dump-dom "http://127.0.0.1:4173/My-Portfolio/v2/" > previews/v2-runtime-dom.html
+          grep -q 'class="sig-letter"' previews/v2-runtime-dom.html
+          grep -q 'v2-flow-canvas' previews/v2-runtime-dom.html
+          grep -q -- '--rib' previews/v2-runtime-dom.html
+          python - <<'PY'
+          from PIL import Image, ImageChops
+          from pathlib import Path
+          a=Image.open('previews/v2-desktop.png').convert('RGB')
+          b=Image.open('previews/v2-motion-later.png').convert('RGB')
+          box=ImageChops.difference(a,b).getbbox()
+          if box is None:
+              raise SystemExit('V2 motion frames were identical; expected visible animation.')
+          print('V2 animation produced changed pixels:', box)
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
