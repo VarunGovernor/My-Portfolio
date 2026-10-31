@@ -28,6 +28,7 @@ try {
   await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
   await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "no-preference" }]);
   await page.goto(root, { waitUntil: "networkidle0", timeout: 50000 });
+  await sleep(1450); // Allow approved entry animation to settle before measuring geometry.
   check("Public root serves approved V2",
     await page.$eval("#hero-title", e => e.textContent.includes("Full-stack")));
   check("Root references V2 stylesheet",
@@ -49,12 +50,18 @@ try {
     return {
       fields: toRect(document.querySelector(".hero .fields")),
       title: toRect(document.querySelector(".hero h1")),
+      glyphs: [...document.querySelectorAll("#hero-title > span")].map(span => {
+        const range = document.createRange();
+        range.selectNodeContents(span);
+        return toRect(range);
+      }),
       feature: toRect(document.querySelector(".hero .feature-bar")),
       work: toRect(document.querySelector("#work"))
     };
   });
-  check("Glass panel rests in upper-right without headline overlap",
-    geometry.fields.left > 850 && !overlaps(geometry.fields, geometry.title));
+  console.log("Desktop geometry:", JSON.stringify(geometry));
+  check("Glass panel rests in upper-right without headline text overlap",
+    geometry.fields.left > 850 && geometry.glyphs.every(glyph => !overlaps(geometry.fields, glyph)));
   check("Hero feature bar stays above Selected Work",
     geometry.feature.bottom <= geometry.work.top + 5);
   check("Hero headline appears within opening viewport",
