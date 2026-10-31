@@ -2,9 +2,10 @@ import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 // Publish the approved standalone V2 page at the existing GitHub Pages root.
-// Leave the source V1 index.html untouched and preserve its case studies.
+// V2 is the source homepage for both GitHub Pages publishing methods.
+// Preserve the archived V1 source separately for its existing case studies.
 const dist = resolve("dist");
-const oldRoot = await readFile(resolve(dist, "index.html"), "utf8");
+const oldRoot = await readFile(resolve("legacy", "index.html"), "utf8");
 const v2Path = resolve(dist, "v2", "index.html");
 const v2 = await readFile(v2Path, "utf8");
 
@@ -25,6 +26,7 @@ await writeFile(resolve(dist, "legacy", "index.html"), legacy);
 
 // Images are referenced directly by V1, so Vite does not necessarily bundle them.
 await cp(resolve("images"), resolve(dist, "images"), { recursive: true });
+await cp(resolve("images"), resolve(dist, "legacy", "images"), { recursive: true });
 
 const legacyLinks = v2.replaceAll("../index.html#", "../legacy/index.html#");
 await writeFile(v2Path, legacyLinks);
