@@ -1,0 +1,30 @@
+{"label":"final","geometry":[{"x":240,"y":257.09375,"width":704,"height":241},{"x":960,"y":257.09375,"width":472,"height":241},{"x":240,"y":512.09375,"width":462,"height":189},{"x":718,"y":512.09375,"width":365,"height":189},{"x":1099,"y":512.09375,"width":333,"height":189}],"errors":[]}
+[{"name":"no horizontal overflow at 768px","pass":true},{"name":"project links stay inside their cards at 768px","pass":true},{"name":"no horizontal overflow at 1024px","pass":true},{"name":"project links stay inside their cards at 1024px","pass":true},{"name":"no horizontal overflow at 1100px","pass":true},{"name":"project links stay inside their cards at 1100px","pass":true},{"name":"desktop navigation uses dark text on light sections","pass":true},{"name":"keyboard opening focuses the first mobile navigation link","pass":true}]
+PASS continuous light field changes at five seconds
+PASS cursor parallax eases back after pointer leave
+PASS glass card responds with a small eased tilt
+PASS glass tilt resets on leave
+PASS name signature responds to hover after its reveal completes
+PASS motion controller stops when both light scenes are offscreen
+PASS real project destination #cs2
+PASS real project destination #cs3
+PASS real project destination #cs5
+PASS real project destination #cs1
+PASS real project destination #designs
+PASS live reduced-motion preference freezes the light field
+PASS no laptop horizontal overflow
+PASS no mobile horizontal overflow
+PASS mobile menu opens accessibly
+PASS Escape closes menu and restores focus
+PASS mobile navigation closes after anchor selection
+PASS Varun name is revealed letter by letter
+PASS desktop animation sustains a frame budget below 25ms
+PASS no automated WCAG A/AA violations
+PASS keyboard begins at visible skip link
+PASS skip link reaches main content
+PASS headline and name remain readable without JavaScript
+PASS touch device disables cursor-only motion
+PASS touch navigation opens and follows Work
+PASS touch viewport has no horizontal overflow
+PASS no browser JavaScript errors
+{"checks":["continuous light field changes at five seconds","cursor parallax eases back after pointer leave","glass card responds with a small eased tilt","glass tilt resets on leave","name signature responds to hover after its reveal completes","motion controller stops when both light scenes are offscreen","real project destination #cs2","real project destination #cs3","real project destination #cs5","real project destination #cs1","real project destination #designs","live reduced-motion preference freezes the light field","no laptop horizontal overflow","no mobile horizontal overflow","mobile menu opens accessibly","Escape closes menu and restores focus","mobile navigation closes after anchor selection","Varun name is revealed letter by letter","desktop animation sustains a frame budget below 25ms","no automated WCAG A/AA violations","keyboard begins at visible skip link","skip link reaches main content","headline and name remain readable without JavaScript","touch device disables cursor-only motion","touch navigation opens and follows Work","touch viewport has no horizontal overflow","no browser JavaScript errors"],"errors":[],"accessibility":{"desktop":[],"mobile":[]},"performance":{"median_frame_ms":16.700000000000728,"p95_frame_ms":33.400000000001455}}

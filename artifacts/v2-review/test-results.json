@@ -1,0 +1,40 @@
+{
+  "checks": [
+    "continuous light field changes at five seconds",
+    "cursor parallax eases back after pointer leave",
+    "glass card responds with a small eased tilt",
+    "glass tilt resets on leave",
+    "name signature responds to hover after its reveal completes",
+    "motion controller stops when both light scenes are offscreen",
+    "real project destination #cs2",
+    "real project destination #cs3",
+    "real project destination #cs5",
+    "real project destination #cs1",
+    "real project destination #designs",
+    "live reduced-motion preference freezes the light field",
+    "no laptop horizontal overflow",
+    "no mobile horizontal overflow",
+    "mobile menu opens accessibly",
+    "Escape closes menu and restores focus",
+    "mobile navigation closes after anchor selection",
+    "Varun name is revealed letter by letter",
+    "desktop animation sustains a frame budget below 25ms",
+    "no automated WCAG A/AA violations",
+    "keyboard begins at visible skip link",
+    "skip link reaches main content",
+    "headline and name remain readable without JavaScript",
+    "touch device disables cursor-only motion",
+    "touch navigation opens and follows Work",
+    "touch viewport has no horizontal overflow",
+    "no browser JavaScript errors"
+  ],
+  "errors": [],
+  "accessibility": {
+    "desktop": [],
+    "mobile": []
+  },
+  "performance": {
+    "median_frame_ms": 16.700000000000728,
+    "p95_frame_ms": 33.400000000001455
+  }
+}

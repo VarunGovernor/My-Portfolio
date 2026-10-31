@@ -1,0 +1,50 @@
+{
+  "baseline": {
+    "hero": {
+      "mean_absolute_rgb_error": 37.46
+    },
+    "work-about": {
+      "mean_absolute_rgb_error": 60.48
+    }
+  },
+  "pass2": {
+    "hero": {
+      "mean_absolute_rgb_error": 26.43
+    },
+    "work-about": {
+      "mean_absolute_rgb_error": 31.07
+    }
+  },
+  "pass3": {
+    "hero": {
+      "mean_absolute_rgb_error": 25.59
+    },
+    "work-about": {
+      "mean_absolute_rgb_error": 31.49
+    }
+  },
+  "pass4": {
+    "hero": {
+      "mean_absolute_rgb_error": 27.29
+    },
+    "work-about": {
+      "mean_absolute_rgb_error": 35.05
+    }
+  },
+  "pass5": {
+    "hero": {
+      "mean_absolute_rgb_error": 25.92
+    },
+    "work-about": {
+      "mean_absolute_rgb_error": 29.53
+    }
+  },
+  "final": {
+    "hero": {
+      "mean_absolute_rgb_error": 23.57
+    },
+    "work-about": {
+      "mean_absolute_rgb_error": 29.32
+    }
+  }
+}

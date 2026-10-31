@@ -1,0 +1,119 @@
+name: Independent portfolio versions
+
+on:
+  push:
+    branches: [feat/v2-motion-experience-20261031, feat/v2-parallax-live-showcase-20261031]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Verify independent version outputs and design anchors
+        run: |
+          test -f dist/index.html
+          test -f dist/legacy/index.html
+          test -f dist/images/liva-showcase/01_homepage_hero.png
+          test -f dist/images/quantum-digital/01-cdr-link-analysis.png
+          grep -q 'v2/assets/kinetic.css' dist/index.html
+          grep -q 'v2/assets/kinetic.js' dist/index.html
+          grep -q 'legacy/index.html#cs1' dist/index.html
+          grep -q 'id="case-studies"' dist/legacy/index.html
+          test -f dist/v2/index.html
+          test -f dist/v3/index.html
+          test -f dist/v4/index.html
+          test -f dist/v2/assets/kinetic.css
+          test -f dist/v2/assets/kinetic.js
+          grep -q 'data-ambient-icon="build"' dist/v2/index.html
+          grep -q 'data-ambient-icon="explore"' dist/v2/index.html
+          grep -q 'data-ambient-icon="collaborate"' dist/v2/index.html
+          test -f dist/v2/assets/dm-sans-400.ttf
+          grep -q 'light-field' dist/v2/index.html
+          grep -q 'repeating-linear-gradient' dist/v2/assets/kinetic.css
+          grep -q 'starfield' dist/v3/index.html
+          grep -q 'equalizer-scene' dist/v3/index.html
+          grep -q '#FC734D' dist/v3/index.html
+          grep -q '#105BFF' dist/v4/index.html
+          grep -q '#ff48a5' dist/v4/index.html
+          for v in v2 v3 v4; do
+            if grep -q 'images/profile.jpeg' "dist/$v/index.html"; then
+              echo "Profile image unexpectedly referenced in $v"
+              exit 1
+            fi
+          done
+          cmp index.html dist/index.html >/dev/null || echo "Vite may have transformed original index.html; source is unchanged."
+
+      - name: Capture desktop and mobile design previews
+        continue-on-error: true
+        run: |
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME" ]; then echo "Chrome unavailable on runner"; exit 1; fi
+          mkdir -p previews
+          npm run preview -- --host 127.0.0.1 --port 4173 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl -fsS http://127.0.0.1:4173/My-Portfolio/v2/ > /dev/null; then break; fi
+            sleep 1
+          done
+          for v in v2 v3 v4; do
+            "$CHROME" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars \
+              --window-size=1440,1000 --force-device-scale-factor=1 --virtual-time-budget=2500 \
+              --screenshot="previews/${v}-desktop.png" "http://127.0.0.1:4173/My-Portfolio/${v}/"
+            "$CHROME" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars \
+              --window-size=390,850 --force-device-scale-factor=1 --virtual-time-budget=2500 \
+              --screenshot="previews/${v}-mobile.png" "http://127.0.0.1:4173/My-Portfolio/${v}/"
+          done
+          # Compare a later frame against the usual hero screenshot to verify ongoing motion.
+          "$CHROME" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars \
+            --window-size=1440,1000 --force-device-scale-factor=1 --virtual-time-budget=7100 \
+            --screenshot="previews/v2-motion-later.png" "http://127.0.0.1:4173/My-Portfolio/v2/"
+          "$CHROME" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --virtual-time-budget=3000 --dump-dom "http://127.0.0.1:4173/My-Portfolio/v2/" > previews/v2-runtime-dom.html
+          grep -q 'class="sig-letter"' previews/v2-runtime-dom.html
+          grep -q 'light-field' previews/v2-runtime-dom.html
+          grep -q -- '--rib' previews/v2-runtime-dom.html
+          if cmp -s previews/v2-desktop.png previews/v2-motion-later.png; then
+            echo "V2 motion frames were identical; expected visible animation"
+            exit 1
+          fi
+          echo "V2 motion frames differ, signature DOM present, and scroll variables initialized"
+      - name: Verify public homepage and legacy case study compatibility
+        run: |
+          npm install --no-save --package-lock=false puppeteer-core
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME" ]; then echo "Chrome unavailable"; exit 1; fi
+          mkdir -p previews
+          npm run preview -- --host 127.0.0.1 --port 4174 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl -fsS http://127.0.0.1:4174/My-Portfolio/ > /dev/null; then break; fi
+            sleep 1
+          done
+          CHROME_BINARY="$CHROME" node scripts/verify-live-homepage.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-portfolio-preview-bundle
+          path: |
+            dist/index.html
+            dist/legacy/index.html
+            dist/v2/index.html
+            dist/v2/assets/**
+            dist/v3/index.html
+            dist/v4/index.html
+            previews/*.png
+          if-no-files-found: warn
