@@ -7,6 +7,22 @@ const browser = await puppeteer.launch({
   args: ["--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu"],
 });
 const page = await browser.newPage();
+// Headless Chromium may report (pointer: fine) as false even with a desktop mouse.
+// Force only this capability before the site loads; reduced-motion remains native.
+await page.evaluateOnNewDocument(() => {
+  const native = window.matchMedia.bind(window);
+  window.matchMedia = query => {
+    const list = native(query);
+    if (query !== "(pointer: fine)") return list;
+    return new Proxy(list, {
+      get(target, prop) {
+        if (prop === "matches") return true;
+        const value = target[prop];
+        return typeof value === "function" ? value.bind(target) : value;
+      }
+    });
+  };
+});
 const errors = [];
 page.on("pageerror", e => errors.push(e.message));
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -57,6 +73,12 @@ try {
   await page.mouse.move(1300, 280);
   await wait(400);
   const secondTilt = await prop(".fields", "--field-rotate-y");
+  const pointerState = await page.evaluate(() => ({
+    fine: matchMedia("(pointer: fine)").matches,
+    reduced: matchMedia("(prefers-reduced-motion: reduce)").matches,
+    visible: document.querySelector(".hero")?.getBoundingClientRect().bottom > 0
+  }));
+  console.log("Cursor test:", JSON.stringify({ firstTilt, secondTilt, pointerState }));
   await check("Selected Fields reacts to cursor depth", async () => firstTilt !== secondTilt);
 
   const beforeScroll = await prop(".hero", "--copy-y");
