@@ -100,14 +100,16 @@ try {
     !overlaps(mobile.glass, mobile.heading));
   await page.screenshot({ path: "previews/live-root-mobile.png" });
 
+  const v2Errors = errors.slice();
   await page.goto(root + "legacy/index.html#cs1", { waitUntil: "networkidle0" });
   check("Legacy project case studies survive the upgrade",
     (await page.$("#cs1")) !== null);
-  const image = await page.goto(root + "images/quantum-digital/01-cdr-link-analysis.png");
-  check("Original case-study image assets are published",
-    image?.status() === 200);
+  const imageStatus = await page.evaluate(async () =>
+    (await fetch("../images/quantum-digital/01-cdr-link-analysis.png")).status
+  );
+  check("Original case-study image assets are published", imageStatus === 200);
 
-  check("No uncaught V2 browser errors", errors.length === 0);
+  check("No uncaught V2 browser errors", v2Errors.length === 0);
   console.log(JSON.stringify({ result: "passed", checks: passed }, null, 2));
 } finally {
   await browser.close();
