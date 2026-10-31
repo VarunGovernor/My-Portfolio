@@ -345,6 +345,13 @@ h1,h2,h3{font-family:'Sora','DM Sans',sans-serif}
 .work-card .work-main p{opacity:.87}
 .work-card:nth-child(2) .work-main p,.work-card:nth-child(3) .work-main p,.work-card:nth-child(4) .work-main p{color:#315e84}
 .work-card:focus-within{outline:2px solid #D83995;outline-offset:3px}
+.work-card.reveal.in-view{transform:translate3d(0,var(--card-shift,0px),0)}
+.work-card.reveal.in-view:hover{transform:translate3d(0,calc(var(--card-shift,0px) - 8px),0)}
+.cap-card.reveal.in-view:hover{transform:translateY(-7px)}
+.work-section::before,.skills-section::before,.about-section::before{
+  transform:translate3d(0,var(--section-shift,0px),0);
+  will-change:transform;
+}
 
 /* Neutral, readable capabilities — not a wall of saturated blue. */
 .skills-section{background:#fcffff;color:#082e5f}
@@ -398,7 +405,7 @@ h1,h2,h3{font-family:'Sora','DM Sans',sans-serif}
 .contact-section .contact-row p{opacity:.86}
 .contact-section .contact-links a{border:1px solid rgba(252,255,255,.48);border-radius:999px;background:rgba(252,255,255,.07)}
 .contact-section .contact-links a:hover{background:rgba(252,255,255,.18);border-color:#D83995}
-body:has(.contact-section) > footer{background:#052e56;color:#FCFFFF;margin:0;width:100%;max-width:none;padding-left:max(36px,calc((100vw - 1200px)/2));padding-right:max(36px,calc((100vw - 1200px)/2));}
+main > footer{background:#052e56;color:#FCFFFF;margin:0;width:100%;max-width:none;padding-left:max(36px,calc((100vw - 1200px)/2));padding-right:max(36px,calc((100vw - 1200px)/2));}
 .reveal{transition-duration:.95s;transition-timing-function:cubic-bezier(.16,1,.3,1)}
 /* independently-staggered text child motion */
 .section-heading.in-view .eyebrow{animation:v2-fade-up .75s both}
@@ -432,7 +439,7 @@ body:has(.contact-section) > footer{background:#052e56;color:#FCFFFF;margin:0;wi
  .about-pulse{margin-top:24px}
  .about-copy p{font-size:.92rem}
  .about-copy p.about-lede{font-size:1.15rem}
- body:has(.contact-section) > footer{padding-left:19px;padding-right:19px}
+ main > footer{padding-left:19px;padding-right:19px}
 }
 @media(prefers-reduced-motion:reduce){
  .v2-ribs,.v2-ribs::after,.v2-light-sweep,.hero-title-line,.v2-index-line,.about-pulse span{animation:none!important}
@@ -628,7 +635,7 @@ schedule();
  const schedule=document.querySelector('.v2-floating-schedule');
  const cards=[...document.querySelectorAll('.work-card')];
  if(!hero||reduced.matches)return;
- let targetX=0,targetY=0,scrollGoal=0,smoothX=0,smoothY=0,smoothScroll=0;
+ let targetX=0,targetY=0,smoothX=0,smoothY=0;
  let raf=0,active=true,heroVisible=true;
  const heroWatcher=('IntersectionObserver' in window)
  ? new IntersectionObserver(e=>{heroVisible=e[0].isIntersecting;tickRequest();},{rootMargin:'25% 0px 25% 0px'})
@@ -654,7 +661,6 @@ schedule();
    raf=0;if(!active||reduced.matches)return;
    smoothX+=(targetX-smoothX)*.072;
    smoothY+=(targetY-smoothY)*.072;
-   smoothScroll+=(scrollGoal-smoothScroll)*.075;
    if(heroVisible){
      const rect=hero.getBoundingClientRect();
      const t=Math.max(-1,Math.min(1,-rect.top/Math.max(1,rect.height)));
@@ -669,6 +675,14 @@ schedule();
      const progress=(r.top+r.height*.5-vh*.5)/Math.max(vh,r.height);
      section.style.setProperty('--edge-shift',(Math.max(-33,Math.min(33,progress*45))).toFixed(1)+'px');
      section.style.setProperty('--section-shift',(Math.max(-32,Math.min(32,progress*32))).toFixed(1)+'px');
+     if(section.classList.contains('work-section')){
+       cards.forEach((card,i)=>{
+         const cr=card.getBoundingClientRect();
+         if(cr.bottom<0||cr.top>vh)return;
+         const mid=(cr.top+cr.height*.5-vh*.5)/Math.max(vh,cr.height);
+         card.style.setProperty('--card-shift',(Math.max(-10,Math.min(10,-mid*(9+(i%3)*2)))).toFixed(1)+'px');
+       });
+     }
    });
    const heroActive=heroVisible&&(Math.abs(targetX-smoothX)>.003||Math.abs(targetY-smoothY)>.003);
    if(heroActive)tickRequest();
