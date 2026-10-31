@@ -1,0 +1,8 @@
+{
+  "hero": {
+    "mean_absolute_rgb_error": 23.57
+  },
+  "work-about": {
+    "mean_absolute_rgb_error": 29.32
+  }
+}

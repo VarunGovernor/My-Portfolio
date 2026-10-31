@@ -1,0 +1,37 @@
+
+> varun-portfolio@1.0.0 build
+> vite build
+
+vite v5.4.21 building for production...
+transforming...
+node.exe : Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Browserslist: b...ld. Please run::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ 2 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/assets/profile-CRl9_1vy.jpeg                        70.06 kB
+dist/assets/03-record-search-C47pmjYt.png               136.75 kB
+dist/index.html                                         181.13 kB │ gzip: 42.67 kB
+dist/assets/02-cdr-summary-DIaavUlF.png                 303.48 kB
+dist/assets/01-cdr-link-analysis-BqtlD6eu.png           325.14 kB
+dist/assets/08-bank-recipient-analysis-CAUC7EA_.png     375.02 kB
+dist/assets/08_mobile_showcase-BqYyb6tK.png             413.07 kB
+dist/assets/07-investigation-overview-hj2Z4yl7.png      557.13 kB
+dist/assets/05_custom_studio_workspace-DU_sjtxP.png     588.54 kB
+dist/assets/01_homepage_hero-Ds1no9HB.png               636.00 kB
+dist/assets/06-risk-and-movement-BOyV9IvO.png           719.49 kB
+dist/assets/05-transaction-layers-C93vdrYi.png          732.42 kB
+dist/assets/04-account-hierarchy-Z1UzI3et.png           752.16 kB
+dist/assets/03_featured_collections-f5e_VrPF.png      1,207.48 kB
+dist/assets/02_new_drops_section-DkIFxxWM.png         1,226.27 kB
+dist/assets/07_cart_drawer_preview-cmNhJyyU.png       1,875.04 kB
+dist/assets/06_collections_catalog-BHTK2NQ9.png       2,100.51 kB
+dist/assets/04_product_detail_f1_monaco-BG-RiYI9.png  2,173.14 kB
+✓ built in 356ms

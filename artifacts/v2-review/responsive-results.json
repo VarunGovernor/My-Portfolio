@@ -1,0 +1,34 @@
+[
+  {
+    "name": "no horizontal overflow at 768px",
+    "pass": true
+  },
+  {
+    "name": "project links stay inside their cards at 768px",
+    "pass": true
+  },
+  {
+    "name": "no horizontal overflow at 1024px",
+    "pass": true
+  },
+  {
+    "name": "project links stay inside their cards at 1024px",
+    "pass": true
+  },
+  {
+    "name": "no horizontal overflow at 1100px",
+    "pass": true
+  },
+  {
+    "name": "project links stay inside their cards at 1100px",
+    "pass": true
+  },
+  {
+    "name": "desktop navigation uses dark text on light sections",
+    "pass": true
+  },
+  {
+    "name": "keyboard opening focuses the first mobile navigation link",
+    "pass": true
+  }
+]

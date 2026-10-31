@@ -1,288 +1,421 @@
-/* V2 / KINETIC — independent motion controller.
-   One frame loop, passive scroll/pointer input, intersection culling, reduced-motion support.
-   No external libraries, no duplicate animation engines. */
 (() => {
-  'use strict';
-  const root=document.documentElement;
-  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
-  const fine=window.matchMedia('(pointer: fine)');
-  const hero=document.querySelector('.v2-hero');
-  const nav=document.querySelector('.navigation');
-  const menu=document.querySelector('.menu-toggle');
-  const field=document.querySelector('.v2-floating-schedule');
-  const work=document.querySelector('.work-section');
-  const cards=Array.from(document.querySelectorAll('.work-card'));
-  const sections=Array.from(document.querySelectorAll('.section'));
-  const reveals=Array.from(document.querySelectorAll('.reveal'));
-  let visibleHero=true, visibleSections=new Set();
+  "use strict";
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  const fine = matchMedia("(pointer: fine)");
+  const nav = document.querySelector(".navigation");
+  const menu = document.querySelector(".menu-toggle");
+  const hero = document.querySelector(".hero");
+  const fields = document.querySelector(".fields");
+  const cards = [...document.querySelectorAll(".work-card")];
+  const sections = [...document.querySelectorAll(".section")];
+  const visible = new Set();
+  const scenes = [...document.querySelectorAll(".light-field")].map(
+    (canvas) => {
+      canvas.width = 836;
+      canvas.height = canvas.closest(".hero") ? 471 : 330;
+      const refraction = document.createElement("canvas");
+      refraction.width = canvas.width;
+      refraction.height = canvas.height;
+      return {
+        canvas,
+        refraction,
+        ctx: canvas.getContext("2d", { alpha: false }),
+        section: canvas.parentElement,
+      };
+    },
+  );
+  let frameId = 0,
+    last = 0,
+    lastPaint = -100,
+    scrollDirty = true;
+  let targetX = 0,
+    targetY = 0,
+    x = 0,
+    y = 0,
+    tiltX = 0,
+    tiltY = 0,
+    activeCard = null;
+  const start = performance.now();
 
-  // The atmosphere is a low-resolution original procedural light field,
-  // redrawn at most 24fps. The crisp 18px vertical ribs remain a CSS layer above it.
-  const canvas=document.getElementById('v2-flow-canvas');
-  const ctx=canvas?.getContext('2d',{alpha:true,desynchronized:true})||null;
-  let lastCanvas=0;
-  if(ctx){canvas.width=360;canvas.height=220}
-  function lightSpot(x,y,rx,ry,r,g,b,a){
-    if(!ctx)return;
-    ctx.save();ctx.translate(x,y);ctx.scale(rx,ry);
-    const gr=ctx.createRadialGradient(0,0,0,0,0,1);
-    gr.addColorStop(0,'rgba('+r+','+g+','+b+','+a+')');
-    gr.addColorStop(.42,'rgba('+r+','+g+','+b+','+(a*.64)+')');
-    gr.addColorStop(1,'rgba('+r+','+g+','+b+',0)');
-    ctx.fillStyle=gr;ctx.beginPath();ctx.arc(0,0,1,0,Math.PI*2);ctx.fill();ctx.restore();
-  }
-  function drawFlow(time){
-    if(!ctx || time-lastCanvas<42)return;
-    lastCanvas=time;ctx.clearRect(0,0,360,220);
-    const t=time*.00027;
-    const drift=Math.sin(t)*22;
-    // Distinct navy / sky-blue / hot-pink masses, sliding behind the ribbing.
-    lightSpot(206+drift+px*8,70+Math.cos(t*.8)*14,78,100,3,11,65,.62);
-    lightSpot(120+Math.sin(t*.72)*27,119+Math.cos(t*.62)*13,102,94,252,255,255,.18);
-    lightSpot(190+Math.cos(t*.55)*22,161+Math.sin(t*.61)*17,110,74,216,57,149,.59);
-    lightSpot(280+Math.sin(t*.82)*16,147+Math.cos(t*.45)*19,94,89,28,178,231,.32);
-    lightSpot(280+Math.cos(t*.7)*12,55+Math.sin(t*.65)*10,84,84,2,105,185,.22);
-    ctx.save();
-    ctx.globalAlpha=.15;
-    ctx.lineCap='round';
-    const ribbon=ctx.createLinearGradient(50,65,300,192);
-    ribbon.addColorStop(0,'rgba(252,255,255,0)');
-    ribbon.addColorStop(.43,'rgba(216,57,149,.75)');
-    ribbon.addColorStop(.76,'rgba(252,255,255,.25)');
-    ribbon.addColorStop(1,'rgba(216,57,149,0)');
-    ctx.strokeStyle=ribbon;ctx.lineWidth=20;
-    ctx.beginPath();
-    ctx.moveTo(-20,126+Math.sin(t)*15);
-    ctx.bezierCurveTo(107,65+Math.sin(t*.8)*24,166,203+Math.cos(t*.7)*17,355,146+Math.cos(t)*14);
-    ctx.stroke();ctx.restore();
-  }
-
-  let px=0,py=0,tx=0,ty=0;
-  let running=false,last=0;
-  let hidden=document.hidden;
-
-  // Navigation works even when reduced motion is enabled.
-  if(nav&&menu){
-    menu.addEventListener('click',()=>{
-      const open=nav.dataset.open!=='true';
-      nav.dataset.open=String(open);
-      menu.setAttribute('aria-expanded',String(open));
-    });
-    nav.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{
-      nav.dataset.open='false';menu.setAttribute('aria-expanded','false');
-    }));
-    document.addEventListener('keydown',e=>{
-      if(e.key==='Escape' && nav.dataset.open==='true'){
-        nav.dataset.open='false';menu.setAttribute('aria-expanded','false');menu.focus();
-      }
-    });
-  }
-
-  // Human name fallback: letter-by-letter wordmark, not a giant V tile.
-  const signature=document.querySelector('.signature-name');
-  if(signature){
-    const name=signature.textContent.trim();
-    signature.textContent='';
-    [...name].forEach((ch,i)=>{
-      const span=document.createElement('span');
-      span.className='sig-letter';
-      span.textContent=ch===''?' ':ch;
-      span.style.setProperty('--i',String(i));
-      span.style.setProperty('--wave-y',String(i%3*-3)+'px');
-      span.setAttribute('aria-hidden','true');
-      signature.appendChild(span);
-    });
-    signature.setAttribute('aria-label',name);
-  }
-
-  // Split the existing section titles without replacing the words or adding fake content.
-  const splitWords=el=>{
-    if(!el || el.dataset.wordsReady)return;
-    el.dataset.wordsReady='1';
-    let i=0;
-    const walk=node=>{
-      [...node.childNodes].forEach(child=>{
-        if(child.nodeType===Node.TEXT_NODE){
-          const value=child.textContent;
-          const pieces=value.match(/\S+\s*|\s+/g);
-          if(!pieces)return;
-          const frag=document.createDocumentFragment();
-          pieces.forEach(piece=>{
-            if(!piece.trim()){frag.append(document.createTextNode(piece));return}
-            const span=document.createElement('span');
-            span.className='kinetic-word';
-            span.style.setProperty('--word-index',String(Math.min(i++,8)));
-            span.textContent=piece;
-            frag.append(span);
-          });
-          child.replaceWith(frag);
-        } else if(child.nodeType===Node.ELEMENT_NODE && child.tagName!=='SCRIPT') walk(child);
-      });
-    };
-    walk(el);
+  const closeMenu = () => {
+    nav.dataset.open = "false";
+    menu.setAttribute("aria-expanded", "false");
   };
-  document.querySelectorAll('.section-heading h2,.about-intro h2,.contact-title').forEach(splitWords);
-
-  // Respect immediately visible content; never hide the hero on load.
-  if(reduce.matches || !('IntersectionObserver' in window)){
-    reveals.forEach(el=>el.classList.add('in-view'));
-  } else {
-    const ro=new IntersectionObserver(entries=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting){entry.target.classList.add('in-view');ro.unobserve(entry.target)}
-      });
-    },{threshold:.055,rootMargin:'0px 0px 105px 0px'});
-    reveals.forEach(el=>{
-      const r=el.getBoundingClientRect();
-      if(r.top<innerHeight+90)el.classList.add('in-view');
-      else ro.observe(el);
-    });
-  }
-
-  // Cursor depth on backdrop and floating fields only; nothing jumps aggressively.
-  if(hero && fine.matches && !reduce.matches){
-    hero.addEventListener('pointermove',e=>{
-      const r=hero.getBoundingClientRect();
-      tx=Math.max(-1,Math.min(1,(e.clientX-r.left)/Math.max(1,r.width)*2-1));
-      ty=Math.max(-1,Math.min(1,(e.clientY-r.top)/Math.max(1,r.height)*2-1));
-      ensureFrame();
-    },{passive:true});
-    hero.addEventListener('pointerleave',()=>{tx=0;ty=0;ensureFrame()},{passive:true});
-  }
-
-  if(!reduce.matches){
-    const io=new IntersectionObserver(entries=>{
-      entries.forEach(e=>{
-        if(e.target===hero)visibleHero=e.isIntersecting;
-        if(e.isIntersecting)visibleSections.add(e.target);
-        else visibleSections.delete(e.target);
-      });
-      ensureFrame();
-    },{rootMargin:'20% 0px 20% 0px',threshold:0});
-    sections.forEach(s=>io.observe(s));
-    if(hero)io.observe(hero);
-  }
-
-  function updateScrollDepth(){
-    if(reduce.matches)return;
-    const vh=innerHeight;
-    for(const section of visibleSections){
-      const r=section.getBoundingClientRect();
-      if(r.bottom<0||r.top>vh)continue;
-      const p=Math.max(-1,Math.min(1,(r.top+r.height*.5-vh*.5)/Math.max(vh,r.height)));
-      section.style.setProperty('--section-shift',(p*-35).toFixed(2)+'px');
-      section.style.setProperty('--edge-shift',(p*-24).toFixed(2)+'px');
-      if(section===work) {
-        section.style.setProperty('--orb-x',(p*31).toFixed(2)+'px');
-        cards.forEach((card,index)=>{
-          const cr=card.getBoundingClientRect();
-          if(cr.bottom<0||cr.top>vh)return;
-          const cp=(cr.top+cr.height/2-vh/2)/Math.max(vh,cr.height);
-          card.style.setProperty('--card-shift',(Math.max(-12,Math.min(12,-cp*(6+index%3*3)))).toFixed(1)+'px');
-        });
-      }
-    }
-  }
-
-  // Single rAF loop: the ribbing flows even when the pointer is still.
-  function frame(time){
-    running=false;
-    if(hidden||reduce.matches)return;
-    const dt=Math.min(.05,Math.max(.001,(time-last)/1000||.016));
-    last=time;
-    const lerp=1-Math.exp(-7.6*dt);
-    px+=(tx-px)*lerp;py+=(ty-py)*lerp;
-    if(visibleHero && hero){
-      const r=hero.getBoundingClientRect();
-      const progress=Math.max(-1,Math.min(1,-r.top/Math.max(1,r.height)));
-      drawFlow(time);
-      hero.style.setProperty('--mx',(px*26).toFixed(2)+'px');
-      hero.style.setProperty('--my',(py*17+progress*13).toFixed(2)+'px');
-      hero.style.setProperty('--sx',(px*-11).toFixed(2)+'px');
-      hero.style.setProperty('--sy',(py*-8+progress*-21).toFixed(2)+'px');
-      hero.style.setProperty('--rib',(Math.sin(time*.00026)*4.2+px*2).toFixed(2)+'px');
-      hero.style.setProperty('--hero-turn',(px*.34).toFixed(2)+'deg');
-      if(field){
-        field.style.setProperty('--field-x',(px*-13).toFixed(2)+'px');
-        field.style.setProperty('--field-y',(py*-10+progress*12).toFixed(2)+'px');
-        field.style.setProperty('--field-rx',(py*2).toFixed(2)+'deg');
-        field.style.setProperty('--field-ry',(px*-2.5).toFixed(2)+'deg');
-      }
-    }
-    updateScrollDepth();
-    // Animation is paused completely when the hero is offscreen and no input is pending.
-    if(visibleHero)ensureFrame();
-  }
-  function ensureFrame(){
-    if(!running&&!hidden&&!reduce.matches){running=true;requestAnimationFrame(frame)}
-  }
-  document.addEventListener('visibilitychange',()=>{
-    hidden=document.hidden;
-    if(!hidden){last=performance.now();ensureFrame()}
+  menu.addEventListener("click", () => {
+    const open = nav.dataset.open !== "true";
+    nav.dataset.open = String(open);
+    menu.setAttribute("aria-expanded", String(open));
+    if (open) nav.querySelector(".nav-list a").focus({ preventScroll: true });
   });
-  window.addEventListener('scroll',ensureFrame,{passive:true});
-  window.addEventListener('resize',ensureFrame,{passive:true});
+  nav
+    .querySelectorAll("a")
+    .forEach((link) => link.addEventListener("click", closeMenu));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && nav.dataset.open === "true") {
+      closeMenu();
+      menu.focus();
+    }
+  });
+  nav.addEventListener("focusout", (event) => {
+    if (!nav.contains(event.relatedTarget)) closeMenu();
+  });
 
-  // Glass cards gain real 3D response. Hover light tracks the cursor.
-  if(fine.matches && !reduce.matches){
-    cards.forEach(card=>{
-      let sx=0,sy=0;
-      card.addEventListener('pointermove',e=>{
-        const r=card.getBoundingClientRect();
-        sx=Math.max(-1,Math.min(1,(e.clientX-r.left)/Math.max(1,r.width)*2-1));
-        sy=Math.max(-1,Math.min(1,(e.clientY-r.top)/Math.max(1,r.height)*2-1));
-        card.style.setProperty('--tilt-x',(sy*-3).toFixed(2)+'deg');
-        card.style.setProperty('--tilt-y',(sx*3).toFixed(2)+'deg');
-        card.style.setProperty('--sheen-x',(sx*15).toFixed(1)+'px');
-        card.style.setProperty('--border-angle',((Math.atan2(sy,sx)*180/Math.PI)+135).toFixed(1)+'deg');
-      },{passive:true});
-      card.addEventListener('pointerleave',()=>{
-        card.style.setProperty('--tilt-x','0deg');card.style.setProperty('--tilt-y','0deg');
-        card.style.setProperty('--sheen-x','0px');
-      },{passive:true});
-    });
-    document.querySelectorAll('.v2-main-action').forEach(el=>{
-      el.addEventListener('pointermove',e=>{
-        const r=el.getBoundingClientRect();
-        el.style.setProperty('--mag-x',(((e.clientX-r.left)/r.width-.5)*8).toFixed(2)+'px');
-        el.style.setProperty('--mag-y',(((e.clientY-r.top)/r.height-.5)*5).toFixed(2)+'px');
-      },{passive:true});
-      el.addEventListener('pointerleave',()=>{
-        el.style.setProperty('--mag-x','0px');el.style.setProperty('--mag-y','0px');
-      },{passive:true});
-    });
+  const signature = document.querySelector(".signature-name");
+  const name = signature.textContent;
+  signature.textContent = "";
+  [...name].forEach((letter, i) => {
+    const span = document.createElement("span");
+    span.textContent = letter;
+    span.className = "sig-letter";
+    span.setAttribute("aria-hidden", "true");
+    span.style.setProperty("--i", i);
+    span.style.setProperty("--wave", `${-((i % 3) + 1) * 3}px`);
+    signature.append(span);
+  });
+  const reveal = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          reveal.unobserve(entry.target);
+        }
+      }),
+    { threshold: 0.08 },
+  );
+  document.querySelectorAll(".reveal").forEach((element, i) => {
+    element.style.setProperty("--delay", `${(i % 3) * 35}ms`);
+    reveal.observe(element);
+  });
+
+  function spot(ctx, cx, cy, rx, ry, color, strength = 1) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(rx, ry);
+    const fill = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+    fill.addColorStop(0, color);
+    fill.addColorStop(0.35, color);
+    fill.addColorStop(1, "transparent");
+    ctx.globalAlpha = strength;
+    ctx.fillStyle = fill;
+    ctx.fillRect(-1, -1, 2, 2);
+    ctx.restore();
   }
-
-  // Intentional micro-interaction from the existing portfolio: scramble *on hover*.
-  // No auto-scramble that leaves the headline unreadable while loading.
-  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  function scramble(el){
-    if(el.dataset.scrambling)return;
-    const original=el.textContent;
-    const started=performance.now();
-    el.dataset.scrambling='1';
-    const animate=now=>{
-      const t=Math.min(1,(now-started)/410);
-      const fixed=Math.floor(original.length*t);
-      el.textContent=[...original].map((c,i)=>(i<fixed||/\s|[.&-]/.test(c))?c:chars[(i*13+Math.floor(now/41))%chars.length]).join('');
-      if(t<1)requestAnimationFrame(animate);
-      else{el.textContent=original;delete el.dataset.scrambling}
+  function ribbon(ctx, path, color, width, blur = 0) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.lineCap = "round";
+    ctx.filter = blur ? `blur(${blur}px)` : "none";
+    ctx.stroke(new Path2D(path));
+    ctx.restore();
+  }
+  function buildLights(scene) {
+    const { canvas } = scene;
+    const layers = [];
+    const layer = () => {
+      const light = document.createElement("canvas");
+      light.width = canvas.width;
+      light.height = canvas.height;
+      layers.push(light);
+      const context = light.getContext("2d");
+      context.setTransform(
+        canvas.width / 1672,
+        0,
+        0,
+        canvas.height / (scene.section === hero ? 941 : 725),
+        0,
+        0,
+      );
+      return context;
     };
-    requestAnimationFrame(animate);
+    let ctx = layer();
+    if (scene.section === hero) {
+      ribbon(
+        ctx,
+        "M987 -120 C976 90 977 204 1030 335 S1139 540 1191 701",
+        "#05245f",
+        190,
+        40,
+      );
+      spot(ctx, 1040, 355, 195, 350, "#081750", 0.65);
+      spot(ctx, 387, 460, 450, 460, "#005caf", 0.65);
+      spot(ctx, 63, 500, 160, 85, "#704aab", 0.46);
+      ctx = layer();
+      ribbon(ctx, "M803 252 C832 302 741 359 718 407", "#d83995", 70, 20);
+      ribbon(
+        ctx,
+        "M737 403 C654 475 762 512 843 551 S1015 663 1090 800",
+        "#d83995",
+        144,
+        27,
+      );
+      ribbon(ctx, "M700 222 C920 199 816 263 800 292", "#ff54bb", 66, 13);
+      ribbon(
+        ctx,
+        "M727 400 C671 478 768 499 841 557 S936 667 1015 699",
+        "#ff65bf",
+        86,
+        17,
+      );
+      spot(ctx, 1230, 810, 420, 280, "#9654aa", 0.63);
+      ribbon(ctx, "M704 491 L870 542 L965 550", "#ffd2e66b", 22, 9);
+      ctx = layer();
+      spot(ctx, 665, 145, 170, 290, "#bceeff", 0.44);
+      spot(ctx, 1228, 116, 185, 203, "#9ee6ff", 0.59);
+      spot(ctx, 1270, 460, 155, 195, "#67bcfa", 0.24);
+      spot(ctx, 1531, 390, 215, 350, "#bcefff", 0.68);
+      spot(ctx, 720, 741, 195, 255, "#a5daff", 0.68);
+      spot(ctx, 1465, 780, 280, 240, "#b3dcff", 0.38);
+      ribbon(ctx, "M1210 600 C1358 610 1505 460 1650 510", "#d9f3ff99", 62, 25);
+      ribbon(
+        ctx,
+        "M915 589 C1093 631 1278 611 1481 698 L1634 739",
+        "#efd8ef88",
+        30,
+        16,
+      );
+      ribbon(ctx, "M532 342 L557 320 L576 357", "#fcffffcc", 10, 4);
+      ribbon(ctx, "M226 535 L271 521 L300 528", "#e0f7ff99", 9, 3);
+    } else {
+      spot(ctx, 585, 44, 450, 390, "#72c6ff", 0.7);
+      spot(ctx, 1088, 16, 375, 220, "#d7e9ff", 0.64);
+      spot(ctx, 190, 330, 260, 355, "#004f9b", 0.8);
+      ctx = layer();
+      ribbon(ctx, "M1116 118 C1313 167 1274 209 1467 294", "#f74fc3", 99, 25);
+      ribbon(ctx, "M-80 294 C80 295 100 342 217 366", "#ad43bcaa", 75, 32);
+      ribbon(ctx, "M487 275 C739 256 729 432 914 472", "#ff4cbd", 117, 15);
+      ribbon(ctx, "M1200 576 C1400 534 1550 548 1760 410", "#f464ce", 72, 22);
+      ctx = layer();
+      ribbon(ctx, "M520 190 C670 224 634 320 730 372", "#061f72dd", 100, 20);
+      ribbon(ctx, "M601 278 C759 309 747 425 916 468", "#ffe7f188", 21, 9);
+      spot(ctx, 834, 421, 125, 99, "#ff40b8", 0.7);
+      ribbon(ctx, "M-70 605 C261 664 399 831 713 799", "#f5fdff", 92, 24);
+      ribbon(ctx, "M974 661 C1145 653 1331 701 1577 595", "#c8eeff", 90, 35);
+      ribbon(ctx, "M1280 382 L1501 262", "#e4e4ff88", 38, 16);
+      spot(ctx, 1085, 557, 250, 195, "#cbb7ef", 0.52);
+    }
+    // Bake refraction once; continuous motion only composites these three light layers.
+    const refract = scene.refraction.getContext("2d");
+    for (const light of layers) {
+      refract.clearRect(0, 0, canvas.width, canvas.height);
+      refract.drawImage(light, 0, 0);
+      const context = light.getContext("2d");
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      for (let column = 0; column < canvas.width; column += 2) {
+        const shift =
+          Math.sin(column * 1.73) * 1.5 + Math.sin(column * 0.041) * 1.5;
+        context.drawImage(
+          scene.refraction,
+          column,
+          0,
+          2,
+          canvas.height,
+          column,
+          shift,
+          2,
+          canvas.height,
+        );
+      }
+    }
+    return layers;
   }
-  if(fine.matches && !reduce.matches){
-    document.querySelectorAll('.hero-title-line').forEach(el=>{
-      el.addEventListener('pointerenter',()=>scramble(el));
+  function paint(scene, seconds) {
+    const { canvas, ctx } = scene;
+    if (!ctx) return;
+    scene.layers ||= buildLights(scene);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = "#0593C6";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = scene.section === hero ? "#0056ff29" : "#0070ff59";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const depth =
+      parseFloat(scene.section.style.getPropertyValue("--section-shift")) || 0;
+    scene.layers.forEach((light, index) => {
+      const direction = index === 0 ? -1 : 1;
+      const target = reduce.matches ? 0 : x * (index + 1) * 5 * direction;
+      light.dx =
+        (light.dx || 0) + (target - (light.dx || 0)) * (0.08 + index * 0.04);
+      const drift =
+        Math.sin((seconds * Math.PI) / (15 + index * 4)) * (3 + index * 2);
+      const swell =
+        1.015 + Math.sin((seconds * Math.PI) / (21 + index * 3)) * 0.008;
+      ctx.drawImage(
+        light,
+        (-canvas.width * (swell - 1)) / 2 + light.dx + drift,
+        (-canvas.height * (swell - 1)) / 2 + (depth + y * (index - 1) * 5) / 2,
+        canvas.width * swell,
+        canvas.height * swell,
+      );
     });
-    const logo=document.querySelector('.brand');
-    if(logo){logo.addEventListener('pointerenter',()=>{const el=logo.firstChild;if(el && el.nodeType===Node.TEXT_NODE){
-      // Keep the nav brand's text node intact; scramble the About signature instead.
-      const name=document.querySelector('.signature-name');
-      if(name)name.querySelectorAll('.sig-letter').forEach((span,i)=>{
-        span.style.transitionDelay=i*18+'ms';
-      });
-    }})}
   }
-  if(!reduce.matches)root.classList.add('motion-ready');
-  ensureFrame();
+  function queue() {
+    if (!frameId && !document.hidden) frameId = requestAnimationFrame(tick);
+  }
+  function tick(time) {
+    frameId = 0;
+    if (document.hidden) return;
+    const moving = !reduce.matches;
+    const ease =
+      1 - Math.exp(-7 * Math.min(0.05, (time - last) / 1000 || 0.016));
+    last = time;
+    x += (targetX - x) * ease;
+    y += (targetY - y) * ease;
+    if (scrollDirty) {
+      nav.classList.toggle("scrolled", scrollY > 100);
+      const surface = sections.find((section) => {
+        const rect = section.getBoundingClientRect();
+        return rect.top <= 32 && rect.bottom > 32;
+      });
+      nav.classList.toggle(
+        "light-surface",
+        !!surface?.matches(".about-section,.skills-section"),
+      );
+      visible.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        section.style.setProperty(
+          "--section-shift",
+          moving
+            ? `${Math.max(-20, Math.min(20, -rect.top * 0.025))}px`
+            : "0px",
+        );
+      });
+      scrollDirty = false;
+    }
+    const seconds = moving ? (time - start) / 1000 : 0;
+    if (time - lastPaint > 40 || !moving) {
+      scenes.forEach((scene) => {
+        if (visible.has(scene.section) || !moving) paint(scene, seconds);
+      });
+      lastPaint = time;
+    }
+    if (moving) {
+      visible.forEach((section) => {
+        section.style.setProperty(
+          "--rib",
+          `${Math.sin((seconds * Math.PI) / 12) * 1.8 + x * 0.9}px`,
+        );
+        section.style.setProperty(
+          "--flow",
+          `${Math.sin((seconds * Math.PI) / 15) * 15}%`,
+        );
+      });
+      if (visible.has(hero)) {
+        fields.style.setProperty("--field-x", `${-x * 11}px`);
+        fields.style.setProperty(
+          "--field-y",
+          `${-y * 8 + Math.sin(seconds * 0.55) * 2}px`,
+        );
+      }
+      if (activeCard) {
+        const currentX =
+          parseFloat(activeCard.style.getPropertyValue("--tilt-x")) || 0;
+        const currentY =
+          parseFloat(activeCard.style.getPropertyValue("--tilt-y")) || 0;
+        activeCard.style.setProperty(
+          "--tilt-x",
+          `${currentX + (tiltX - currentX) * ease}deg`,
+        );
+        activeCard.style.setProperty(
+          "--tilt-y",
+          `${currentY + (tiltY - currentY) * ease}deg`,
+        );
+      }
+      if (scenes.some((scene) => visible.has(scene.section)) || activeCard)
+        queue();
+    }
+  }
+  const visibility = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) visible.add(entry.target);
+      else visible.delete(entry.target);
+    });
+    scrollDirty = true;
+    queue();
+  });
+  sections.forEach((section) => visibility.observe(section));
+  document.addEventListener(
+    "pointermove",
+    (event) => {
+      if (!fine.matches || reduce.matches) return;
+      targetX = (event.clientX / innerWidth) * 2 - 1;
+      targetY = (event.clientY / innerHeight) * 2 - 1;
+      queue();
+    },
+    { passive: true },
+  );
+  document.documentElement.addEventListener("pointerleave", () => {
+    targetX = 0;
+    targetY = 0;
+    queue();
+  });
+  cards.forEach((card) => {
+    card.addEventListener(
+      "pointermove",
+      (event) => {
+        if (!fine.matches || reduce.matches) return;
+        if (activeCard && activeCard !== card)
+          activeCard.style.removeProperty("--tilt-x");
+        activeCard = card;
+        const r = card.getBoundingClientRect();
+        const cx = (event.clientX - r.left) / r.width,
+          cy = (event.clientY - r.top) / r.height;
+        tiltX = (cy - 0.5) * -4;
+        tiltY = (cx - 0.5) * 4;
+        card.style.setProperty("--shine-x", `${cx * 100}%`);
+        card.style.setProperty("--shine-y", `${cy * 100}%`);
+        queue();
+      },
+      { passive: true },
+    );
+    card.addEventListener("pointerleave", () => {
+      card.style.setProperty("--tilt-x", "0deg");
+      card.style.setProperty("--tilt-y", "0deg");
+      activeCard = null;
+    });
+  });
+  function motionPreference() {
+    document.documentElement.classList.toggle("motion-ready", !reduce.matches);
+    if (reduce.matches) {
+      targetX = targetY = x = y = 0;
+      activeCard = null;
+      fields.style.cssText = "";
+      cards.forEach((card) => {
+        card.style.removeProperty("--tilt-x");
+        card.style.removeProperty("--tilt-y");
+      });
+      sections.forEach((section) => {
+        section.style.setProperty("--rib", "0px");
+        section.style.setProperty("--flow", "0%");
+      });
+    }
+    scrollDirty = true;
+    queue();
+  }
+  reduce.addEventListener("change", motionPreference);
+  addEventListener(
+    "scroll",
+    () => {
+      scrollDirty = true;
+      queue();
+    },
+    { passive: true },
+  );
+  addEventListener(
+    "resize",
+    () => {
+      if (innerWidth > 600) closeMenu();
+      scrollDirty = true;
+      queue();
+    },
+    { passive: true },
+  );
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      cancelAnimationFrame(frameId);
+      frameId = 0;
+    } else queue();
+  });
+  scenes.forEach((scene) => paint(scene, 0));
+  motionPreference();
 })();

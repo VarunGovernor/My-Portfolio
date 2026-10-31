@@ -25,8 +25,11 @@ jobs:
           test -f dist/v2/index.html
           test -f dist/v3/index.html
           test -f dist/v4/index.html
-          grep -q 'background-size:13px 100%' dist/v2/index.html
-          grep -q 'feDisplacementMap' dist/v2/index.html
+          test -f dist/v2/assets/kinetic.css
+          test -f dist/v2/assets/kinetic.js
+          test -f dist/v2/assets/dm-sans-400.ttf
+          grep -q 'light-field' dist/v2/index.html
+          grep -q 'repeating-linear-gradient' dist/v2/assets/kinetic.css
           grep -q 'starfield' dist/v3/index.html
           grep -q 'equalizer-scene' dist/v3/index.html
           grep -q '#FC734D' dist/v3/index.html
@@ -68,7 +71,7 @@ jobs:
           "$CHROME" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage \
             --virtual-time-budget=3000 --dump-dom "http://127.0.0.1:4173/My-Portfolio/v2/" > previews/v2-runtime-dom.html
           grep -q 'class="sig-letter"' previews/v2-runtime-dom.html
-          grep -q 'v2-flow-canvas' previews/v2-runtime-dom.html
+          grep -q 'light-field' previews/v2-runtime-dom.html
           grep -q -- '--rib' previews/v2-runtime-dom.html
           if cmp -s previews/v2-desktop.png previews/v2-motion-later.png; then
             echo "V2 motion frames were identical; expected visible animation"
