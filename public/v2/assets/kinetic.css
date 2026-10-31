@@ -225,3 +225,17 @@ body { text-rendering:optimizeLegibility; }
 @media(prefers-reduced-motion:reduce){
  .v2-flow-canvas{display:none}
 }
+
+/* Name fallback: a proper signature reveal, never a giant initial tile. */
+.brand{position:relative;animation:brand-arrive .85s var(--ease-out) both}
+.brand::after{content:"";position:absolute;bottom:-5px;left:0;width:0;height:2px;background:#D83995;transition:width .45s var(--ease-out)}
+.brand:hover::after,.brand:focus-visible::after{width:100%}
+@keyframes brand-arrive{from{opacity:.62;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.about-copy.in-view .signature-name .sig-letter{
+ animation:signature-letter-in .85s var(--ease-out) both;
+ animation-delay:calc(.09s + var(--i) * 55ms);
+}
+@keyframes signature-letter-in{from{opacity:.1;transform:translate3d(0,30px,0) rotate(3deg)}to{opacity:1;transform:translate3d(0,0,0) rotate(0)}}
+@media(prefers-reduced-motion:reduce){
+ .brand,.about-copy.in-view .signature-name .sig-letter{animation:none!important}
+}
