@@ -70,16 +70,11 @@ jobs:
           grep -q 'class="sig-letter"' previews/v2-runtime-dom.html
           grep -q 'v2-flow-canvas' previews/v2-runtime-dom.html
           grep -q -- '--rib' previews/v2-runtime-dom.html
-          python - <<'PY'
-          from PIL import Image, ImageChops
-          from pathlib import Path
-          a=Image.open('previews/v2-desktop.png').convert('RGB')
-          b=Image.open('previews/v2-motion-later.png').convert('RGB')
-          box=ImageChops.difference(a,b).getbbox()
-          if box is None:
-              raise SystemExit('V2 motion frames were identical; expected visible animation.')
-          print('V2 animation produced changed pixels:', box)
-          PY
+          if cmp -s previews/v2-desktop.png previews/v2-motion-later.png; then
+            echo "V2 motion frames were identical; expected visible animation"
+            exit 1
+          fi
+          echo "V2 motion frames differ, signature DOM present, and scroll variables initialized"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
