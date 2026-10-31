@@ -177,6 +177,73 @@ h1,h2,h3{font-family:'Sora','DM Sans',sans-serif}
  .hero-kicker{font-size:.62rem}
  .hero-desc{max-width:325px}
 }
+
+/* Reference reconstruction V2: source uses ribbed light, not a 1px grid curtain.
+   The exact base remains #0593C6; text #FCFFFF, distortion #D83995. */
+.v2-hero{position:relative;isolation:isolate;min-height:clamp(760px,100svh,1100px);display:block;background:#0593C6;overflow:hidden;padding:0}
+.v2-hero .v2-colorfield,.v2-hero .v2-ribs{position:absolute;inset:0;pointer-events:none}
+.v2-colorfield{z-index:0;transform:translate3d(0,var(--parallax,0px),0) scale(1.08);transform-origin:center;overflow:hidden}
+.v2-sky-glow{position:absolute;inset:-9%;background:radial-gradient(ellipse 40% 48% at 28% 37%,rgba(111,232,251,.35),transparent 80%),radial-gradient(ellipse 38% 58% at 80% 25%,rgba(152,238,255,.46),transparent 77%),radial-gradient(ellipse 51% 65% at 59% 84%,rgba(0,52,163,.40),transparent 78%);filter:blur(29px)}
+.v2-distortion{position:absolute;inset:0;width:100%;height:100%;opacity:.93}
+.v2-ribs{z-index:1;opacity:.63;mix-blend-mode:multiply;
+  background-image:linear-gradient(90deg,
+  rgba(0,44,112,.37) 0px,rgba(0,44,112,.22) 1px,
+  rgba(5,147,198,.02) 3px,rgba(0,75,141,.24) 7px,
+  rgba(120,228,251,.10) 10px,rgba(0,52,118,.22) 13px,
+  rgba(120,233,255,.13) 16px,rgba(0,64,125,.31) 18px);
+  background-size:18px 100%;background-repeat:repeat}
+.v2-ribs::after{content:"";position:absolute;inset:0;opacity:.6;background:repeating-linear-gradient(90deg,rgba(252,255,255,.10) 0px,transparent 2px,transparent 9px,rgba(252,255,255,.07) 10px,transparent 13px,transparent 18px)}
+.v2-hero .shell.v2-hero-inner{position:relative;z-index:3;min-height:clamp(760px,100svh,1100px);display:flex;flex-direction:column;justify-content:flex-end;padding-top:170px;padding-bottom:30px}
+.v2-floating-schedule{position:absolute;top:105px;right:0;width:clamp(235px,27vw,330px);padding:19px 18px 16px;border:1px solid rgba(252,255,255,.22);border-radius:21px;background:rgba(1,103,156,.42);box-shadow:0 16px 55px rgba(0,51,108,.12);backdrop-filter:blur(25px) saturate(1.25);-webkit-backdrop-filter:blur(25px) saturate(1.25);color:#FCFFFF}
+.v2-float-handle{height:3px;width:42px;background:#FCFFFF;border-radius:20px;margin:-6px auto 22px;opacity:.88}
+.v2-panel-kicker{font:600 .61rem var(--mono);letter-spacing:.12em;opacity:.78;margin:0 0 15px}
+.v2-panel-row{display:flex;flex-direction:column;gap:7px;padding:16px 15px;margin-top:9px;border:1px solid rgba(252,255,255,.15);border-radius:12px;background:rgba(252,255,255,.18)}
+.v2-panel-row span{font:.62rem var(--mono);letter-spacing:.025em;opacity:.85}
+.v2-panel-row b{font-size:1rem;font-weight:500;letter-spacing:-.025em}
+.v2-panel-row small{font-size:.63rem;opacity:.7;line-height:1.4}
+.v2-headline-area{position:relative;z-index:4;margin-bottom:clamp(30px,5vh,65px);max-width:100%}
+.v2-index-line{font:650 .63rem var(--mono);letter-spacing:.1em;margin-bottom:24px;opacity:.79}
+.v2-headline-area h1{font-family:'DM Sans',sans-serif;font-size:clamp(3.5rem,6.4vw,7.2rem);line-height:1.045;font-weight:400;letter-spacing:-.069em;color:#FCFFFF;margin:0 0 27px;max-width:950px;text-shadow:0 2px 23px rgba(0,74,135,.12)}
+.v2-headline-area h1 em{font-style:normal;font-weight:500}
+.v2-bottom-row{display:flex;align-items:end;justify-content:space-between;gap:30px}
+.v2-bottom-row p{font:400 clamp(.79rem,1.05vw,.95rem)/1.7 'DM Sans',sans-serif;max-width:460px;margin:0;opacity:.94}
+.v2-headline-actions{display:flex;align-items:center;gap:20px;white-space:nowrap}
+.v2-main-action{background:#FCFFFF;color:#0593C6;border-radius:999px;padding:15px 21px;font-size:.77rem;font-weight:750;box-shadow:0 7px 24px rgba(0,83,144,.12);transition:transform .25s}
+.v2-main-action:hover{transform:translateY(-3px)}
+.v2-text-action{font-size:.75rem;font-weight:650;text-decoration:underline;text-underline-offset:5px}
+.v2-feature-bar{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:27px;align-items:start;border-top:1px solid rgba(252,255,255,.48);padding-top:23px}
+.v2-feature-bar>div{display:grid;grid-template-columns:37px 1fr;column-gap:9px;row-gap:6px}
+.v2-feature-bar span{font:600 .62rem var(--mono);opacity:.75;grid-row:span 2}
+.v2-feature-bar b{font-size:.78rem;font-weight:600}
+.v2-feature-bar small{font-size:.68rem;opacity:.72;line-height:1.4}
+.v2-hero .edge-mark{opacity:.6}
+@media(max-width:850px){
+ .v2-floating-schedule{top:105px;right:0;max-width:260px;opacity:.92}
+ .v2-headline-area h1{font-size:clamp(3.4rem,8.5vw,6.2rem)}
+ .v2-bottom-row{align-items:start;flex-direction:column;gap:23px}
+}
+@media(max-width:600px){
+ .v2-hero,.v2-hero .shell.v2-hero-inner{min-height:900px}
+ .v2-hero .shell.v2-hero-inner{padding-top:360px;padding-bottom:26px}
+ .v2-floating-schedule{right:0;left:auto;top:94px;width:min(250px,80vw);padding:12px 13px;border-radius:16px}
+ .v2-panel-row{padding:10px 11px;gap:4px}
+ .v2-panel-row b{font-size:.83rem}
+ .v2-panel-row small{font-size:.58rem}
+ .v2-panel-kicker{font-size:.52rem;margin-bottom:9px}
+ .v2-float-handle{margin:0 auto 11px}
+ .v2-distortion{opacity:.7}
+ .v2-headline-area h1{font-size:clamp(3.1rem,10.5vw,5rem)}
+ .v2-index-line{font-size:.52rem;letter-spacing:.04em}
+ .v2-headline-area{margin-bottom:32px}
+ .v2-bottom-row p{max-width:320px;font-size:.77rem}
+ .v2-feature-bar{gap:11px}
+ .v2-feature-bar>div{grid-template-columns:1fr}
+ .v2-feature-bar span{grid-row:auto;font-size:.57rem}
+ .v2-feature-bar b{font-size:.63rem}
+ .v2-feature-bar small{font-size:.54rem}
+}
+@media(prefers-reduced-motion:reduce){.v2-colorfield{transform:none!important}}
+
 </style></head>
 <body>
 <a href="#top" class="skip">Skip to content</a>
@@ -186,32 +253,56 @@ h1,h2,h3{font-family:'Sora','DM Sans',sans-serif}
  <a href="#contact" class="nav-cta">Let's connect ↗</a>
  <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">Menu +</button>
 </div></nav>
-<main><section class="section hero" id="top" aria-labelledby="hero-title">
-<div class="blueprint-lines" aria-hidden="true"></div>
-<div class="shell hero-layout">
- <div class="hero-copy reveal">
- <div class="hero-kicker">VARUN MANIKANTA / INDEPENDENT ENGINEER</div>
- <h1 class="hero-heading" id="hero-title"><span>I build</span><span>what works.</span></h1>
- <p class="hero-desc">Systems, AI tools and digital products made for real people and real operations — from the first idea to deployment.</p>
- <div class="hero-actions"><a href="#work">Explore projects ↗</a><a href="#contact">Get in touch</a></div>
- </div>
- <div class="hero-art" data-parallax=".08" aria-hidden="true"><span class="hero-orbit"></span>
- <svg class="distort-art" viewBox="0 0 700 750" xmlns="http://www.w3.org/2000/svg" role="presentation">
- <defs><radialGradient id="v2pink"><stop offset="0%" stop-color="#FCFFFF" stop-opacity=".12"/><stop offset="35%" stop-color="#D83995" stop-opacity=".85"/><stop offset="75%" stop-color="#D83995"/><stop offset="100%" stop-color="#D83995" stop-opacity="0"/></radialGradient>
- <linearGradient id="v2streak" x1="0" x2="1"><stop stop-color="#D83995" stop-opacity="0"/><stop offset=".45" stop-color="#D83995" stop-opacity=".8"/><stop offset="1" stop-color="#D83995" stop-opacity="0"/></linearGradient>
- <filter id="v2warp" x="-35%" y="-35%" width="170%" height="170%"><feTurbulence type="fractalNoise" baseFrequency=".008 .018" numOctaves="2" seed="11" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="74" xChannelSelector="R" yChannelSelector="G"/></filter>
- <filter id="v2soft"><feGaussianBlur stdDeviation="29"/></filter></defs>
- <ellipse cx="345" cy="365" rx="250" ry="310" fill="#D83995" opacity=".45" filter="url(#v2soft)"/>
- <g filter="url(#v2warp)" stroke-linecap="round" fill="none">
- <path d="M125 520 C255 440 315 385 370 305 S505 190 580 230" stroke="#D83995" stroke-width="182" opacity=".89"/>
- <path d="M185 645 C310 555 435 480 555 390" stroke="#D83995" stroke-width="118" opacity=".70"/>
- <path d="M205 440 C350 400 470 300 560 265" stroke="#FCFFFF" stroke-width="25" opacity=".1"/>
- </g>
- <path d="M0 425 C245 315 472 395 700 225" stroke="url(#v2streak)" stroke-width="85" opacity=".42" fill="none" filter="url(#v2soft)"/>
- </svg><span class="art-label">PINK / DISPLACEMENT FIELD</span>
- </div>
- <div class="hero-footer"><span>01 / 04 — INDEPENDENT DESIGN STUDY</span><span>SCROLL TO EXPLORE ↓</span></div>
-</div><span class="edge-mark" aria-hidden="true"></span>
+<main><section class="section hero v2-hero" id="top" aria-labelledby="hero-title">
+  <div class="v2-colorfield" data-parallax=".025" aria-hidden="true">
+    <div class="v2-sky-glow"></div>
+    <svg viewBox="0 0 1200 780" preserveAspectRatio="xMidYMid slice" class="v2-distortion" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="v2-smear" x="-45%" y="-45%" width="190%" height="190%">
+          <feTurbulence type="fractalNoise" baseFrequency=".005 .017" numOctaves="2" seed="8" result="w"/>
+          <feDisplacementMap in="SourceGraphic" in2="w" scale="88" xChannelSelector="R" yChannelSelector="G"/>
+          <feGaussianBlur stdDeviation="23"/>
+        </filter>
+        <filter id="v2-bleed"><feGaussianBlur stdDeviation="69"/></filter>
+        <linearGradient id="v2-flow" x1="0" x2=".9" y1="0" y2="1">
+          <stop offset="0" stop-color="#D83995" stop-opacity=".08"/>
+          <stop offset=".36" stop-color="#FCFFFF" stop-opacity=".55"/>
+          <stop offset=".62" stop-color="#D83995" stop-opacity=".94"/>
+          <stop offset="1" stop-color="#D83995" stop-opacity=".2"/>
+        </linearGradient>
+      </defs>
+      <path d="M570 -95 C720 58 780 193 689 340 C610 470 725 565 820 705" stroke="#02070A" stroke-opacity=".67" stroke-width="185" fill="none" filter="url(#v2-bleed)"/>
+      <path d="M435 90 C590 100 580 245 490 318 C355 445 510 509 567 584 C628 660 682 704 793 810" stroke="url(#v2-flow)" stroke-width="280" stroke-linecap="round" fill="none" filter="url(#v2-smear)"/>
+      <path d="M240 451 C434 389 528 545 692 552 C786 560 823 621 910 639" stroke="#D83995" stroke-opacity=".7" stroke-width="140" fill="none" filter="url(#v2-bleed)"/>
+      <ellipse cx="1047" cy="448" rx="220" ry="340" fill="#FCFFFF" fill-opacity=".24" filter="url(#v2-bleed)"/>
+    </svg>
+  </div>
+  <div class="v2-ribs" aria-hidden="true"></div>
+  <div class="shell v2-hero-inner">
+    <aside class="v2-floating-schedule" aria-label="Areas of engineering work">
+      <div class="v2-float-handle" aria-hidden="true"></div>
+      <p class="v2-panel-kicker">SELECTED FIELDS / 2026</p>
+      <div class="v2-panel-row"><span>01 / Production systems</span><b>Full Stack</b><small>Applications, data and deployment</small></div>
+      <div class="v2-panel-row"><span>02 / Intelligent workflows</span><b>AI & Automation</b><small>Practical tools that reduce friction</small></div>
+    </aside>
+    <div class="v2-headline-area">
+      <div class="v2-index-line">VARUN MANIKANTA &nbsp; — &nbsp; DESIGN / DEVELOPMENT / AUTOMATION</div>
+      <h1 id="hero-title">Building software<br>that <em>feels human.</em></h1>
+      <div class="v2-bottom-row">
+        <p>I design and build intelligent systems, mobile products and dependable software—made to work beyond the demo.</p>
+        <div class="v2-headline-actions">
+          <a href="#work" class="v2-main-action">Explore my work <span aria-hidden="true">↗</span></a>
+          <a href="#contact" class="v2-text-action">Let's connect ↗</a>
+        </div>
+      </div>
+    </div>
+    <div class="v2-feature-bar" aria-label="Focus areas">
+      <div><span>01 /</span><b>AI development</b><small>Models, integrations, real workflows</small></div>
+      <div><span>02 /</span><b>Full-stack engineering</b><small>From interface to infrastructure</small></div>
+      <div><span>03 /</span><b>Production delivery</b><small>Reliable systems that are used</small></div>
+    </div>
+  </div>
+  <span class="edge-mark" aria-hidden="true"></span>
 </section>
 <section class="section work-section" id="work"><div class="shell section-content">
  <div class="section-heading reveal"><div><div class="eyebrow">SELECTED WORK — REAL SYSTEMS</div><h2>Selected<br>work.</h2></div><p>Built for actual operations. Selected work across mobile, data, intelligence and enterprise software.</p></div>
