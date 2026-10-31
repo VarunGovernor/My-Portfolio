@@ -99,6 +99,32 @@
       span.addEventListener("pointerleave", () => { active = false; span.textContent = original; });
     });
   }
+  // Keep the original headings and line breaks, but reveal their words in sequence.
+  // Text remains present and readable when JavaScript or motion is disabled.
+  function prepareWords(heading) {
+    let wordIndex = 0;
+    function walk(node) {
+      [...node.childNodes].forEach(child => {
+        if (child.nodeType === Node.TEXT_NODE) {
+          const tokens = child.textContent.match(/\S+\s*|\s+/g);
+          if (!tokens) return;
+          const fragment = document.createDocumentFragment();
+          tokens.forEach(token => {
+            if (!token.trim()) { fragment.append(document.createTextNode(token)); return; }
+            const word = document.createElement("span");
+            word.className = "motion-word";
+            word.textContent = token;
+            word.style.setProperty("--word-index", String(Math.min(wordIndex++, 9)));
+            fragment.append(word);
+          });
+          child.replaceWith(fragment);
+        } else if (child.nodeType === Node.ELEMENT_NODE && child.tagName !== "BR") walk(child);
+      });
+    }
+    walk(heading);
+  }
+  document.querySelectorAll(".section-heading h2,.about-intro h2,.contact-title,.work-card h3").forEach(prepareWords);
+
   const reveal = new IntersectionObserver(
     (entries) =>
       entries.forEach((entry) => {
