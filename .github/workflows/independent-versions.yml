@@ -90,7 +90,7 @@ jobs:
             exit 1
           fi
           echo "V2 motion frames differ, signature DOM present, and scroll variables initialized"
-      - name: Verify actual V2 motion and responsive layout
+      - name: Verify public homepage and legacy case study compatibility
         run: |
           npm install --no-save --package-lock=false puppeteer-core
           CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
@@ -100,15 +100,17 @@ jobs:
           SERVER_PID=$!
           trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
           for attempt in {1..30}; do
-            if curl -fsS http://127.0.0.1:4174/My-Portfolio/v2/ > /dev/null; then break; fi
+            if curl -fsS http://127.0.0.1:4174/My-Portfolio/ > /dev/null; then break; fi
             sleep 1
           done
-          CHROME_BINARY="$CHROME" node artifacts/v2-review/visible-motion-test.mjs
+          CHROME_BINARY="$CHROME" node scripts/verify-live-homepage.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: independent-portfolio-preview-bundle
           path: |
+            dist/index.html
+            dist/legacy/index.html
             dist/v2/index.html
             dist/v2/assets/**
             dist/v3/index.html
