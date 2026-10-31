@@ -151,7 +151,7 @@ try {
   await check("Quantum Digital gallery serves actual project images", async () =>
     page.$eval(".gallery-image", img => img.naturalWidth > 100 && img.src.includes("quantum")));
   await check("Gallery exposes four screenshot thumbnails", async () =>
-    (await page.$(".gallery-dot")).length === 4);
+    (await page.$$(".gallery-dot")).length === 4);
   const firstSrc = await page.$eval(".gallery-image", img => img.src);
   await page.keyboard.press("ArrowRight");
   await check("Gallery keyboard navigation changes the real image", async () =>
