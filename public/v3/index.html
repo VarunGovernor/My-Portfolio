@@ -170,6 +170,121 @@ h1,h2,h3{font-family:'Instrument Serif',Georgia,serif;font-weight:400}
  .hero-corner span:last-child{display:none}
 }
 @media(prefers-reduced-motion:reduce){.star,.eq-bar{animation:none!important}}
+
+/* Reference reconstruction V3 — light originates from beneath the headline.
+   Actual palette: #02070A / #0297DE / #FC734D. */
+.flux-hero{background:#02070A;min-height:clamp(840px,100svh,1120px);display:block;isolation:isolate;position:relative;overflow:hidden}
+.flux-hero:before{display:none}
+.flux-radiance{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.flux-blue-volume{position:absolute;inset:7% -25% -20%;
+  background:radial-gradient(ellipse 30% 62% at 51% 73%,rgba(2,151,222,.98),transparent 83%),
+             radial-gradient(ellipse 53% 44% at 48% 82%,rgba(2,151,222,.68),transparent 82%),
+             radial-gradient(ellipse 22% 64% at 56% 39%,rgba(2,151,222,.32),transparent 76%),
+             radial-gradient(ellipse 33% 55% at 20% 86%,rgba(2,151,222,.27),transparent 90%);
+  filter:blur(36px);opacity:.95;
+}
+.flux-orange-volume{position:absolute;inset:auto -25% -27%;height:70%;
+  background:radial-gradient(ellipse 47% 49% at 50% 72%,rgba(252,115,77,.92),transparent 87%),
+             radial-gradient(ellipse 60% 36% at 53% 90%,rgba(252,115,77,.5),transparent 88%);
+  filter:blur(37px);opacity:.81;
+}
+.flux-ribs{position:absolute;left:0;right:0;bottom:0;height:86%;
+  background-image:linear-gradient(90deg,rgba(0,10,32,.25) 0px,rgba(0,10,32,.38) 1px,
+    transparent 3px,rgba(61,198,251,.2) 5px,rgba(0,31,80,.16) 7px,rgba(0,10,32,.21) 9px);
+  background-size:9px 100%;opacity:.48;
+  mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.45) 25%,black 71%);
+  mix-blend-mode:overlay;
+}
+.flux-hero .starfield{position:absolute;inset:0;z-index:1;opacity:.82}
+.flux-hero .star{width:1px;height:1px;box-shadow:0 0 5px rgba(2,151,222,.9)}
+.flux-hero .equalizer-scene{position:absolute;left:0;right:0;width:100%;bottom:0;
+  height:85%;display:flex;justify-content:space-between;align-items:flex-end;gap:1px;
+  overflow:hidden;z-index:1;pointer-events:none;
+  mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.6) 30%,black 87%);
+}
+.flux-hero .eq-bar{flex:1;min-width:1px;max-width:6px;height:var(--height,28%);
+  background:linear-gradient(to bottom,transparent 0%,rgba(2,151,222,.02) 18%,rgba(2,151,222,.56) 43%,rgba(2,151,222,.70) 72%,rgba(252,115,77,.62) 100%);
+  box-shadow:0 0 10px rgba(2,151,222,.27),0 0 19px rgba(2,151,222,.08);
+  opacity:var(--stripe-opacity,.45);
+  transform-origin:bottom;animation:eqFloat var(--speed,4s) ease-in-out infinite alternate;
+}
+.flux-hero-content{position:relative;z-index:3;display:flex;align-items:center;flex-direction:column;text-align:center;
+  padding-top:clamp(130px,14.5vh,185px);padding-bottom:0}
+.flux-hero-content .hero-kicker{color:#9cc9df;font:.6rem var(--mono);letter-spacing:.16em;margin:0 0 29px}
+.flux-hero-content .hero-heading{font-family:'Instrument Serif',Georgia,serif;font-weight:400;
+ font-size:clamp(4.2rem,8.2vw,9.1rem);line-height:.92;letter-spacing:-.04em;
+ max-width:1050px;margin:0 0 29px;color:#FCFFFF;text-shadow:0 1px 23px rgba(0,0,0,.18)}
+.flux-hero-content .hero-heading i{color:#FCFFFF;font-weight:400;font-style:italic}
+.flux-hero-content .hero-desc{max-width:510px;font:400 .87rem/1.7 'DM Sans',sans-serif;margin:0 auto 28px;color:rgba(252,255,255,.8)}
+.flux-cta-wrap{display:flex;justify-content:center}
+.flux-orb-cta{display:flex;width:100px;height:100px;border-radius:50%;align-items:center;justify-content:center;
+  text-align:center;position:relative;border:1px solid rgba(252,255,255,.67);
+  background:radial-gradient(circle at 47% 55%,rgba(252,115,77,.66),rgba(252,115,77,.16) 58%,transparent 78%);
+  box-shadow:0 0 0 7px rgba(252,255,255,.08),0 0 34px rgba(252,115,77,.26);
+  color:#FCFFFF;font:650 .73rem/1.35 var(--mono);transition:transform .3s}
+.flux-orb-cta:hover{transform:scale(1.06)}
+.flux-orb-cta span{position:relative;z-index:1}
+.flux-margin-label{position:absolute;top:37%;z-index:3;display:flex;flex-direction:column;gap:18px;
+  color:#b4c5d3;font:.6rem var(--mono);letter-spacing:.06em;opacity:.75}
+.flux-margin-label--left{left:clamp(24px,6vw,90px);text-align:left}
+.flux-margin-label--right{right:clamp(24px,6vw,90px);text-align:right}
+.flux-panels{position:absolute;z-index:4;left:0;right:0;bottom:-103px;display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;pointer-events:none}
+.flux-preview{padding:16px 17px 30px;background:linear-gradient(160deg,rgba(5,13,24,.89),rgba(2,12,24,.79));
+  border:1px solid rgba(151,219,247,.24);border-radius:18px 18px 8px 8px;
+  box-shadow:0 10px 40px rgba(0,0,0,.28);backdrop-filter:blur(11px)}
+.flux-preview:nth-child(1){transform:rotate(-2.6deg) translateY(22px)}
+.flux-preview:nth-child(3){transform:rotate(2.8deg) translateY(30px)}
+.flux-panel-name{font:.57rem var(--mono);color:#b8d1de;letter-spacing:.13em;
+  white-space:nowrap;display:flex;align-items:center;gap:8px;margin:0 0 14px}
+.flux-label-dot{height:4px;width:4px;background:#FC734D;border-radius:50%}
+.flux-preview h3{font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:650;letter-spacing:-.03em;color:#FCFFFF;margin:18px 0 5px}
+.flux-preview p{font:.7rem/1.5 'DM Sans',sans-serif;color:rgba(252,255,255,.67);margin:0}
+.flux-panel-window{height:125px;padding:11px;border:1px solid rgba(2,151,222,.35);background:rgba(2,151,222,.11);border-radius:9px}
+.flux-panel-window-head{display:flex;gap:5px;margin-bottom:14px}
+.flux-panel-window-head span{width:5px;height:5px;background:rgba(252,255,255,.37);border-radius:50%}
+.flux-data-row{display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(252,255,255,.1);padding:8px 0}
+.flux-data-row i{width:10px;height:10px;background:rgba(2,151,222,.6);border-radius:3px}
+.flux-data-row span{width:42%;height:5px;border-radius:3px;background:rgba(252,255,255,.28)}
+.flux-data-row b{margin-left:auto;width:22%;height:5px;border-radius:3px;background:rgba(252,115,77,.59)}
+.flux-mini-graph{height:125px;display:flex;align-items:center;justify-content:center;padding:15px;
+  background:repeating-linear-gradient(0deg,transparent 0 23px,rgba(252,255,255,.06) 23px 24px),
+  rgba(2,151,222,.09);border:1px solid rgba(2,151,222,.35);border-radius:9px}
+.flux-mini-graph svg{width:100%;height:90%}
+.flux-flow{height:125px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid rgba(2,151,222,.35);
+  background:rgba(2,151,222,.11);border-radius:9px}
+.flux-flow div{font:.57rem var(--mono);padding:11px 8px;border-radius:5px;border:1px solid rgba(151,219,247,.24);background:rgba(252,255,255,.07)}
+.flux-flow i{width:16px;height:1px;background:#FC734D}
+.flux-hero .edge-mark{display:none}
+@media(max-width:900px){
+ .flux-margin-label{display:none}
+ .flux-panels{gap:10px}
+ .flux-preview{padding:13px 12px 30px}
+ .flux-flow div{font-size:.45rem;padding:8px 5px}
+}
+@media(max-width:600px){
+ .flux-hero{min-height:880px}
+ .flux-hero-content{padding-top:160px}
+ .flux-hero-content .hero-heading{font-size:clamp(4.3rem,14.7vw,6.2rem)}
+ .flux-hero-content .hero-desc{font-size:.79rem}
+ .flux-panels{bottom:-104px;gap:7px;width:calc(100% - 22px)}
+ .flux-preview{padding:10px 7px 25px;border-radius:10px}
+ .flux-preview:nth-child(1){transform:rotate(-2deg) translateY(20px)}
+ .flux-preview:nth-child(3){transform:rotate(2deg) translateY(27px)}
+ .flux-panel-name{font-size:.39rem;letter-spacing:0;gap:4px;margin-bottom:9px}
+ .flux-preview h3{font-size:.74rem}
+ .flux-preview p{font-size:.52rem}
+ .flux-panel-window,.flux-mini-graph,.flux-flow{height:85px;padding:5px}
+ .flux-flow{gap:2px}
+ .flux-flow div{font-size:.35rem;padding:6px 3px}
+ .flux-flow i{width:6px}
+ .flux-hero .equalizer-scene{height:74%}
+ .flux-orb-cta{height:83px;width:83px;font-size:.61rem}
+}
+@media(prefers-reduced-motion:reduce){
+ .flux-hero .star,.flux-hero .eq-bar{animation:none!important}
+}
+
 </style></head>
 <body>
 <a href="#top" class="skip">Skip to content</a>
@@ -179,17 +294,45 @@ h1,h2,h3{font-family:'Instrument Serif',Georgia,serif;font-weight:400}
  <a href="#contact" class="nav-cta">Let's connect ↗</a>
  <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">Menu +</button>
 </div></nav>
-<main><section class="section hero" id="top" aria-labelledby="hero-title">
-<div class="starfield" id="starfield" aria-hidden="true"></div><div class="blue-beam" data-parallax=".055" aria-hidden="true"></div>
-<div class="shell hero-layout">
- <div class="hero-kicker reveal">VARUN MANIKANTA · ENGINEERING / AI / AUTOMATION</div>
- <h1 class="hero-heading reveal" id="hero-title">Build for the<br><i>real world.</i></h1>
- <p class="hero-desc reveal">Software should be reliable before it is impressive. I design and ship full-stack systems, automation and intelligent products.</p>
- <div class="hero-actions reveal"><a href="#work">Selected work ↗</a><a href="#contact">Talk projects ↗</a></div>
-</div>
-<div class="equalizer-scene" id="equalizer" aria-hidden="true"></div><div class="eq-ground" aria-hidden="true"></div>
-<div class="shell hero-corner"><span>02 / 04 — INDEPENDENT DESIGN STUDY</span><span>ENGINEERED, NOT DECORATED ↘</span></div>
-<span class="edge-mark" aria-hidden="true"></span>
+<main><section class="section hero flux-hero" id="top" aria-labelledby="hero-title">
+ <div class="starfield" id="starfield" aria-hidden="true"></div>
+ <div class="flux-radiance" aria-hidden="true">
+  <div class="flux-blue-volume"></div><div class="flux-orange-volume"></div>
+  <div class="flux-ribs"></div>
+ </div>
+ <div class="equalizer-scene" id="equalizer" aria-hidden="true"></div>
+ <div class="shell flux-hero-content">
+  <div class="hero-kicker reveal">VARUN MANIKANTA &nbsp; / &nbsp; SYSTEMS · INTELLIGENCE · DESIGN</div>
+  <h1 class="hero-heading reveal" id="hero-title">Systems built<br>to <i>think ahead.</i></h1>
+  <p class="hero-desc reveal">I build dependable software, intelligent workflows and products that solve real problems—without losing sight of the people using them.</p>
+  <div class="flux-cta-wrap reveal">
+    <a href="#work" class="flux-orb-cta"><span>Explore<br>work ↗</span></a>
+  </div>
+ </div>
+ <div class="flux-margin-label flux-margin-label--left" aria-hidden="true"><span>01 / SOFTWARE</span><span>02 / AUTOMATION</span></div>
+ <div class="flux-margin-label flux-margin-label--right" aria-hidden="true"><span>03 / ENGINEERING</span><span>04 / SYSTEMS</span></div>
+ <div class="flux-panels shell" aria-label="Selected engineering work preview">
+   <article class="flux-preview flux-preview--one">
+     <div class="flux-panel-name"><span class="flux-label-dot"></span> DATA OPERATIONS</div>
+     <div class="flux-panel-window"><div class="flux-panel-window-head"><span></span><span></span><span></span></div>
+       <div class="flux-data-row"><i></i><span></span><b></b></div><div class="flux-data-row"><i></i><span></span><b></b></div><div class="flux-data-row"><i></i><span></span><b></b></div>
+     </div>
+     <h3>Staffing CRM</h3><p>Multi-stage operational workflows</p>
+   </article>
+   <article class="flux-preview flux-preview--two">
+     <div class="flux-panel-name"><span class="flux-label-dot"></span> SIGNAL & INTELLIGENCE</div>
+     <div class="flux-mini-graph">
+       <svg viewBox="0 0 300 90" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60 C28 64 44 15 78 49 S133 82 159 28 S222 72 251 33 S285 29 300 17" fill="none" stroke="#0297DE" stroke-width="2"/><path d="M0 76 C30 48 54 73 88 39 S144 55 165 60 S221 24 242 55 S281 45 300 51" fill="none" stroke="#FC734D" stroke-width="2"/></svg>
+     </div>
+     <h3>AI & Automation</h3><p>Systems that make data actionable</p>
+   </article>
+   <article class="flux-preview flux-preview--three">
+     <div class="flux-panel-name"><span class="flux-label-dot"></span> SECURE SYSTEMS</div>
+     <div class="flux-flow"><div>INPUT</div><i></i><div>RULES</div><i></i><div>OUTPUT</div></div>
+     <h3>Digital Forensics</h3><p>Investigation-ready information</p>
+   </article>
+ </div>
+ <span class="edge-mark" aria-hidden="true"></span>
 </section>
 <section class="section work-section" id="work"><div class="shell section-content">
  <div class="section-heading reveal"><div><div class="eyebrow">SELECTED WORK — REAL SYSTEMS</div><h2>Systems in<br>the wild.</h2></div><p>Built for actual operations. Selected work across mobile, data, intelligence and enterprise software.</p></div>
@@ -303,12 +446,15 @@ for(let i=0;i<(small?65:135);i++){
  s.style.cssText='width:'+size.toFixed(1)+'px;height:'+size.toFixed(1)+'px;left:'+(random()*100).toFixed(2)+'%;top:'+(random()*78).toFixed(2)+'%;--opacity:'+(.3+random()*.6).toFixed(2)+';--duration:'+(3+random()*6).toFixed(1)+'s;animation-delay:-'+(random()*8).toFixed(1)+'s';
  stars.appendChild(s);
 }
-for(let i=0;i<65;i++){
+const total=160;
+for(let i=0;i<total;i++){
  const b=document.createElement('i');b.className='eq-bar';
- const envelope=Math.pow(Math.max(0,1-Math.abs(i-32)/34),.7);
- const wave=Math.abs(Math.sin(i*.61)+Math.cos(i*.19)*.35);
- const height=9+Math.round(envelope*(20+wave*56));
- b.style.cssText='--height:'+height+'%;--speed:'+(3+i%7*.45)+'s;animation-delay:-'+(i%13*.33)+'s';
+ const position=(i-total/2)/(total/2);
+ const center=Math.pow(Math.max(0,1-Math.abs(position)),.55);
+ const wave=.68+.20*Math.sin(i*.28)+.12*Math.cos(i*.75);
+ const height=10+Math.round(center*(54+wave*28));
+ const opacity=Math.min(.85,.24+center*.34+random()*.19);
+ b.style.cssText='--height:'+height+'%;--stripe-opacity:'+opacity.toFixed(2)+';--speed:'+(3+(i%9)*.35)+'s;animation-delay:-'+((i%17)*.22)+'s';
  eq.appendChild(b);
 }
 })();
