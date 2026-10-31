@@ -72,6 +72,33 @@
     span.style.setProperty("--wave", `${-((i % 3) + 1) * 3}px`);
     signature.append(span);
   });
+  // Optional typographic interaction. Text is stable unless someone hovers it.
+  const heading = document.getElementById("hero-title");
+  if (heading) {
+    heading.setAttribute("aria-label", heading.textContent.replace(/\\s+/g, " ").trim());
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    heading.querySelectorAll("span").forEach(span => {
+      const original = span.textContent;
+      let active = false;
+      span.addEventListener("pointerenter", event => {
+        if (!fine.matches || reduce.matches || active || event.pointerType === "touch") return;
+        active = true;
+        const began = performance.now();
+        function step(now) {
+          if (!active || reduce.matches) { span.textContent = original; active = false; return; }
+          const t = Math.min(1, (now - began) / 470);
+          const fixed = Math.floor(original.length * t);
+          span.textContent = [...original].map((char, i) =>
+            i < fixed || /[\\s.&-]/.test(char) ? char : alphabet[(i * 13 + Math.floor(now / 45)) % alphabet.length]
+          ).join("");
+          if (t < 1) requestAnimationFrame(step);
+          else { span.textContent = original; active = false; }
+        }
+        requestAnimationFrame(step);
+      });
+      span.addEventListener("pointerleave", () => { active = false; span.textContent = original; });
+    });
+  }
   const reveal = new IntersectionObserver(
     (entries) =>
       entries.forEach((entry) => {
@@ -233,13 +260,13 @@
       parseFloat(scene.section.style.getPropertyValue("--section-shift")) || 0;
     scene.layers.forEach((light, index) => {
       const direction = index === 0 ? -1 : 1;
-      const target = reduce.matches ? 0 : x * (index + 1) * 5 * direction;
+      const target = reduce.matches ? 0 : x * (index + 1) * 12 * direction;
       light.dx =
         (light.dx || 0) + (target - (light.dx || 0)) * (0.08 + index * 0.04);
       const drift =
-        Math.sin((seconds * Math.PI) / (15 + index * 4)) * (3 + index * 2);
+        Math.sin((seconds * Math.PI) / (11 + index * 3)) * (9 + index * 5);
       const swell =
-        1.015 + Math.sin((seconds * Math.PI) / (21 + index * 3)) * 0.008;
+        1.027 + Math.sin((seconds * Math.PI) / (19 + index * 3)) * 0.022;
       ctx.drawImage(
         light,
         (-canvas.width * (swell - 1)) / 2 + light.dx + drift,
@@ -276,9 +303,19 @@
         section.style.setProperty(
           "--section-shift",
           moving
-            ? `${Math.max(-20, Math.min(20, -rect.top * 0.025))}px`
+            ? `${Math.max(-43, Math.min(43, -rect.top * 0.04))}px`
             : "0px",
         );
+        const phase = Math.max(-1, Math.min(1, (rect.top + rect.height / 2 - innerHeight / 2) / Math.max(rect.height, innerHeight)));
+        section.style.setProperty("--scene-y", moving ? `${(-phase * 29).toFixed(2)}px` : "0px");
+        if (section === hero) hero.style.setProperty("--copy-y", moving ? `${(-phase * 8).toFixed(2)}px` : "0px");
+        if (section.matches(".work-section")) {
+          cards.forEach(card => {
+            const box = card.getBoundingClientRect();
+            const cardPhase = Math.max(-1, Math.min(1, (box.top + box.height / 2 - innerHeight / 2) / Math.max(box.height, innerHeight)));
+            card.style.setProperty("--card-depth", moving ? `${(-cardPhase * 9).toFixed(2)}px` : "0px");
+          });
+        }
       });
       scrollDirty = false;
     }
@@ -293,19 +330,22 @@
       visible.forEach((section) => {
         section.style.setProperty(
           "--rib",
-          `${Math.sin((seconds * Math.PI) / 12) * 1.8 + x * 0.9}px`,
+          `${Math.sin((seconds * Math.PI * 2) / 13) * 7.5 + x * 2.5}px`,
         );
         section.style.setProperty(
           "--flow",
-          `${Math.sin((seconds * Math.PI) / 15) * 15}%`,
+          `${Math.sin((seconds * Math.PI * 2) / 17) * 48}%`,
         );
+        section.style.setProperty("--ribbon-sweep", `${-115 + ((seconds * 14) % 245)}%`);
       });
       if (visible.has(hero)) {
-        fields.style.setProperty("--field-x", `${-x * 11}px`);
+        fields.style.setProperty("--field-x", `${-x * 17}px`);
         fields.style.setProperty(
           "--field-y",
-          `${-y * 8 + Math.sin(seconds * 0.55) * 2}px`,
+          `${-y * 10 + Math.sin(seconds * 0.72) * 7}px`,
         );
+        fields.style.setProperty("--field-rotate-x", `${(y * 2.2).toFixed(2)}deg`);
+        fields.style.setProperty("--field-rotate-y", `${(-x * 2.8).toFixed(2)}deg`);
       }
       if (activeCard) {
         const currentX =
@@ -360,10 +400,11 @@
         const r = card.getBoundingClientRect();
         const cx = (event.clientX - r.left) / r.width,
           cy = (event.clientY - r.top) / r.height;
-        tiltX = (cy - 0.5) * -4;
-        tiltY = (cx - 0.5) * 4;
+        tiltX = (cy - 0.5) * -9;
+        tiltY = (cx - 0.5) * 9;
         card.style.setProperty("--shine-x", `${cx * 100}%`);
         card.style.setProperty("--shine-y", `${cy * 100}%`);
+        card.style.setProperty("--glow-angle", `${Math.atan2(cy - 0.5, cx - 0.5) * 180 / Math.PI + 100}deg`);
         queue();
       },
       { passive: true },
