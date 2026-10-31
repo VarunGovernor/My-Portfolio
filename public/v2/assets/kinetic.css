@@ -1474,10 +1474,10 @@ h1>span:nth-child(3){animation-delay:.44s}
   will-change: transform;
 }
 .hero .fields {
-  position: relative;
+  position: absolute;
   z-index: 5;
   transform: perspective(1000px)
-    translate3d(var(--field-x, 0px), calc(var(--field-y, 0px) + var(--hero-fields-y, 0px)), 0)
+    translate3d(var(--field-x, 0px), var(--field-y, 0px), 0)
     rotateX(var(--field-rotate-x, 0deg)) rotateY(var(--field-rotate-y, 0deg));
   will-change: transform;
 }
@@ -1770,7 +1770,7 @@ h1>span:nth-child(3){animation-delay:.44s}
   .hero-depth { opacity: 0.7; }
   .hero .hero-copy { transform: none; }
   .hero .fields {
-    transform: translate3d(var(--field-x, 0px), calc(var(--field-y, 0px) + var(--hero-fields-y, 0px)), 0);
+    transform: translate3d(var(--field-x, 0px), var(--field-y, 0px), 0);
   }
   .about-intro, .about-copy, .about-points { transform: none; }
   .about-points .about-point { gap: 11px; }

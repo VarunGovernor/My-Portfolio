@@ -434,22 +434,18 @@
       const depthBY = (smoothScrollY * 0.32).toFixed(2);
       heroSection.style.setProperty("--depth-b-y", `${depthBY}px`);
 
-      // 5. Main Hero Content (lifts smoothly into scroll at -15%)
-      const heroCopyY = (smoothScrollY * -0.15).toFixed(2);
+      // 5. Main Hero Content (lifts smoothly into scroll at subtle, safe rate)
+      const heroCopyY = Math.max(-28, smoothScrollY * -0.06).toFixed(2);
       heroSection.style.setProperty("--hero-copy-y", `${heroCopyY}px`);
 
-      // 6. Floating Selected Fields Glass Panel (floats at +28% + 3D momentum tilt)
-      const heroFieldsY = (smoothScrollY * 0.28).toFixed(2);
-      heroSection.style.setProperty("--hero-fields-y", `${heroFieldsY}px`);
-
-      // Scroll momentum creates gentle 3D pitch on the floating panel
+      // 6. Floating Selected Fields Glass Panel (stays securely in upper-right; responds with 3D momentum tilt)
       const scrollVelocity = (currentScrollY - smoothScrollY);
       const pitchTilt = Math.min(6, Math.max(-6, -scrollVelocity * 0.08));
       fieldsPanel?.style.setProperty("--field-rotate-x", `${(mouseY * 3 + pitchTilt).toFixed(2)}deg`);
       fieldsPanel?.style.setProperty("--field-rotate-y", `${(-mouseX * 3.5).toFixed(2)}deg`);
 
-      // 7. Bottom Feature Strip (moves at -12%)
-      const heroFeatureY = (smoothScrollY * -0.12).toFixed(2);
+      // 7. Bottom Feature Strip (subtle stable movement that preserves layout space)
+      const heroFeatureY = Math.max(-14, smoothScrollY * -0.03).toFixed(2);
       heroSection.style.setProperty("--hero-feature-y", `${heroFeatureY}px`);
 
       // Cursor depth & ambient breathing on hero
