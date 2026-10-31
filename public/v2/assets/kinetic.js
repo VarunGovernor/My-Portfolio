@@ -75,7 +75,7 @@
   // Optional typographic interaction. Text is stable unless someone hovers it.
   const heading = document.getElementById("hero-title");
   if (heading) {
-    heading.setAttribute("aria-label", heading.textContent.replace(/\\s+/g, " ").trim());
+    heading.setAttribute("aria-label", heading.textContent.replace(/\s+/g, " ").trim());
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     heading.querySelectorAll("span").forEach(span => {
       const original = span.textContent;
@@ -89,7 +89,7 @@
           const t = Math.min(1, (now - began) / 470);
           const fixed = Math.floor(original.length * t);
           span.textContent = [...original].map((char, i) =>
-            i < fixed || /[\\s.&-]/.test(char) ? char : alphabet[(i * 13 + Math.floor(now / 45)) % alphabet.length]
+            i < fixed || /[\s.&-]/.test(char) ? char : alphabet[(i * 13 + Math.floor(now / 45)) % alphabet.length]
           ).join("");
           if (t < 1) requestAnimationFrame(step);
           else { span.textContent = original; active = false; }
