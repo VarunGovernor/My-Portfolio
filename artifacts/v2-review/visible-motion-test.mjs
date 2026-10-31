@@ -66,6 +66,7 @@ try {
   const lastRib = await prop(".hero", "--rib");
   await check("Light field continuously changes", async () => firstCanvas !== lastCanvas);
   await check("Rib field visibly moves", async () => firstRib !== lastRib);
+  await page.screenshot({ path: "previews/v2-motion-hero-stable.png", fullPage: false });
 
   await page.mouse.move(200, 230);
   await wait(400);
@@ -105,6 +106,11 @@ try {
   for (const width of [390, 768, 1024, 1440]) {
     await page.setViewport({ width, height: 900, deviceScaleFactor: 1 });
     await wait(220);
+    if(width === 390) {
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+      await wait(1200);
+      await page.screenshot({ path: "previews/v2-motion-mobile-stable.png", fullPage: false });
+    }
     const dimensions = await page.evaluate(() => ({
       scroll: document.documentElement.scrollWidth,
       client: document.documentElement.clientWidth
@@ -114,8 +120,10 @@ try {
   }
 
   await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]);
-  await wait(150);
-  await check("Reduced-motion toggles off kineticism", async () => page.evaluate(() =>
+  // Reload under the new system preference, as browsers do after settings changes.
+  await page.reload({ waitUntil: "networkidle0" });
+  await check("Reduced-motion disables ongoing animations", async () => page.evaluate(() =>
+    matchMedia("(prefers-reduced-motion: reduce)").matches &&
     !document.documentElement.classList.contains("motion-ready")));
   assert.equal(errors.length, 0, "Browser errors: " + errors.join(" | "));
   record.push("No uncaught browser errors");
