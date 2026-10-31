@@ -271,7 +271,7 @@ h1,h2,h3{font-family:'Sora','DM Sans',sans-serif}
 .hero-title-line:nth-child(1){animation-delay:.14s}
 .hero-title-line:nth-child(2){animation-delay:.29s}
 .hero-title-line:nth-child(3){animation-delay:.44s}
-@keyframes v2-hero-line{0%{opacity:0;transform:translate3d(0,33px,0);filter:blur(7px)}100%{opacity:1;transform:none;filter:blur(0)}}
+@keyframes v2-hero-line{0%{opacity:1;transform:translate3d(0,15px,0);filter:blur(0)}100%{opacity:1;transform:none;filter:blur(0)}}
 .v2-index-line{animation:v2-fade-up .8s both .08s cubic-bezier(.2,.8,.2,1)}
 @keyframes v2-fade-up{from{opacity:0;transform:translateY(15px)}to{opacity:.8;transform:none}}
 .v2-bottom-row{display:block}
@@ -428,7 +428,7 @@ main > footer{background:#052e56;color:#FCFFFF;margin:0;width:100%;max-width:non
  .v2-hero .shell.v2-hero-inner{padding-top:340px;padding-bottom:26px}
  .v2-floating-schedule{top:99px;right:0;width:min(258px,76vw)}
  .v2-headline-area{padding-top:0;margin-bottom:30px}
- .v2-headline-area h1{font-size:clamp(2.17rem,8.6vw,3.85rem);letter-spacing:-.07em;line-height:1.09}
+ .v2-headline-area h1{font-size:clamp(2.08rem,8.1vw,3.85rem);letter-spacing:-.073em;line-height:1.09}
  .hero-title-line{white-space:normal}
  .v2-bottom-row .hero-description{font-size:.84rem;max-width:350px}
  .v2-headline-actions{gap:17px;margin-top:22px}
@@ -692,8 +692,8 @@ schedule();
  document.addEventListener('visibilitychange',()=>{active=!document.hidden;if(active)tickRequest()});
  tickRequest();
 
- /* A restrained take on the live site's scramble-to-text animation.
-    Once on load; content is always readable afterwards and ARIA title stays stable. */
+ /* Live-site-inspired scramble is interactive, not automatic.
+    Heading stays readable on first paint and in browser screenshots. */
  const lines=[...hero.querySelectorAll('.hero-title-line')];
  const glyphs='ABCDEFGHJKLMNPQRSTUVWXYZ0123456789';
  const original=lines.map(el=>el.textContent);
@@ -714,8 +714,18 @@ schedule();
    }
    requestAnimationFrame(draw);
  }
- // Don't briefly scramble content while it's still being font-loaded on slow devices.
- if(lines.length===3)lines.forEach((el,i)=>scramble(el,original[i],560,360+i*145));
+ // Re-run a short scramble on desktop hover, but never hide the actual headline on load.
+ if(lines.length===3){
+   lines.forEach((el,i)=>{
+     let busy=false;
+     el.addEventListener('pointerenter',event=>{
+       if(event.pointerType==='touch'||busy||reduced.matches)return;
+       busy=true;
+       scramble(el,original[i],370,0);
+       window.setTimeout(()=>{el.textContent=original[i];busy=false},410);
+     });
+   });
+ }
 })();
 
 </script></body></html>
