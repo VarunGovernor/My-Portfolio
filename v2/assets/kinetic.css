@@ -1792,26 +1792,3 @@ h1>span:nth-child(3){animation-delay:.44s}
     width: 100% !important;
   }
 }
-
-
-/* Additional work cards use complete tracks; the five-card composition remains unchanged. */
-.work-card:nth-child(n + 6) {
-  grid-column: 1 / 4;
-  min-height: 240px;
-}
-.work-card:nth-child(2n + 7) {
-  grid-column: 5 / 8;
-}
-
-/* Keep motion subtle when the work section grows beyond the original five cards. */
-.work-grid:has(> .work-card:nth-child(6)) > .work-card {
-  transform: perspective(900px)
-    translate3d(0, clamp(-5px, var(--card-y, 0px), 5px), 0)
-    rotateX(var(--tilt-x, 0deg))
-    rotateY(var(--tilt-y, 0deg));
-}
-@media (min-width: 601px) and (max-width: 800px) {
-  .work-card:nth-child(n + 6) {
-    grid-column: 1 / -1;
-  }
-}
