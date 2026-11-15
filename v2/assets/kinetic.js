@@ -14,6 +14,24 @@
   const skillsSection = document.querySelector(".skills-section");
   const contactSection = document.querySelector(".contact-section");
   const workCards = [...document.querySelectorAll(".work-card")];
+  const workGrid = workSection?.querySelector(".work-grid");
+  let workSceneHeight = 0;
+  let workSceneShift = 0;
+  let workCardCenters = [];
+
+  function measureWork() {
+    if (!workGrid) return;
+    const content = workGrid.parentElement;
+    const gridTop = content.offsetTop + workGrid.offsetTop;
+    // Appending rows must not change the original composition's lighting scale or motion reference.
+    workSceneHeight = gridTop + Math.max(...workCards.slice(0, 5).map(card => card.offsetTop + card.offsetHeight))
+      + parseFloat(getComputedStyle(content).paddingBottom);
+    workCardCenters = workCards.map(card => gridTop + card.offsetTop + card.offsetHeight / 2);
+    workSection.style.setProperty("--work-scene-height", `${workSceneHeight}px`);
+  }
+
+  measureWork();
+  if (workGrid) new ResizeObserver(() => { measureWork(); queueTick(); }).observe(workGrid.parentElement);
   const capCards = [...document.querySelectorAll(".cap-card")];
   const allSections = [...document.querySelectorAll(".section")];
   const signatureEl = document.querySelector(".signature-name");
@@ -203,8 +221,11 @@
     { threshold: 0.08 }
   );
 
-  document.querySelectorAll(".reveal").forEach((element, i) => {
-    element.style.setProperty("--delay", `${(i % 3) * 35}ms`);
+  let originalRevealIndex = 0;
+  document.querySelectorAll(".reveal").forEach((element) => {
+    const cardIndex = workCards.indexOf(element);
+    const index = cardIndex >= 5 ? cardIndex - 5 : originalRevealIndex++;
+    element.style.setProperty("--delay", `${(index % 3) * 35}ms`);
     revealObserver.observe(element);
   });
 
@@ -358,7 +379,8 @@
       const swell = 1.025 + Math.sin((seconds * Math.PI) / (19 + index * 3)) * 0.02;
 
       // Internal scroll parallax inside the canvas
-      const layerScrollOffset = reduceMotion.matches ? 0 : smoothScrollY * internalParallaxRates[index] * 0.25;
+      const sceneScroll = smoothScrollY - (isHero ? 0 : workSceneShift);
+      const layerScrollOffset = reduceMotion.matches ? 0 : sceneScroll * internalParallaxRates[index] * 0.25;
 
       ctx.drawImage(
         light,
@@ -469,10 +491,12 @@
        ---------------------------------------------------------------------- */
     if (workSection && visibleSections.has(workSection) && isMoving) {
       const rect = workSection.getBoundingClientRect();
-      const progress = (vh * 0.5) - (rect.top + rect.height * 0.5);
+      const progress = (vh * 0.5) - (rect.top + workSceneHeight * 0.5);
+      workSceneShift = Math.max(0, Math.min(rect.height - workSceneHeight, -rect.top - workSceneHeight * 0.5));
+      const sceneProgress = progress - workSceneShift;
 
-      workSection.style.setProperty("--work-light-y", `${(progress * 0.30).toFixed(2)}px`);
-      workSection.style.setProperty("--work-ribs-y", `${(progress * 0.20).toFixed(2)}px`);
+      workSection.style.setProperty("--work-light-y", `${(workSceneShift + sceneProgress * 0.30).toFixed(2)}px`);
+      workSection.style.setProperty("--work-ribs-y", `${(sceneProgress * 0.20).toFixed(2)}px`);
       workSection.style.setProperty("--work-heading-y", `${(progress * 0.12).toFixed(2)}px`);
       workSection.style.setProperty("--light-x", `${(mouseX * 12).toFixed(2)}px`);
       workSection.style.setProperty("--rib", `${(Math.sin((time * 0.001 * Math.PI * 2) / 13) * 7.5).toFixed(2)}px`);
@@ -481,7 +505,10 @@
       const cardRates = [0.09, -0.11, 0.07, -0.09, 0.12];
       workCards.forEach((card, index) => {
         const rate = cardRates[index % cardRates.length];
-        const cardY = (progress * rate).toFixed(2);
+        const cardProgress = vh * 0.5 - (rect.top + workCardCenters[index]);
+        // Leave 8px for the original cards' tilt and 12px for the wider additional cards.
+        const travel = index < 5 ? 3 : 10;
+        const cardY = Math.max(-travel, Math.min(travel, cardProgress * rate)).toFixed(2);
         card.style.setProperty("--card-y", `${cardY}px`);
       });
     }
@@ -689,5 +716,18 @@
   // Initialize
   onMotionPreferenceChange();
   scenes.forEach((scene) => paintCanvas(scene, 0));
+  // Mirror the original light field so offscreen rows stay lit without texture seams or extra animation loops.
+  const workScene = scenes.find(scene => scene.section === workSection);
+  if (workScene) {
+    const texture = document.createElement("canvas");
+    texture.width = workScene.canvas.width;
+    texture.height = workScene.canvas.height * 2;
+    const ctx = texture.getContext("2d");
+    ctx.drawImage(workScene.canvas, 0, 0);
+    ctx.translate(0, texture.height);
+    ctx.scale(1, -1);
+    ctx.drawImage(workScene.canvas, 0, 0);
+    workSection.style.backgroundImage = `url("${texture.toDataURL()}")`;
+  }
   queueTick();
 })();
