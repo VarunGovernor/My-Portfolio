@@ -515,6 +515,25 @@ h1 > span:nth-child(3) {
   height: 189px;
   background: linear-gradient(140deg, #0d5eb03b, #526fc059);
 }
+/* Keep the original five placements; additional rows span content tracks, never spacers. */
+.work-card:nth-child(n + 6) {
+  grid-column: 1/4;
+  height: auto;
+  min-height: 241px;
+  margin-top: 18px;
+  background: linear-gradient(130deg, #134a9d66, #79bcdf24);
+}
+.work-card:nth-child(n + 6):nth-child(odd) {
+  grid-column: 5/8;
+  background: linear-gradient(125deg, #165ca466, #9bbbf94d);
+}
+.work-card:nth-child(16) {
+  grid-column: 1/8;
+}
+.work-card:nth-child(n + 6) .work-bottom {
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
 .work-card:after {
   content: "";
   position: absolute;
@@ -1487,13 +1506,18 @@ h1>span:nth-child(3){animation-delay:.44s}
   position: relative;
   overflow: hidden;
   isolation: isolate;
+  background-size: auto calc(var(--work-scene-height, 100vh) * 3);
+  background-position: center calc(var(--work-scene-height, 100vh) * -0.25);
+  background-repeat: repeat-y;
 }
 .work-section .light-field {
   position: absolute;
-  inset: -25% -12%;
+  inset: auto -12%;
+  top: calc(var(--work-scene-height, 100vh) * -0.25);
   width: 124%;
-  height: 150%;
+  height: calc(var(--work-scene-height, 100vh) * 1.5);
   object-fit: cover;
+  mask-image: linear-gradient(transparent, #000 15% 85%, transparent);
   pointer-events: none;
   z-index: 0;
   transform: translate3d(var(--light-x, 0px), var(--work-light-y, 0px), 0) scale(1.18);
@@ -1501,9 +1525,10 @@ h1>span:nth-child(3){animation-delay:.44s}
 }
 .work-section .ribs {
   position: absolute;
-  inset: -15% -8%;
+  inset: auto -8%;
+  top: calc(var(--work-scene-height, 100vh) * -0.15);
   width: 116%;
-  height: 130%;
+  height: calc(100% + var(--work-scene-height, 100vh) * 0.3);
   pointer-events: none;
   z-index: 1;
   transform: translate3d(var(--rib, 0px), var(--work-ribs-y, 0px), 0);
