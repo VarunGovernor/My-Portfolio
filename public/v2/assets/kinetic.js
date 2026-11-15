@@ -64,18 +64,22 @@
   /* --------------------------------------------------------------------------
      Navigation Controls
      -------------------------------------------------------------------------- */
-  const closeMenu = () => {
-    if (!nav) return;
-    nav.dataset.open = "false";
-    menuBtn?.setAttribute("aria-expanded", "false");
-  };
-
-  menuBtn?.addEventListener("click", () => {
-    const isOpen = nav.dataset.open !== "true";
+  const setMenuOpen = (isOpen) => {
+    if (!nav || !menuBtn) return;
     nav.dataset.open = String(isOpen);
     menuBtn.setAttribute("aria-expanded", String(isOpen));
-    if (isOpen) {
-      nav.querySelector(".nav-list a")?.focus({ preventScroll: true });
+    menuBtn.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
+    menuBtn.textContent = isOpen ? "Menu -" : "Menu +";
+  };
+
+  const closeMenu = () => setMenuOpen(false);
+
+  menuBtn?.addEventListener("click", (event) => {
+    const shouldOpen = nav?.dataset.open !== "true";
+    setMenuOpen(shouldOpen);
+    // Preserve focus on touch so a second tap reliably closes the menu.
+    if (shouldOpen && event.detail === 0) {
+      nav?.querySelector(".nav-list a")?.focus({ preventScroll: true });
     }
   });
 
@@ -91,7 +95,8 @@
   });
 
   nav?.addEventListener("focusout", (event) => {
-    if (!nav.contains(event.relatedTarget)) closeMenu();
+    // Mobile browsers may report a null relatedTarget during a tap.
+    if (event.relatedTarget && !nav.contains(event.relatedTarget)) closeMenu();
   });
 
   /* --------------------------------------------------------------------------

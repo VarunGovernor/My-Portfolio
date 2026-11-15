@@ -107,6 +107,36 @@ try {
     !overlaps(mobile.glass, mobile.heading));
   await page.screenshot({ path: "previews/live-root-mobile.png" });
 
+  await page.click(".menu-toggle");
+  check("Mobile menu opens and shows Menu -",
+    await page.evaluate(() => {
+      const nav = document.querySelector(".navigation");
+      const button = document.querySelector(".menu-toggle");
+      return nav.dataset.open === "true" &&
+        button.getAttribute("aria-expanded") === "true" &&
+        button.getAttribute("aria-label") === "Close navigation" &&
+        button.textContent.trim() === "Menu -" &&
+        getComputedStyle(document.querySelector(".nav-list")).display !== "none";
+    }));
+  await page.click(".menu-toggle");
+  check("Second tap closes mobile menu and restores Menu +",
+    await page.evaluate(() => {
+      const nav = document.querySelector(".navigation");
+      const button = document.querySelector(".menu-toggle");
+      return nav.dataset.open === "false" &&
+        button.getAttribute("aria-expanded") === "false" &&
+        button.getAttribute("aria-label") === "Open navigation" &&
+        button.textContent.trim() === "Menu +" &&
+        getComputedStyle(document.querySelector(".nav-list")).display === "none";
+    }));
+  await page.click(".menu-toggle");
+  await page.click('.nav-list a[href="#work"]');
+  check("Selecting a mobile menu link closes the menu",
+    await page.evaluate(() =>
+      document.querySelector(".navigation").dataset.open === "false" &&
+      document.querySelector(".menu-toggle").textContent.trim() === "Menu +"
+    ));
+
   await page.goto(root + "v2/work/index.html#liva", { waitUntil: "networkidle0" });
   check("V2 project details load with consistent theme",
     (await page.$("#liva")) !== null && (await page.$$('img')).length === 0);
